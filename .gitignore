@@ -1,0 +1,45 @@
+# Raw and intermediate radar data never goes in git (GB-scale). See docs/PLAN.md.
+# Datasets/ = raw NISAR downloads, data/ = crops and quick-look pictures.
+Datasets/
+datasets/
+data/
+*.h5
+*.nc
+*.tif
+*.tiff
+!app/public/data/**/*.tif
+
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+.netrc
+_netrc
+local.settings.json
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Saved copies of the challenge web pages (20 MB of site assets, and they contain
+# a logged-in account name). They stay on disk in docs/challenge/ for reference.
+# The requirements we rely on are summarized in docs/challenge/README.md.
+docs/challenge/*.htm
+docs/challenge/*_files/
+
+# Per-person agent identity file (see docs/COORDINATION.md)
+CLAUDE.local.md
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json

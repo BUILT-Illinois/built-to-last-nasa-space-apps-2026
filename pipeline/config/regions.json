@@ -1,0 +1,41 @@
+{
+  "_comment": "One entry per study region. bbox is [west, south, east, north] in decimal degrees (WGS84). Adding a region here is the only change needed to search or process a new place. File drafted with AI assistance (Claude Code); reviewed by the team.",
+  "default_region": "mexico_city",
+  "regions": {
+    "mexico_city": {
+      "name": "Mexico City (Valley of Mexico)",
+      "bbox": [-99.40, 19.10, -98.85, 19.65],
+      "tier": 1
+    },
+    "popocatepetl": {
+      "name": "Popocatepetl volcano",
+      "bbox": [-98.75, 18.90, -98.50, 19.15],
+      "tier": 3
+    },
+    "guadalajara_chapala": {
+      "name": "Guadalajara and Lake Chapala",
+      "bbox": [-103.60, 20.10, -102.70, 20.80],
+      "tier": 3
+    },
+    "monterrey": {
+      "name": "Monterrey",
+      "bbox": [-100.50, 25.50, -100.05, 25.90],
+      "tier": 3
+    },
+    "tabasco_wetlands": {
+      "name": "Tabasco wetlands (Pantanos de Centla)",
+      "bbox": [-92.90, 18.00, -92.20, 18.65],
+      "tier": 3
+    },
+    "mexicali_valley": {
+      "name": "Mexicali Valley (Cerro Prieto)",
+      "bbox": [-115.50, 32.20, -114.90, 32.70],
+      "tier": 3
+    },
+    "aguascalientes": {
+      "name": "Aguascalientes valley",
+      "bbox": [-102.45, 21.75, -102.15, 22.05],
+      "tier": 3
+    }
+  }
+}

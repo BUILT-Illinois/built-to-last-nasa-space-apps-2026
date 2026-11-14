@@ -1,0 +1,10 @@
+# Catalog search (search_granules.py)
+asf_search>=14.0
+
+# Quick looks at local files (quicklook.py)
+h5py>=3.11
+numpy>=2.0
+pyproj>=3.6
+pillow>=10.0
+
+# Added when the build pipeline is written (T-03, T-10): earthaccess, rasterio, pytest

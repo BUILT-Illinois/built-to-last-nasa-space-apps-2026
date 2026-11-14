@@ -1,0 +1,17 @@
+# Decisions log
+
+Newest at the bottom. Only the plan agent (Eduardo's session) edits this file, after Eduardo approves. Status is `proposed`, `accepted`, `open`, or `replaced by D-xx`.
+
+| ID | Date (CT) | Decision | Why | Status |
+|---|---|---|---|---|
+| D-01 | Nov 14, 2:00 PM | Use track 19 / frame 11 (ascending) and one processing release per layer for every NISAR layer in the app. | It covers 100% of the Mexico City box with 29 GCOV dates and 28 chained GUNW pairs from Oct 30, 2025 to Oct 13, 2026 in the PROVISIONAL collection. One track means identical viewing geometry. Evidence: `pipeline/reports/summary_mexico_city.md`. | accepted with plan v0.2 |
+| D-02 | Nov 14, 2:30 PM | The story is chosen by the team after looking at the data (T-25), by Sat 5:30 PM (gate GS). Default if undecided: surface change in GCOV. | Eduardo: "we will do data analysis and then choose a story based on the data." It also matches the guide's rule that AI should not come up with the idea. Options are in `docs/DECISION_MEMO.md`. | open until GS |
+| D-03 | Nov 14, 2:00 PM | Read windows from the cloud-hosted files instead of downloading whole granules. Full downloads only as the G1 fallback. Eduardo approved the two fallback sets in advance (14 GB of GCOV for Tier 1, 32 GB of GUNW overnight for Tier 2); anything larger needs a new yes. | The one-track time series is about 270 GB; venue Wi-Fi is 60 Mbps. | accepted |
+| D-04 | Nov 14, 2:30 PM | The demo is a slide deck of at most 7 slides. No demo video. | The Submission Guide limits the demo to 7 slides or 30 seconds, and going over makes the project ineligible for global judging. Eduardo: the team prefers a slide deck. | accepted |
+| D-05 | Nov 14, 2:30 PM | Host on Azure Static Web Apps with managed Azure Functions for the typed API. Elias gets the Azure subscription. Keep a second static host as fallback. | Local Best Use of Technology award requires Azure. Whether hosting alone qualifies is unconfirmed (T-05). | accepted for the subscription; hosting design accepted with plan v0.2 |
+| D-06 | Nov 14, 2:30 PM | MIT license. Eduardo makes the repo public by Sun 9:00 AM at the latest. | The challenge asks for open source, and judges need a public link. Eduardo has the rights on the BUILT-Illinois repo. | accepted with plan v0.2 |
+| D-07 | Nov 14, 2:30 PM | The saved copies of the challenge web pages live in `docs/challenge/` and stay out of git. `docs/challenge/README.md` carries the requirements. | Eduardo asked for the move. They stay git-ignored because they are 20 MB of site assets and include a logged-in account name. | accepted with plan v0.2 |
+| D-08 | Nov 14, 2:00 PM | If ground motion is shown, it is reported along the radar line of sight, relative to a named reference area, and labeled provisional. | One track cannot separate vertical from horizontal movement. | accepted with plan v0.2 |
+| D-09 | Nov 14, 2:30 PM | Eduardo owns the map screen (`app/src/map/`, `app/src/state/`, `app/src/App.tsx`). Monica is backup and owns the story layer on top. | Eduardo's answer to the open-slot question. | accepted |
+| D-10 | Nov 14, 2:30 PM | Raw downloads live in `Datasets/` and crops and pictures in `data/`. Both are git-ignored. | Eduardo's request; no raw data in git. | accepted |
+| D-11 | Nov 14, 3:05 PM | Plan v0.2 is approved and in force. | Eduardo's approval in chat. | accepted |
