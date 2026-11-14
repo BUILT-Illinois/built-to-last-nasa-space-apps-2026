@@ -8,9 +8,15 @@ import type { Landmark, Layer, Manifest } from '../types/manifest';
 export type LoadStatus = 'idle' | 'loading' | 'ready' | 'error';
 
 export type AppState = {
+  /**
+   * Region whose data is in `manifest` and `landmarks`. It only changes together with that data,
+   * so the two never disagree. Before the first load it is the default region with no data yet.
+   */
   regionId: string;
   manifest: Manifest | null;
   landmarks: Landmark[];
+  /** Region being loaded right now, or null. The current data stays on screen meanwhile. */
+  loadingRegionId: string | null;
   /** Layer shown (left side of the swipe). Empty string until a manifest is loaded. */
   activeLayerId: string;
   /** Right side of the swipe; null = no swipe. */
@@ -21,12 +27,24 @@ export type AppState = {
   selectedLandmarkId: string | null;
   /** null = free exploration. */
   storyStep: number | null;
+  /** State of the most recent load request. */
   loadStatus: LoadStatus;
+  /** Why the most recent load failed; the previous region's data is still shown. */
   loadError: string | null;
 };
 
+/** The part of the state a story step may set. Region and data change only through loadRegion. */
+export type ViewState = Pick<
+  AppState,
+  'activeLayerId' | 'compareLayerId' | 'dateIndex' | 'compareDateIndex' | 'selectedLandmarkId' | 'storyStep'
+>;
+
 export type AppActions = {
-  /** Load manifest and landmarks for a region and reset the view state. */
+  /**
+   * The only way to change region. Loads manifest and landmarks, then swaps region and data in one
+   * step and resets the view. Only the newest request may change the store: a response that
+   * arrives after a newer request started is dropped, whether it succeeded or failed.
+   */
   loadRegion: (regionId: string) => Promise<void>;
   setLayer: (layerId: string) => void;
   setCompare: (layerId: string | null, dateIndex?: number | null) => void;
@@ -34,16 +52,20 @@ export type AppActions = {
   selectLandmark: (landmarkId: string | null) => void;
   setStoryStep: (step: number | null) => void;
   /** Apply a story step's `set` block (content/story/<region>.json). */
-  applyPartial: (partial: Partial<AppState>) => void;
+  applyPartial: (partial: Partial<ViewState>) => void;
 };
 
 /** Folder under public/data/ to load. "sample" until the pipeline writes a real region. */
 export const DEFAULT_REGION_ID: string = import.meta.env.VITE_REGION_ID ?? 'sample';
 
-export const useAppStore = create<AppState & AppActions>()((set, get) => ({
+/** Number of the newest loadRegion call. Responses from older calls are dropped. */
+let latestRequest = 0;
+
+export const useAppStore = create<AppState & AppActions>()((set) => ({
   regionId: DEFAULT_REGION_ID,
   manifest: null,
   landmarks: [],
+  loadingRegionId: null,
   activeLayerId: '',
   compareLayerId: null,
   dateIndex: 0,
@@ -54,17 +76,21 @@ export const useAppStore = create<AppState & AppActions>()((set, get) => ({
   loadError: null,
 
   loadRegion: async (regionId) => {
-    set({ regionId, loadStatus: 'loading', loadError: null });
+    const request = ++latestRequest;
+    const isStale = () => request !== latestRequest;
+    set({ loadingRegionId: regionId, loadStatus: 'loading', loadError: null });
     try {
       const manifest = await loadManifest(regionId);
       // Landmarks are optional: the map works without them.
       const landmarks = await loadLandmarks(regionId)
         .then((f) => f.landmarks)
         .catch(() => [] as Landmark[]);
-      if (get().regionId !== regionId) return; // a newer load started meanwhile
+      if (isStale()) return;
       set({
+        regionId,
         manifest,
         landmarks,
+        loadingRegionId: null,
         activeLayerId: manifest.layers[0]?.id ?? '',
         compareLayerId: null,
         dateIndex: 0,
@@ -73,8 +99,10 @@ export const useAppStore = create<AppState & AppActions>()((set, get) => ({
         loadStatus: 'ready',
       });
     } catch (err) {
-      if (get().regionId !== regionId) return;
-      set({ loadStatus: 'error', loadError: err instanceof Error ? err.message : String(err) });
+      if (isStale()) return;
+      // Keep the region and data already on screen; only report the failure.
+      const reason = err instanceof Error ? err.message : String(err);
+      set({ loadingRegionId: null, loadStatus: 'error', loadError: `Region "${regionId}": ${reason}` });
     }
   },
 
