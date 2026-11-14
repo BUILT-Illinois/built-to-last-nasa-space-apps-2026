@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "0.1",
+  "generatedAt": "2026-11-14T22:30:00Z",
+  "generatedBy": "Hand-written sample by Zainab with AI assistance (Claude Code), see docs/AI_USAGE.md. Images are synthetic placeholders from pipeline/tests/make_sample_images.py.",
+  "region": {
+    "id": "sample",
+    "name": "Sample data (Mexico City extent, synthetic images)",
+    "bbox": [-99.40, 19.10, -98.85, 19.65],
+    "center": [-99.13, 19.40],
+    "zoom": 10
+  },
+  "dataMaturity": "PROVISIONAL",
+  "layers": [
+    {
+      "id": "gcov_hh",
+      "title": "Radar brightness, HH",
+      "kind": "backscatter",
+      "product": "GCOV",
+      "polarization": "HH",
+      "units": "dB",
+      "bounds": [-99.40, 19.10, -98.85, 19.65],
+      "colormap": { "name": "gray", "min": -25, "max": 0 },
+      "description": "Placeholder layer for building the app. Real HH radar images replace it later.",
+      "caveats": ["Synthetic placeholder images, not NISAR data."],
+      "frames": [
+        {
+          "date": "2026-04-16",
+          "image": "layers/gcov_hh/2026-04-16.webp",
+          "granules": ["NISAR_L2_PR_GCOV_018_019_A_011_4005_DHDH_A_20260416T120544_20260416T120619_P05023_N_F_J_001"],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-10-13",
+          "image": "layers/gcov_hh/2026-10-13.webp",
+          "granules": ["NISAR_L2_PR_GCOV_033_019_A_011_4005_DHDH_A_20261013T120538_20261013T120612_P05023_N_F_J_001"],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "id": "gcov_hv",
+      "title": "Radar brightness, HV",
+      "kind": "backscatter",
+      "product": "GCOV",
+      "polarization": "HV",
+      "units": "dB",
+      "bounds": [-99.40, 19.10, -98.85, 19.65],
+      "colormap": { "name": "gray", "min": -30, "max": -5 },
+      "description": "Placeholder layer for building the app. Real HV radar images replace it later.",
+      "caveats": ["Synthetic placeholder images, not NISAR data."],
+      "frames": [
+        {
+          "date": "2026-04-16",
+          "image": "layers/gcov_hv/2026-04-16.webp",
+          "granules": ["NISAR_L2_PR_GCOV_018_019_A_011_4005_DHDH_A_20260416T120544_20260416T120619_P05023_N_F_J_001"],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-10-13",
+          "image": "layers/gcov_hv/2026-10-13.webp",
+          "granules": ["NISAR_L2_PR_GCOV_033_019_A_011_4005_DHDH_A_20261013T120538_20261013T120612_P05023_N_F_J_001"],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "id": "gcov_composite",
+      "title": "Radar color composite, HH and HV",
+      "kind": "composite",
+      "product": "GCOV",
+      "polarization": "HH+HV",
+      "units": "dB",
+      "bounds": [-99.40, 19.10, -98.85, 19.65],
+      "colormap": { "name": "rgb", "min": -30, "max": 0 },
+      "description": "Placeholder layer for building the app. Red is HH, green is HV, blue is HH minus HV.",
+      "caveats": ["Synthetic placeholder images, not NISAR data."],
+      "frames": [
+        {
+          "date": "2026-04-16",
+          "image": "layers/gcov_composite/2026-04-16.webp",
+          "granules": ["NISAR_L2_PR_GCOV_018_019_A_011_4005_DHDH_A_20260416T120544_20260416T120619_P05023_N_F_J_001"],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-10-13",
+          "image": "layers/gcov_composite/2026-10-13.webp",
+          "granules": ["NISAR_L2_PR_GCOV_033_019_A_011_4005_DHDH_A_20261013T120538_20261013T120612_P05023_N_F_J_001"],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "nisar-gcov",
+      "title": "NISAR L2 GCOV PROVISIONAL V1",
+      "url": "https://nisar-docs.asf.alaska.edu/",
+      "license": "NASA open data"
+    }
+  ]
+}
