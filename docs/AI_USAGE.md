@@ -17,5 +17,6 @@ Rules we follow (from the 2026 Project Submission Guide, summarized in `docs/cha
 | Nov 14 | Eduardo | Claude Code | Quick-look script for local NISAR files; ran it on the downloaded files and described what the pictures show (the pictures are renderings of NASA data, not generated imagery) | `pipeline/quicklook.py`, `data/quicklooks/*` (not in git) |
 | Nov 14 | Eduardo | Claude Code | Coordination files from the team's protocol template | `coordination/*` |
 | Nov 14 | Zainab | Claude Code | T-08 sample dataset: guided writing of the placeholder image script (math patterns, not AI imagery, not NASA data), drafted the sample manifest, reviewed and fixed the hand-written landmarks file | `pipeline/tests/make_sample_images.py`, `app/public/data/sample/*` |
+| Nov 14 | Zainab | Claude Code | T-08 part 2: wrote the manifest validator and its tests; Zainab reviewed them | `pipeline/validate_manifest.py`, `pipeline/tests/test_validate.py` |
 
 
