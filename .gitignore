@@ -2,7 +2,7 @@
 # Datasets/ = raw NISAR downloads, data/ = crops and quick-look pictures.
 Datasets/
 datasets/
-data/
+/data/
 *.h5
 *.nc
 *.tif
