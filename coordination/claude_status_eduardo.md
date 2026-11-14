@@ -1,10 +1,10 @@
-# Status: Eduardo        Updated: Sat 4:00 PM CT        Branch: eduardo/app-scaffold (T-02); main (plan files)
-Plan version read: Sat 4:00 PM, plan v0.3 (one go/no-go at Sun 1:00 AM) plus roadblock ID change
+# Status: Eduardo        Updated: Sat 5:55 PM CT        Branch: eduardo/map-screen (T-09)
+Plan version read: Sat 5:55 PM, plan v0.3 plus roadblock ID change
 
 ## Now / Next / Done
-- Now:  T-02 in review: PR #2 (https://github.com/BUILT-Illinois/built-to-last-nasa-space-apps-2026/pull/2). Needs one reviewer and a squash merge.
-- Next: T-09 map screen; join T-25 at 4:15 PM
-- Done: plan v0.3 (D-12) pushed; RB-M01 claims added to the memo; T-02 pushed; plan v0.2 approved and pushed; Phase 0 to 3 planning; catalog check (`pipeline/reports/`); first look at local files (`data/quicklooks/`, `pipeline/quicklook.py`)
+- Now:  T-09 map screen (built and tested locally; PR after rebasing on main). FYI Elias: repo secret AZURE_STATIC_WEB_APPS_API_TOKEN is set (Sat 5:52 PM) for PR #4. CLOUDFLARE_API_TOKEN is not set.
+- Next: follow-up PR for the PR #2 should-fix items (runtime validation, displacement `since`, Node 24 engines, minimatch audit, AI notices); landmark markers on the map for T-14
+- Done: T-02 merged (PR #2, with the region-loading race fix and regression tests); Azure deploy secret set; plan v0.3 (D-12) pushed; RB-M01 claims added to the memo; T-02 pushed; plan v0.2 approved and pushed; Phase 0 to 3 planning; catalog check (`pipeline/reports/`); first look at local files (`data/quicklooks/`, `pipeline/quicklook.py`)
 
 ## Roadblocks (append-only; mark resolved, never delete)
 ### RB-F01 (was RB-E01)  [FYI]  OPEN   Needed by: Sat 4:30 PM
