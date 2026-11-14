@@ -1,0 +1,22 @@
+/* Minimal base styles so the map fills the window. Owner: Monica (app/src/styles/).
+   Placeholder from the T-02 scaffold, drafted with AI assistance (Claude Code). */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.app {
+  position: relative;
+  height: 100%;
+}
+
+.map {
+  position: absolute;
+  inset: 0;
+}
