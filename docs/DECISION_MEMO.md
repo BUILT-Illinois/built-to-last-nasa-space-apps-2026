@@ -107,6 +107,13 @@ Whatever is chosen, the app keeps what the radar shows separate from what we inf
 | Subsidence rates reach up to 50 cm per year and are almost fully irreversible | Chaussard et al. (2021), JGR Solid Earth, doi:10.1029/2020JB020648. **Read the abstract ourselves before quoting.** |
 | Double bounce is most sensitive to HH; volume scattering (for example forest canopy) to cross-polarized HV or VH; rough surface scattering to VV | NASA Earthdata, "What is SAR": <https://www.earthdata.nasa.gov/learn/earth-observation-data-basics/sar> |
 | L-band wavelength is about 23 cm | Same NASA Earthdata page |
+| A SAR instrument "sends out a pulse of energy" and "records the amount of that energy reflected back after it interacts with Earth" | Same NASA Earthdata page (T-06 claim 1, added 4:00 PM for RB-M01) |
+| SAR can collect data "night or day, regardless of weather conditions" | Same NASA Earthdata page (T-06 claim 2) |
+| NISAR's L-band radar is "unhindered by clouds or vegetation that impede optical sensors and higher-frequency radars" | Same JPL article (T-06 claim 3) |
+| NISAR is "a joint mission developed by NASA and the Indian Space Research Organisation (ISRO)" | Same JPL article (T-06 claim 4) |
+| NASA's JPL "provided the satellite's L-band SAR and antenna reflector" | Same JPL article (T-06 claim 5) |
+| L-band's longer wavelength "enables it to penetrate more deeply through a tree canopy" | Same NASA Earthdata page (T-06 claim 6) |
+| H is horizontal and V is vertical polarization; a signal "emitted in horizontal (H) and received in horizontal (H) would be indicated HH" | Same NASA Earthdata page (T-06 claim 7) |
 | PROVISIONAL products are calibrated and validated at a limited set of sites; SME2 is not yet fully calibrated; use caution mixing BETA and PROVISIONAL | ASF, PROVISIONAL known issues (updated Jul 30, 2026): <https://nisar-docs.asf.alaska.edu/provisional-known-issues/> |
 
 Anything not in this table needs a source added here before it appears in the app, the slides, or the project page.
