@@ -1,7 +1,8 @@
 # Hackathon plan: Dancing with the SARs, Mexico City
 
-**Status: v0.2, approved by Eduardo and in force since Sat Nov 14, 3:10 PM CT.**
-v0.2 adds Eduardo's answers (map owner, Azure, repo, slide deck), a first look at the files in `Datasets/`, and a story decision gate: the team analyses the data and picks the story.
+**Status: v0.3, approved by Eduardo and in force since Sat Nov 14, 3:55 PM CT.**
+v0.3 merges the 9:30 PM and 11:30 PM gates into one go/no-go at Sun 1:00 AM (G2), keeps 9:30 PM as a progress checkpoint, and moves the G1-fallback GUNW download to Eduardo's laptop in the evening (see section 13).
+v0.2 added Eduardo's answers (map owner, Azure, repo, slide deck), a first look at the files in `Datasets/`, and a story decision gate: the team analyses the data and picks the story.
 Only the plan agent (Eduardo's session) edits this file, and only after Eduardo says yes. Everyone else raises problems in their own status file and references task IDs (T-01, T-02, ...).
 
 All times are Central Time. **Hard deadline: Sun Nov 15, 1:30 PM. We submit by 12:00 PM.**
@@ -34,7 +35,7 @@ First look at the four files in `Datasets/` (16 GB, on Eduardo's laptop, git-ign
 | Dataset names and grids are confirmed on real files. GCOV: `frequencyA` is 10 m pixels (33,480 x 34,128), `frequencyB` is 80 m. GUNW: unwrapped phase, coherence, connected components, and ionosphere screen at 80 m; wrapped interferogram at 20 m. Everything is in UTM zone 14N (EPSG:32614). Radar wavelength from the file: 24.2 cm. | The recipes in section 7 are no longer guesses. Cropping our box from a local file takes about a second. |
 | The three complete files do not match each other. The Oct 30, 2025 GCOV is **BETA** (release X05009). The Nov 6, 2026 GCOV is release P05036 from the `NISAR_L2_GCOV_V1` collection, not the PROVISIONAL collection. The GUNW is track 113 (descending), Oct 8 to Oct 20, 2026. | Fine for exploring. For the app, use one release per layer. A PROVISIONAL version of the Oct 30, 2025 scene exists. Check how ASF labels `NISAR_L2_GCOV_V1` before we describe that file. |
 | A fourth file (105 MB, same name as the Nov 6 file without "(2)") was a truncated download that would not open. | Deleted on Eduardo's instruction, Nov 14, 3:09 PM. |
-| **One 12-day GUNW pair does not show sinking on its own.** The raw picture is a smooth tilt of several centimeters across the valley. After removing the tilt, blobs of about 1 cm remain everywhere, including over the mountains. That is the size of the motion we expect in 12 days, so signal and noise cannot be told apart in one pair. | A ground-motion layer needs many pairs added together. It depends on G1 (remote reads) or on about 32 to 65 GB of downloads. Do not promise it before G3. |
+| **One 12-day GUNW pair does not show sinking on its own.** The raw picture is a smooth tilt of several centimeters across the valley. After removing the tilt, blobs of about 1 cm remain everywhere, including over the mountains. That is the size of the motion we expect in 12 days, so signal and noise cannot be told apart in one pair. | A ground-motion layer needs many pairs added together. It depends on G1 (remote reads) or on about 32 to 65 GB of downloads. Do not promise it before G2 (Sun 1:00 AM). |
 | GCOV from Oct 30, 2025 to Nov 6, 2026 (same season, one year apart): the dark lakebed zone north-east of the airport is clearly darker in HV in 2026, and patches in the southern wetland and farm zone are brighter. The whole scene is also about 1.4 dB brighter in HV, which is probably the different processing releases, not the ground. Place names are read off pixel positions and need checking on a map. | Year-over-year and seasonal surface change is visible in GCOV with almost no processing. It is a real candidate story. Repeat with two files of the same release before believing any number. |
 
 Other Mexican regions with data (granule counts for GCOV / GUNW / SME2, all collections): Monterrey 120 / 94 / 112, Mexicali Valley 117 / 100 / 112, Popocatepetl 95 / 83 / 89, Guadalajara and Chapala 90 / 72 / 82, Aguascalientes 87 / 71 / 82, Tabasco wetlands 81 / 64 / 73. Stretch only.
@@ -47,8 +48,8 @@ Building does not wait for the decision. Tier 1 below is the same for every cand
 
 | Tier | What ships | Deadline |
 |---|---|---|
-| **1, must ship** | Map with GCOV layers (HH, HV, HH/HV composite) for one dry-season and one rainy-season date, swipe slider, 5 to 7 landmark cards, polarization explainer, provisional label, sources page. Static, on Azure, with bundled sample data. | Live Sat 9:30 PM |
-| **2** | Ground-motion layer from 28 GUNW pairs with a chart per landmark. GCOV time slider with about monthly frames. | Checked Sat 11:30 PM, in the app by Sun 8:00 AM |
+| **1, must ship** | Map with GCOV layers (HH, HV, HH/HV composite) for one dry-season and one rainy-season date, swipe slider, 5 to 7 landmark cards, polarization explainer, provisional label, sources page. Static, on Azure, with bundled sample data. | Core live at the Sat 9:30 PM checkpoint; complete and live by Sun 1:00 AM (G2) |
+| **2** | Ground-motion layer from 28 GUNW pairs with a chart per landmark. GCOV time slider with about monthly frames. | Checked Sun 1:00 AM (G2), in the app by Sun 8:00 AM |
 | **3** | Soil moisture layer, second region, Spanish/English toggle, point query API, Azure AI helper, data-quality flag. | Only if Tier 2 is in by Sun 7:30 AM |
 
 If we fall behind, cut in this order: all of Tier 3, the borough context layer (T-21), GCOV time slider, per-landmark charts, ground-motion layer, HH/HV composite. Never cut: real NISAR data on the map, the swipe, the landmark text, the polarization explainer, the provisional label, the sources.
@@ -57,10 +58,10 @@ If we fall behind, cut in this order: all of Tier 3, the borough context layer (
 
 | Gate | Time | Question | If no |
 |---|---|---|---|
-| G1 | Sat 4:30 PM | Can we read our window out of a remote GCOV file and a remote GUNW file? | Full-file downloads, **pre-approved by Eduardo**: 2 GCOV of one release (14 GB, about 55 min). Tier 2 shrinks to 14 GUNW pairs (32 GB overnight). Anything beyond these two sets still needs Eduardo's yes. |
-| GS | Sat 5:30 PM | Has the team chosen the story from the data (T-25)? | Default story: surface change in GCOV. Ground motion stays a Tier 2 option behind G3. |
-| G2 | Sat 9:30 PM | Tier 1 live on the public URL with real data? | No Tier 2. Everyone on Tier 1. |
-| G3 | Sat 11:30 PM | Ground-motion map passes the sanity check? | Cut or shrink the layer. Headline becomes seasonal change. |
+| G1 | Sat 4:30 PM | Can we read our window out of a remote GCOV file and a remote GUNW file? | Full-file downloads, **pre-approved by Eduardo**: 2 GCOV of one release (14 GB, about 55 min). Tier 2 shrinks to 14 GUNW pairs (32 GB, about 2 h), downloaded on Eduardo's laptop as soon as G1 fails, after the GCOV files so they do not split the Wi-Fi. Not overnight. Shared with other machines through LocalSend over a direct Ethernet link. Anything beyond these two sets still needs Eduardo's yes. |
+| GS | Sat 5:30 PM | Has the team chosen the story from the data (T-25)? | Default story: surface change in GCOV. Ground motion stays a Tier 2 option behind G2. |
+| Checkpoint | Sat 9:30 PM | Progress report, not a gate. Is the core of Tier 1 live on the public URL with real data (GCOV layers, swipe, landmark cards; text may still be placeholders)? Each person says what is left for G2. | Nothing is cut here. Problems found go into block E. |
+| G2 | Sun 1:00 AM | Go or no-go, before anyone sleeps. (a) Is all of Tier 1 live, including the polarization explainer, provisional label, sources page, and landmark text? (b) Does the ground-motion map pass the T-32 sanity check? This one gate replaces the old G2 (9:30 PM) and G3 (11:30 PM). | (a) No: no Tier 2; block G finishes Tier 1. (b) No: cut or shrink the layer; the headline becomes seasonal change. |
 | G4 | Sun 8:00 AM | Feature freeze. Main deployed and working? | Roll back to the last good deploy. |
 | G5 | Sun 10:30 AM | All links open in a private window, all form fields drafted? | All hands on the submission. |
 
@@ -211,12 +212,13 @@ What we will say: movement is along the radar's line of sight, relative to our r
 | 6:45 to 7:30 PM | C | First real data on the live URL. Start the long fetch jobs before the talk. |
 | 7:30 to 8:30 PM | Speaker talk | Jobs run unattended. (Length assumed 1 hour.) |
 | 8:30 to 9:30 PM | D: Tier 1 integration | Everyone tests the live site on a laptop and a phone. |
-| **9:30 PM** | **G2** | Go or no-go for Tier 2. |
-| 9:30 to 11:30 PM | E | Tier 2, or finish Tier 1. Slides and page text drafted with placeholders. |
-| **11:30 PM** | **G3** | Standup. |
-| 11:30 PM to 1:00 AM | F | Wire Tier 2 in. Start overnight jobs. Main green and deployed before anyone sleeps. |
+| **9:30 PM** | **Checkpoint** | Progress report: core Tier 1 on the live URL, and what is left for G2. Not a go/no-go. |
+| 9:30 to 11:30 PM | E | Tier 1 text and pages (T-19, T-23, T-24). Tier 2 processing (T-31, T-33). Slides and page text drafted with placeholders. |
+| **11:30 PM** | Standup | Short standup. No gate. |
+| 11:30 PM to 1:00 AM | F | Finish Tier 1. T-32 sanity check. Start overnight jobs. Main green and deployed. |
+| **1:00 AM** | **G2** | Go or no-go for Tier 2, then sleep. |
 | 1:00 to 7:00 AM | Sleep | |
-| Sun 7:00 to 8:00 AM | G | Last features. |
+| Sun 7:00 to 8:00 AM | G | Wire Tier 2 in if G2 said go (T-34); otherwise finish Tier 1. |
 | **8:00 AM** | **G4, feature freeze** | Breakfast. |
 | 8:30 to 10:30 AM | H: submission build | Bug fixes only. Copy, screenshots, slides, page text, README. Repo public. |
 | **10:30 AM** | **G5** | Link check in a private window. |
@@ -253,17 +255,17 @@ Tier 1 unless marked. "Est." is hands-on hours. Blocks refer to section 8.
 | T-16 | `pipeline/landmarks.py`: `sample_at_points()` against given tests | Zainab | D | 1.0 | Tests pass; pipeline fills `series` in `landmarks.json` |
 | T-17 | Project name, tagline, story outline in 6 steps, written once the story is chosen (GS) | Monica | B | 0.5 | Team agrees before dinner |
 | T-18 | Intro screen and guided walkthrough driven by `content/story/mexico_city.json` | Monica (backup Zainab) | B to D | 3.0 | A first-time visitor understands the point in 60 seconds; "explore freely" exits the tour |
-| T-19 | Landmark text for 5 to 7 places with a source for every claim | Monica writes, Eduardo reviews | C to E | 1.5 + 0.75 | `content/landmarks/mexico_city.json` merged; no unsourced claim |
+| T-19 | Landmark text for 5 to 7 places with a source for every claim | Monica writes, Eduardo reviews | C to E | 1.5 + 0.75 | `content/landmarks/mexico_city.json` merged; no unsourced claim; live by G2 (Sun 1:00 AM) |
 | T-20 | Typed API on Azure Functions: health, regions, manifest, landmarks | Elias (backup Zainab) | D, E | 1.0 | Four routes live on the Azure URL; error shape per contract; app still works with the API off |
 | T-21 | Borough boundaries with population as a GeoJSON context layer | Diego | F, G | 1.0 | File under 1 MB; official source and license in `SOURCES.md`. First to cut. |
-| T-22 | Integration pass for G2 | Elias, everyone tests | D | 0.75 | Live URL shows real GCOV with swipe, landmarks, and tour; no console errors; works on one phone |
-| T-23 | Explainer cards (polarization; shows vs. infer), provisional badge, mobile pass | Monica | E, F | 1.5 | Badge visible on every data view |
-| T-24 | Sources page in the app, generated from the manifest `sources` and `SOURCES.md` | Zainab | F | 0.5 | Every dataset, library, and image is listed with a link |
+| T-22 | Integration pass for the 9:30 PM checkpoint | Elias, everyone tests | D | 0.75 | Live URL shows real GCOV with swipe, landmarks, and tour; no console errors; works on one phone |
+| T-23 | Explainer cards (polarization; shows vs. infer), provisional badge, mobile pass | Monica | E, F | 1.5 | Badge visible on every data view; live by G2 (Sun 1:00 AM) |
+| T-24 | Sources page in the app, generated from the manifest `sources` and `SOURCES.md` | Zainab | E, F | 0.5 | Every dataset, library, and image is listed with a link; live by G2 (Sun 1:00 AM) |
 | T-30 | Tier 2: fetch the GUNW windows for all 28 pairs | Diego runs, Elias backs up | C (runs during the talk) | 1.0 | 28 crops in `data/interim/`; failures listed in the status file |
 | T-31 | Tier 2: `pipeline/science/displacement.py` per the recipe in section 7 | Eduardo | E | 2.5 | Runs on the 28 crops; Zainab's tests (T-31t, 0.75 h) pass on synthetic data |
-| T-32 | Tier 2: sanity check for G3 | Eduardo | E | 0.5 | Written in `DECISIONS.md`: where the fastest motion is, its rate, how stable the reference area is, how that compares with the JPL article and the literature |
+| T-32 | Tier 2: sanity check for G2 | Eduardo | F | 0.5 | Written in `DECISIONS.md`: where the fastest motion is, its rate, how stable the reference area is, how that compares with the JPL article and the literature |
 | T-33 | Tier 2: add ground-motion layer and about monthly GCOV frames to the build | Elias | E, F | 1.0 | Both in the manifest; validator passes; folder under 60 MB |
-| T-34 | Tier 2: show the new layers in the app (legend, slider, chart) | Diego, Zainab, Eduardo | F, G | 1.5 | Live before 8:00 AM Sunday |
+| T-34 | Tier 2: show the new layers in the app (legend, slider, chart) | Diego, Zainab, Eduardo | G | 1.5 | Live before 8:00 AM Sunday |
 | T-40+ | Tier 3 items, in the order of section 2 | Unassigned | G | | Only with Eduardo's go |
 | T-50 | Demo deck, **7 slides at most** | Monica (backup Zainab) | E, H | 2.5 | Draft with placeholders by Sat 11:30 PM; final by Sun 10:30 AM; public link opens in a private window |
 | T-51 | Text for all 8 project page fields in `docs/submission/PROJECT_PAGE.md` | Monica, Eduardo reviews | F, H | 1.5 + 0.5 | Draft Sat night; reviewed by Sun 9:30 AM |
@@ -283,7 +285,7 @@ Tier 1 unless marked. "Est." is hands-on hours. Blocks refer to section 8.
 | During the talk | T-30 GUNW windows, 28 pairs | NVIDIA laptop 1 | Diego |
 | During the talk | GCOV `frequencyB` windows for about 12 monthly dates | NVIDIA laptop 2 | Elias |
 | Overnight | GCOV `frequencyA` (10 m) windows around the landmarks for the two Tier 1 dates | NVIDIA laptop 2 | Elias |
-| Overnight, only if G1 failed | Full GUNW downloads (32 GB) | NVIDIA laptop 1, plugged in, sleep disabled | Diego |
+| Evening, as soon as G1 fails (after the GCOV fallback) | Full GUNW downloads (32 GB), shared with other machines through LocalSend over a direct Ethernet link | Eduardo's laptop, plugged in, sleep disabled | Eduardo |
 
 Jobs write to `data/interim/`, log to a file, and can be re-run without redoing finished items. Nothing that touches `main` or the deploy runs unattended.
 
@@ -323,6 +325,8 @@ Answered by Eduardo on Nov 14, 2:30 PM: Eduardo owns the map screen. `docs/COORD
 
 Also answered at 3:05 PM: the plan is approved. The G1 fallback downloads are approved in advance (14 GB of GCOV, 32 GB of GUNW overnight); they start only if G1 fails. The truncated file is deleted.
 
+Changed at 3:55 PM (plan v0.3): one go/no-go at Sun 1:00 AM (G2) instead of gates at 9:30 PM and 11:30 PM, because Tier 1 text (T-19, T-23, T-24) was scheduled after the 9:30 PM gate and an overnight GUNW download could not finish before the 11:30 PM gate. 9:30 PM stays as a progress checkpoint. The 32 GB GUNW fallback runs on Eduardo's laptop in the evening and moves between machines over LocalSend on a direct Ethernet link. The download sizes approved at 3:05 PM are unchanged.
+
 Still open:
 
 1. **Organizer answers** (T-05): does Azure hosting plus Functions qualify for the award, how long is the live pitch, may we edit after 1:30 PM?
@@ -350,7 +354,7 @@ Lines to add after the short prompt:
 |---|---|---|
 | 1 | Nobody has SAR experience, so a wrong science claim slips in | Only claims with a source in the memo table; "radar shows" kept apart from "we infer"; Eduardo reviews all copy; our ground-motion map is checked against the JPL image |
 | 2 | Remote window reads do not work or are too slow on venue Wi-Fi | G1 at 4:30 PM with sized download fallbacks |
-| 3 | Ground-motion processing goes wrong (reference area, sign, noise) | It is Tier 2 behind G3; Tier 1 does not depend on it |
+| 3 | Ground-motion processing goes wrong (reference area, sign, noise) | It is Tier 2 behind G2; Tier 1 does not depend on it |
 | 4 | Azure setup stalls (subscription, org permissions on a private repo) | Deploy before dinner; fallback host serves the same static build |
 | 5 | Demo exceeds 7 slides or 30 seconds | Limit written on the task; Zainab counts slides at G5 |
 | 6 | Repo still private or unlicensed at submission | T-54 and T-07 with owners and times |

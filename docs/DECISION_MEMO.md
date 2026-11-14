@@ -1,6 +1,6 @@
 # Decision memo: what we build over Mexico City
 
-Status: **the story is open. The team analyses the data and decides by Sat Nov 14, 5:30 PM CT (gate GS).** Updated 2:45 PM with a first look at the files in `Datasets/`.
+Status: **the story is open. The team analyses the data and decides by Sat Nov 14, 5:30 PM CT (gate GS).** Updated 2:45 PM with a first look at the files in `Datasets/`. Updated 3:55 PM: gates G2 and G3 merged into one go/no-go at Sun 1:00 AM (plan v0.3).
 
 The Submission Guide says AI should not be used to come up with the idea of how to solve the challenge. This memo therefore only reports what the data can and cannot support. The choice is the team's.
 
@@ -72,8 +72,8 @@ Two stories are supported by the data, and they can be combined.
 | Option | What the app says | Cost and risk |
 |---|---|---|
 | A. Surface change (GCOV) | How the valley's water, wetlands, vegetation, and built-up land look to radar in HH and HV, between seasons and one year apart | Lowest. It is Tier 1 as planned. Needs two to twelve GCOV windows of one release. |
-| B. Ground sinking (GUNW) | Where and how fast the ground moves as the old lakebed compacts | Highest. Needs the 28-pair chain, careful processing, and gate G3. NASA has already published the finding, so our contribution would be the interactive tool and the longer time span. |
-| A + B. "A city built on a lake" | Both views tied to a handful of landmarks | A is Tier 1, B is Tier 2 behind G3. If B fails, the app is still complete. |
+| B. Ground sinking (GUNW) | Where and how fast the ground moves as the old lakebed compacts | Highest. Needs the 28-pair chain, careful processing, and gate G2. NASA has already published the finding, so our contribution would be the interactive tool and the longer time span. |
+| A + B. "A city built on a lake" | Both views tied to a handful of landmarks | A is Tier 1, B is Tier 2 behind G2. If B fails, the app is still complete. |
 
 Whatever is chosen, the app keeps what the radar shows separate from what we infer about causes.
 
@@ -81,18 +81,18 @@ Whatever is chosen, the app keeps what the radar shows separate from what we inf
 
 | Tier | Content | Ships when |
 |---|---|---|
-| **1, must ship** | Web map of Mexico City with NISAR GCOV layers (HH, HV, and an HH/HV color composite) for one dry-season and one rainy-season date, a swipe slider between them, 5 to 7 landmark cards (what radar shows, what we infer, human vs. natural driver, sources), a polarization explainer, a "provisional data" label, a sources page. Static files, deployed on Azure, sample data bundled. | Live by **Sat 9:30 PM** |
-| **2, if Tier 1 is live by Sat 9:30 PM and the team chose option B** | Ground-motion layer: cumulative line-of-sight movement Oct 2025 to Oct 2026 from the 28 GUNW pairs, with a time-series chart per landmark. GCOV time slider with about monthly frames. | Sanity-checked by **Sat 11:30 PM**, in the app by Sun 8:00 AM |
+| **1, must ship** | Web map of Mexico City with NISAR GCOV layers (HH, HV, and an HH/HV color composite) for one dry-season and one rainy-season date, a swipe slider between them, 5 to 7 landmark cards (what radar shows, what we infer, human vs. natural driver, sources), a polarization explainer, a "provisional data" label, a sources page. Static files, deployed on Azure, sample data bundled. | Core live by the **Sat 9:30 PM** checkpoint, complete by **Sun 1:00 AM** (G2) |
+| **2, if Tier 1 is complete at G2 (Sun 1:00 AM) and the team chose option B** | Ground-motion layer: cumulative line-of-sight movement Oct 2025 to Oct 2026 from the 28 GUNW pairs, with a time-series chart per landmark. GCOV time slider with about monthly frames. | Sanity-checked by **Sun 1:00 AM** (G2), in the app by Sun 8:00 AM |
 | **3, only if Tier 2 is in by Sun 7:30 AM** | In order: soil-moisture layer, a second Mexican region through config, Spanish/English toggle, click-anywhere point query through the API, an Azure AI plain-language helper, a data-quality flag. | Probably none. That is fine. |
 
 ## Gates
 
 | Gate | Time (CT) | Question | If no |
 |---|---|---|---|
-| G1 | Sat 4:30 PM | Can we read just the Mexico City window out of a cloud-hosted GCOV file and a GUNW file without downloading whole files? | Switch to full downloads: 2 GCOV files (14 GB, about 55 min) for Tier 1. For Tier 2, 7 dry-season plus 7 rainy-season GUNW pairs (32 GB, about 2 h, overnight). Eduardo approved both sets in advance on Nov 14, 3:05 PM. |
-| GS | Sat 5:30 PM | Has the team chosen the story from the data? | Default: option A. Option B stays possible behind G3. |
-| G2 | Sat 9:30 PM | Is Tier 1 live on the public URL with real NISAR data? | No Tier 2. Everyone finishes Tier 1. The JPL result is cited as context only. |
-| G3 | Sat 11:30 PM | Does our ground-motion map pass the sanity check (sinking where the JPL image shows it, reference area stable, fastest rate in the range JPL and the literature report)? | Cut the layer, or show only the months that pass, labeled as such. The headline becomes seasonal surface change. |
+| G1 | Sat 4:30 PM | Can we read just the Mexico City window out of a cloud-hosted GCOV file and a GUNW file without downloading whole files? | Switch to full downloads: 2 GCOV files (14 GB, about 55 min) for Tier 1. For Tier 2, 7 dry-season plus 7 rainy-season GUNW pairs (32 GB, about 2 h, on Eduardo's laptop in the evening as soon as G1 fails, shared over LocalSend on a direct Ethernet link). Eduardo approved both sets in advance on Nov 14, 3:05 PM. |
+| GS | Sat 5:30 PM | Has the team chosen the story from the data? | Default: option A. Option B stays possible behind G2. |
+| Checkpoint | Sat 9:30 PM | Progress report, not a gate: is the core of Tier 1 live on the public URL with real NISAR data? | Nothing is cut. Problems go into the next block. |
+| G2 | Sun 1:00 AM | (a) Is all of Tier 1 live, including the polarization explainer, provisional label, sources page, and landmark text? (b) Does our ground-motion map pass the sanity check (sinking where the JPL image shows it, reference area stable, fastest rate in the range JPL and the literature report)? Replaces the old G2 (9:30 PM) and G3 (11:30 PM). | (a) No: no Tier 2; everyone finishes Tier 1, and the JPL result is cited as context only. (b) No: cut the layer, or show only the months that pass, labeled as such; the headline becomes seasonal surface change. |
 | G4 | Sun 8:00 AM | Feature freeze. Is main deployed and working? | Roll back to the last good deploy. Bug fixes only from here. |
 | G5 | Sun 10:30 AM | Do all submission links open in a private window, and is every form field drafted? | Stop all code. Everyone on the submission. |
 
