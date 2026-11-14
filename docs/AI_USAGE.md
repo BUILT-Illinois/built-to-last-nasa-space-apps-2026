@@ -17,3 +17,4 @@ Rules we follow (from the 2026 Project Submission Guide, summarized in `docs/cha
 | Nov 14 | Eduardo | Claude Code | Quick-look script for local NISAR files; ran it on the downloaded files and described what the pictures show (the pictures are renderings of NASA data, not generated imagery) | `pipeline/quicklook.py`, `data/quicklooks/*` (not in git) |
 | Nov 14 | Eduardo | Claude Code | Coordination files from the team's protocol template | `coordination/*` |
 | Nov 14 | Eduardo | Claude Code | T-02 app scaffold: Vite, React, TypeScript, MapLibre map, shared state store, data contract types and loader stubs, lint and build config | `app/*` (except `node_modules/`, `dist/`) |
+| Nov 14 | Elias | Codex | Drafting and testing the GCOV data build and reprojection | `pipeline/build_manifest.py`, `pipeline/test_build_manifest.py`, `pipeline/requirements.txt` |
