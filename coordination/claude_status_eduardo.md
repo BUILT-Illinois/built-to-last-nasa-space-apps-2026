@@ -1,13 +1,13 @@
-# Status: Eduardo        Updated: Sat 3:10 PM CT        Branch: main (plan files only)
-Plan version read: Sat 3:10 PM, plan v0.2 approved and in force
+# Status: Eduardo        Updated: Sat 4:00 PM CT        Branch: eduardo/app-scaffold (T-02); main (plan files)
+Plan version read: Sat 4:00 PM, plan v0.3 (one go/no-go at Sun 1:00 AM) plus roadblock ID change
 
 ## Now / Next / Done
-- Now:  T-02 app scaffold (merge by 4:00 PM)
+- Now:  T-02 in review: PR #2 (https://github.com/BUILT-Illinois/built-to-last-nasa-space-apps-2026/pull/2). Needs one reviewer and a squash merge.
 - Next: T-09 map screen; join T-25 at 4:15 PM
-- Done: plan v0.2 approved and pushed; Phase 0 to 3 planning; catalog check (`pipeline/reports/`); first look at local files (`data/quicklooks/`, `pipeline/quicklook.py`)
+- Done: plan v0.3 (D-12) pushed; RB-M01 claims added to the memo; T-02 pushed; plan v0.2 approved and pushed; Phase 0 to 3 planning; catalog check (`pipeline/reports/`); first look at local files (`data/quicklooks/`, `pipeline/quicklook.py`)
 
 ## Roadblocks (append-only; mark resolved, never delete)
-### RB-E01  [FYI]  OPEN   Needed by: Sat 4:30 PM
+### RB-F01 (was RB-E01)  [FYI]  OPEN   Needed by: Sat 4:30 PM
 What I was trying to do: check whether the downloaded files can be used together in the app.
 What happened (exact error or evidence): the two GCOV files are different processing releases (`compositeReleaseId` X05009 = BETA for 2025-10-30, P05036 for 2026-11-06). The HV difference between them has a scene-wide median of +1.36 dB, which is probably processing and not the ground. A third file is truncated: `h5py` reports `truncated file: eof = 104904968, stored_eof = 6983516160`.
 What I already tried: confirmed in the catalog CSV that a PROVISIONAL (P05023) version of the 2025-10-30 scene exists.
@@ -16,16 +16,17 @@ Options (2 or 3, with cost in hours): (a) read both dates from the PROVISIONAL c
 My recommendation: (a), with (b) as the G1 fallback.
 Update Sat 3:10 PM: the truncated file was deleted on Eduardo's instruction. Fallback (b) is pre-approved.
 
-### RB-E02  [FYI]  OPEN   Needed by: Sat 5:30 PM
+### RB-F02 (was RB-E02)  [FYI]  OPEN   Needed by: Sat 5:30 PM
 What I was trying to do: see whether ground sinking shows in the one GUNW pair we have (track 113, 2026-10-08 to 2026-10-20).
 What happened (exact error or evidence): raw line-of-sight change over the box spans -4.3 to +2.9 cm (2nd to 98th percentile) as a smooth tilt. After removing a best-fit plane the spread is still about 1 cm (standard deviation 0.96 to 1.01 cm), with blobs over the mountains as large as those over the city.
 What I already tried: masking coherence below 0.4, subtracting the ionosphere layer, removing a plane.
 Impact on the plan (task IDs, timeline, tiers): T-30 to T-34. Ground motion cannot be shown from one or a few pairs. It needs the chain of pairs and gate G3.
 Options (2 or 3, with cost in hours): (a) keep it as Tier 2 behind G1 and G3; (b) drop it and make surface change the whole story.
 My recommendation: the team decides at GS (5:30 PM) after T-25.
+Update Sat 4:00 PM: G3 is merged into G2 at Sun 1:00 AM (plan v0.3, D-12). Renamed from RB-E01 and RB-E02 because Elias uses E.
 
 ## Reviews of other people's roadblocks
-(none yet)
+- RB-M01: AGREE with (a), done at 4:00 PM: T-06 claims 1 to 7 are rows in the decision memo table. (b) the HV definition and dark/bright guidance are still needed before T-23.
 
 ## Local data (so nobody downloads the same file twice)
 All in `Datasets/` at the repo root on Eduardo's laptop (git-ignored).
