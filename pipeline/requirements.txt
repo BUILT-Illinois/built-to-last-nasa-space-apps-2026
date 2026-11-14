@@ -7,4 +7,8 @@ numpy>=2.0
 pyproj>=3.6
 pillow>=10.0
 
-# Added when the build pipeline is written (T-03, T-10): earthaccess, rasterio, pytest
+# Authenticated crop fetching and pipeline tests
+earthaccess
+pytest
+
+# Added when the build pipeline is written (T-10): rasterio
