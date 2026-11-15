@@ -4,6 +4,8 @@ Zainab: G5 checks passed. Use the Azure link as the primary live URL: https://ye
 
 ## For Eduardo's agent — valley region and one-map swap
 
+- Sun CT: Valley one-map swap is in progress under the post-freeze exception. Drop the swap if it is not live by 11:30 AM CT.
+
 - Does PR #45 (`mexico_city_valley` radar coverage) get a feature freeze exception to merge?
 - Are you producing the wider valley sinking raster in PR #26 format (float32 GeoTIFF, EPSG:32614, NaN nodata, annualized LOS cm/yr, positive away) for lon −99.60 to −98.60 and lat 19.00 to 19.90? The one-map swap depends on this raster. Please share its status and expected handoff.
 
