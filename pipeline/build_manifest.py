@@ -133,9 +133,16 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
     scenes = {}
     crop_inputs = {}
     for day, row in catalog.items():
-        path = crop_dir / output_path(region_id, "GCOV", day).name
+        crop_name = output_path(region_id, "GCOV", day).name
+        path = crop_dir / crop_name
+        reference_region = region.get("gcov_reference_region")
+        if not path.is_file() and reference_region:
+            # Existing deliveries can have the reference region prefix. Keep the
+            # requested region's bounds/selection hash so a smaller crop cannot match.
+            suffix = crop_name.removeprefix(f"{region_id}_")
+            path = crop_dir / f"{reference_region}_{suffix}"
         if not path.is_file():
-            path = OUTPUT_DIR / path.name
+            path = OUTPUT_DIR / crop_name
         if not path.is_file():
             if offline:
                 raise ValueError(f"No cached GCOV crop for {day}")
@@ -193,7 +200,8 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
                 })
             manifest["layers"].append(layer)
 
-        content_path = ROOT / "content" / "landmarks" / f"{region_id}.json"
+        content_region = region.get("landmark_content_region", region_id)
+        content_path = ROOT / "content" / "landmarks" / f"{content_region}.json"
         landmarks = {"schemaVersion": "0.1", "regionId": region_id, "landmarks": []}
         if content_path.is_file():
             content = json.loads(content_path.read_text(encoding="utf-8"))
