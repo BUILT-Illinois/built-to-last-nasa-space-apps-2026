@@ -1,6 +1,6 @@
 {
   "schemaVersion": "0.1",
-  "generatedAt": "2026-11-15T00:04:49Z",
+  "generatedAt": "2026-11-15T00:25:54Z",
   "generatedBy": "pipeline/build_manifest.py (AI-assisted code, see docs/AI_USAGE.md)",
   "region": {
     "id": "mexico_city",
@@ -34,8 +34,8 @@
       ],
       "colormap": {
         "name": "gray",
-        "min": -11.210650386810302,
-        "max": 4.314068441390995
+        "min": -11.733245944976806,
+        "max": 4.304332494735735
       },
       "description": "Radar brightness when the signal is transmitted and received horizontally.",
       "caveats": [
@@ -43,10 +43,10 @@
       ],
       "frames": [
         {
-          "date": "2025-10-30",
-          "image": "layers/gcov_hh/2025-10-30.webp",
+          "date": "2025-11-11",
+          "image": "layers/gcov_hh/2025-11-11.webp",
           "granules": [
-            "NISAR_L2_PR_GCOV_004_019_A_011_4005_DHDH_A_20251030T120539_20251030T120613_P05023_N_F_J_001"
+            "NISAR_L2_PR_GCOV_005_019_A_011_4005_DHDH_A_20251111T120539_20251111T120614_P05023_N_F_J_001"
           ],
           "track": 19,
           "frame": 11,
@@ -79,8 +79,8 @@
       ],
       "colormap": {
         "name": "gray",
-        "min": -17.91940872192383,
-        "max": -5.839170942306517
+        "min": -18.89009822845459,
+        "max": -5.9468426036834705
       },
       "description": "Radar brightness when the signal is transmitted horizontally and received vertically.",
       "caveats": [
@@ -88,10 +88,10 @@
       ],
       "frames": [
         {
-          "date": "2025-10-30",
-          "image": "layers/gcov_hv/2025-10-30.webp",
+          "date": "2025-11-11",
+          "image": "layers/gcov_hv/2025-11-11.webp",
           "granules": [
-            "NISAR_L2_PR_GCOV_004_019_A_011_4005_DHDH_A_20251030T120539_20251030T120613_P05023_N_F_J_001"
+            "NISAR_L2_PR_GCOV_005_019_A_011_4005_DHDH_A_20251111T120539_20251111T120614_P05023_N_F_J_001"
           ],
           "track": 19,
           "frame": 11,
@@ -133,10 +133,10 @@
       ],
       "frames": [
         {
-          "date": "2025-10-30",
-          "image": "layers/gcov_composite/2025-10-30.webp",
+          "date": "2025-11-11",
+          "image": "layers/gcov_composite/2025-11-11.webp",
           "granules": [
-            "NISAR_L2_PR_GCOV_004_019_A_011_4005_DHDH_A_20251030T120539_20251030T120613_P05023_N_F_J_001"
+            "NISAR_L2_PR_GCOV_005_019_A_011_4005_DHDH_A_20251111T120539_20251111T120614_P05023_N_F_J_001"
           ],
           "track": 19,
           "frame": 11,
