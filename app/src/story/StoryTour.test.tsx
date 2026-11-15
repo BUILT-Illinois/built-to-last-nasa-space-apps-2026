@@ -112,3 +112,14 @@ it('renders nothing for a region without a tour', () => {
   act(() => useAppStore.setState({ regionId: 'no_such_region' }));
   expect(container.innerHTML).toBe('');
 });
+
+it('folds a step card\'s sources so the card stays short over the swipe', () => {
+  click(story.intro.startLabel);
+  const details = container.querySelector('.story-card details.story-sources') as HTMLDetailsElement | null;
+  expect(details).not.toBeNull();
+  expect(details!.open).toBe(false);
+  expect(details!.querySelector('summary')?.textContent).toMatch(/^Sources \(\d+\)$/);
+  act(() => details!.querySelector('summary')!.click());
+  expect(details!.open).toBe(true);
+  expect(details!.querySelectorAll('a').length).toBeGreaterThan(0);
+});
