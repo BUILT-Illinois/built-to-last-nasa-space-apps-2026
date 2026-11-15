@@ -124,6 +124,9 @@ def check_series(series, where: str) -> list[str]:
         return [f"{where}: expected an object of named series"]
     problems = []
     for name, points in series.items():
+        if name not in {"hh_db", "hv_db", "los_displacement_cm"}:
+            problems.append(f"{where}.{name}: unknown series")
+            continue
         if not isinstance(points, list):
             problems.append(f"{where}.{name}: must be a list")
             continue
@@ -135,7 +138,9 @@ def check_series(series, where: str) -> list[str]:
             problems += check_date(point.get("date"), f"{at}.date")
             if "value" not in point:
                 problems.append(f"{at}: missing 'value' (use null for no data)")
-            elif point["value"] is not None and not is_number(point["value"]):
+            elif point["value"] is not None and (
+                not is_number(point["value"]) or not -float("inf") < point["value"] < float("inf")
+            ):
                 problems.append(f"{at}.value: must be a number or null")
     return problems
 
@@ -269,6 +274,8 @@ def check_landmarks(landmarks, region_id, source_ids: set) -> list[str]:
     problems = missing_fields(landmarks, ["schemaVersion", "regionId", "landmarks"], "landmarks.json")
     if problems:
         return problems
+    if landmarks["schemaVersion"] != "0.1":
+        problems.append("landmarks.json.schemaVersion: expected '0.1'")
     if not isinstance(landmarks["landmarks"], list):
         return ["landmarks.json landmarks: must be a list"]
     if landmarks["regionId"] != region_id:
@@ -281,9 +288,23 @@ def check_landmarks(landmarks, region_id, source_ids: set) -> list[str]:
         problems += landmark_problems
         if landmark_problems:
             continue
-        if landmark["id"] in seen:
-            problems.append(f"{at}.id: duplicate id '{landmark['id']}'")
-        seen.add(landmark["id"])
+        for field in ("id", "name", "summary", "radarShows", "weInfer"):
+            value = landmark[field]
+            if not isinstance(value, str) or not value.strip():
+                problems.append(f"{at}.{field}: must be a non-empty string")
+        landmark_id = landmark["id"]
+        if isinstance(landmark_id, str):
+            if landmark_id in seen:
+                problems.append(f"{at}.id: duplicate id '{landmark_id}'")
+            seen.add(landmark_id)
+
+        drivers = landmark["drivers"]
+        driver_problems = missing_fields(drivers, ["human", "natural"], f"{at}.drivers")
+        problems += driver_problems
+        if not driver_problems:
+            for field in ("human", "natural"):
+                if drivers[field] is not None and not isinstance(drivers[field], str):
+                    problems.append(f"{at}.drivers.{field}: must be a string or null")
 
         lon, lat = landmark["lon"], landmark["lat"]
         if not (is_number(lon) and is_number(lat)):
@@ -294,9 +315,11 @@ def check_landmarks(landmarks, region_id, source_ids: set) -> list[str]:
         if not isinstance(landmark["sourceIds"], list):
             problems.append(f"{at}.sourceIds: must be a list")
         else:
-            for sid in landmark["sourceIds"]:
-                if sid not in source_ids:
-                    problems.append(f"{at}.sourceIds: '{sid}' is not an id in manifest sources[]")
+            for j, sid in enumerate(landmark["sourceIds"]):
+                if not isinstance(sid, str) or not sid.strip():
+                    problems.append(f"{at}.sourceIds[{j}]: must be a non-empty string")
+                elif sid not in source_ids:
+                    problems.append(f"{at}.sourceIds[{j}]: '{sid}' is not an id in manifest sources[]")
 
         problems += check_series(landmark["series"], f"{at}.series")
     return problems
