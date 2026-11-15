@@ -38,8 +38,9 @@ What I already tried: `git pull --rebase origin main` at 6:06 PM; `ls` of all th
 Impact on the plan (task IDs, timeline, tiers): T-11 and T-12 cannot start as written; T-10 depends on T-11.
 Options (2 or 3, with cost in hours): (a) whoever wrote the exercise (Eduardo or Zainab) pushes the `render.py` skeleton and tests (0.25 h); (b) I write the stubs and tests myself from PLAN section 7 (0.5 h, and then it is not a "given tests" exercise); (c) merge Zainab's T-08 PR so T-12 can start.
 My recommendation: (a) and (c) after dinner; I do T-30 in the meantime.
+Update Sat 9:00 PM: T-11 cancelled (D-15). The sample data (PR #6) is still not on main, so I am starting T-12 against the real `app/public/data/mexico_city/manifest.json`, which follows the same contract.
 
-### RB-D03  [FYI]  OPEN   Needed by: before the next unattended fetch (Elias's overnight GCOV job, PLAN section 10)
+### RB-D03  [FYI]  RESOLVED Sat 8:48 PM by Elias's PR #15 (30 s HTTP timeout, 4 tries in `fetch_crop`)   Needed by: before the next unattended fetch (Elias's overnight GCOV job, PLAN section 10)
 What I was trying to do: fetch 28 GCOV window crops with `pipeline/fetch_crops.py` (`fetch_crop`) for the lake check, unattended.
 What happened (exact error or evidence): `fetch_crop` hung 4 times: the HTTPS connection was dropped by the server and the process sat at zero CPU, waiting forever (no timeout, no retry). Restarted once by hand at 7:38 PM, then a watchdog restarted it 3 times (log on my second laptop: `data/interim/lake_watchdog_log.txt`). No data lost. Separately, T-30 saw one `FSTimeoutError` on 2026-04-28 (retry succeeded).
 What I already tried: restarting; the script skips finished crops, so restarts are safe.
