@@ -1,10 +1,10 @@
-# Status: Eduardo        Updated: Sat 6:25 PM CT        Branch: eduardo/map-screen (T-09)
-Plan version read: Sat 6:25 PM, plan v0.4
+# Status: Eduardo        Updated: Sat 11:50 PM CT        Branches: eduardo/t09-map-screen (PR #25), eduardo/sinking-poc (PR #26), eduardo/memo-sources (PR #27)
+Plan version read: Sat 11:30 PM, plan v0.5 (Mexico City sinking story, flood-priority map in Tier 1, G2 redefined)
 
 ## Now / Next / Done
-- Now:  T-09 map screen (built and tested locally; PR after rebasing on main). FYI Elias: repo secret AZURE_STATIC_WEB_APPS_API_TOKEN is set (Sat 5:52 PM) for PR #4. CLOUDFLARE_API_TOKEN is not set.
-- Next: follow-up PR for the PR #2 should-fix items (runtime validation, displacement `since`, Node 24 engines, minimatch audit, AI notices); landmark markers on the map for T-14
-- Done: T-02 merged (PR #2, with the region-loading race fix and regression tests); Azure deploy secret set; plan v0.3 (D-12) pushed; RB-M01 claims added to the memo; T-02 pushed; plan v0.2 approved and pushed; Phase 0 to 3 planning; catalog check (`pipeline/reports/`); first look at local files (`data/quicklooks/`, `pipeline/quicklook.py`)
+- Now:  Merging my three PRs for the 1:00 AM gate, in this order: #25 T-09 map screen (lint, 11 tests and build pass), #26 sinking proof of concept (numbers reproduced on the 27 crops), #27 memo sources and T-35 sign check.
+- Next: Send Elias the run instructions in PR #26 (unblocks his #24 sinking layer and #20 flood map). Add the sign decision to DECISIONS.md (see RB-F03). Repo public by Sun 9:00 AM (T-54). Follow-up for the PR #2 should-fix items only if time allows.
+- Done: plan v0.5 pushed (D-16 to D-18); T-31 and T-32 via `poc/mexico_city_sinking/` (27 pairs, Nezahualcoyotl 21.9 cm line of sight over 336 days, about 3.2 million people on ground moving >10 cm/yr); rate GeoTIFF and provenance for Elias (PR #26); T-35 sign check (PR #27: positive phase = away from the satellite, high confidence, not from the spec itself; incidence 36.7 to 40.7 degrees); Venezuela work dropped and moved out of the repo; T-09 PR open; T-02 merged; Azure deploy secret set; plan v0.2 to v0.4.
 
 ## Roadblocks (append-only; mark resolved, never delete)
 ### RB-F01 (was RB-E01)  [FYI]  RESOLVED Sat 6:25 PM   Needed by: Sat 4:30 PM
@@ -25,6 +25,15 @@ Impact on the plan (task IDs, timeline, tiers): T-30 to T-34. Ground motion cann
 Options (2 or 3, with cost in hours): (a) keep it as Tier 2 behind G1 and G3; (b) drop it and make surface change the whole story.
 My recommendation: the team decides at GS (5:30 PM) after T-25.
 Update Sat 4:00 PM: G3 is merged into G2 at Sun 1:00 AM (plan v0.3, D-12). Renamed from RB-E01 and RB-E02 because Elias uses E.
+Resolved Sat 11:30 PM: the 27-pair chain reproduces the sinking (`poc/mexico_city_sinking/README.md`). Ground motion is Tier 1 in plan v0.5 (D-16).
+
+### RB-F03  [DEGRADED]  OPEN   Needed by: Sun 12:45 AM (before landmarks.json gets numbers)
+What I was trying to do: hand the line-of-sight numbers to the landmark cards and the sinking layer.
+What happened (exact error or evidence): `docs/DATA_CONTRACT.md` says `los_displacement_cm` "Negative means away from the satellite". Our files (`poc/mexico_city_sinking/landmark_series_los_cm.csv`, `displacement_cumulative.npz`, `los_rate_cm_per_year.tif`) are positive = away, and T-35 (`docs/T35_SIGN_CHECK.md`, PR #27) confirms NISAR's native phase is positive = away.
+What I already tried: documented the sign in `provenance.json` (PR #26) and in the memo rows (PR #27).
+Impact on the plan (task IDs, timeline, tiers): T-19 cards, T-15 chart, T-33 layer, T-34 flood map. A wrong sign shows sinking as uplift.
+Options (2 or 3, with cost in hours): (a) change the contract to positive = away, one line by Elias plus a DECISIONS.md entry (0.1 h); (b) keep the contract and multiply by -1 when writing landmarks.json and the layer (0.1 h, easy to forget in one place).
+My recommendation: (a). Elias, please confirm; I add the decision line.
 
 ## Reviews of other people's roadblocks
 - RB-D01: AGREE with (a). Eduardo decided at 6:20 PM to drop Oct 30, 2025 from every layer and frame (D-13, plan v0.4). The memo and plan lines are corrected. Option (c), real dB values for Oct 30 against Nov 11, is still welcome if Elias has 15 minutes, but nothing waits on it.

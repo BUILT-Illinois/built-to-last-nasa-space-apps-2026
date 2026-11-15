@@ -1,6 +1,7 @@
 # Hackathon plan: Dancing with the SARs, Mexico City
 
-**Status: v0.4, approved by Eduardo and in force since Sat Nov 14, 6:25 PM CT.**
+**Status: v0.5, approved by Eduardo and in force since Sat Nov 14, 11:30 PM CT.**
+v0.5 sets the story (Mexico City sinking, measured by NISAR; D-16), moves the ground-motion layer and the flood-priority map into Tier 1, redefines the 1:00 AM gate, drops two bad GCOV dates (RB-D04, D-17) and cancels Venezuela and other side work (D-18).
 v0.4 records G1 as passed, drops the Oct 30, 2025 acquisition from every layer (D-13), cancels T-11, marks T-04 and T-05 done, and sets the live pitch to 4 minutes (D-14).
 v0.3 merges the 9:30 PM and 11:30 PM gates into one go/no-go at Sun 1:00 AM (G2), keeps 9:30 PM as a progress checkpoint, and moves the G1-fallback GUNW download to Eduardo's laptop in the evening (see section 13).
 v0.2 added Eduardo's answers (map owner, Azure, repo, slide deck), a first look at the files in `Datasets/`, and a story decision gate: the team analyses the data and picks the story.
@@ -43,17 +44,17 @@ Other Mexican regions with data (granule counts for GCOV / GUNW / SME2, all coll
 
 ## 2. Story and scope
 
-**The story is not chosen yet.** The team looks at the data first (T-25) and decides by **Sat 5:30 PM** (gate GS). The candidates, what the catalog and the local files say about each, and the sources for every number are in the [decision memo](DECISION_MEMO.md).
+**Story (v0.5, D-16): "Mexico City is sinking, and NISAR measured a year of it."** NISAR helps governments and international organizations recognize and measure a slow natural hazard before it becomes a disaster. Our proof of concept (`poc/mexico_city_sinking/`) adds up the 27 consecutive 12-day GUNW pairs (Nov 11, 2025 to Oct 13, 2026) and finds two sinking bowls: the airport, Nezahualcoyotl and the old Texcoco lakebed in the north-east, and Tlahuac, Chalco and the Xochimilco lakebed in the south-east. The key landmark is "the lake that came back" (new Lake Chalco, Lago de Tlahuac-Xico), whose history comes from cited sources. The stakes are the 2024 Chalco flood, with a team member's family connection if they consent to share it. The flood-priority map ranks places where sinking ground and standing water coincide, as a screening aid, not a forecast. Wording rule: "recognize and measure", never "predict".
 
-Building does not wait for the decision. Tier 1 below is the same for every candidate: it shows GCOV layers, a swipe, and landmark cards. The story decides which dates, which landmarks, what the text says, and what Tier 2 is. If there is no decision by 5:30 PM, the default is surface change seen in GCOV (seasonal and year-over-year), because Tier 1 already carries it.
+Numbers we may use (from the proof of concept, line of sight, PROVISIONAL): up to about 2 cm per month at Nezahualcoyotl; 24 cm per year at the 99th percentile; about 338 km2 moving faster than 10 cm per year, where about 3.2 million people live (WorldPop 2020). The sign is inferred from where the motion is until T-35 confirms it from the product specification.
 
 | Tier | What ships | Deadline |
 |---|---|---|
-| **1, must ship** | Map with GCOV layers (HH, HV, HH/HV composite) for one dry-season and one rainy-season date, swipe slider, 5 to 7 landmark cards, polarization explainer, provisional label, sources page. Static, on Azure, with bundled sample data. | Core live at the Sat 9:30 PM checkpoint; complete and live by Sun 1:00 AM (G2) |
-| **2** | Ground-motion layer from 27 GUNW pairs with a chart per landmark. GCOV time slider with about monthly frames. | Checked Sun 1:00 AM (G2), in the app by Sun 8:00 AM |
-| **3** | Soil moisture layer, second region, Spanish/English toggle, point query API, Azure AI helper, data-quality flag. | Only if Tier 2 is in by Sun 7:30 AM |
+| **1, must ship** | Map with GCOV layers (HH, HV, HH/HV composite), swipe, **ground-motion layer (year total, line of sight)**, **flood-priority map (T-34)**, 7 landmark cards with real numbers, polarization explainer, provisional label, sources page. Static, on Azure, with bundled sample data. | Core by Sun 1:00 AM (G2); text pieces by the 8:00 AM freeze |
+| **2** | GCOV and ground-motion time slider (monthly frames), time-series chart per landmark, guided tour (T-18). | By the 8:00 AM freeze |
+| **3** | Cancelled in v0.5 (D-18). | |
 
-If we fall behind, cut in this order: all of Tier 3, the borough context layer (T-21), GCOV time slider, per-landmark charts, ground-motion layer, HH/HV composite. Never cut: real NISAR data on the map, the swipe, the landmark text, the polarization explainer, the provisional label, the sources.
+If we fall behind, cut in this order: the guided tour, the time slider, the per-landmark chart, the HH/HV composite. Never cut: real NISAR data on the map, the ground-motion layer, the flood-priority map, the landmark cards, the polarization explainer, the provisional label, the sources.
 
 ## 3. Gates
 
@@ -62,7 +63,7 @@ If we fall behind, cut in this order: all of Tier 3, the borough context layer (
 | G1 | Sat 4:30 PM | Can we read our window out of a remote GCOV file and a remote GUNW file? | **Passed.** Elias read both track 19 / frame 11 PROVISIONAL windows over HTTPS (T-01): GCOV HH and HV in 31.9 s and 14 MB, GUNW unwrapped phase in 21.0 s and 10 MB. The pre-approved fallback downloads are cancelled. |
 | GS | Sat 5:30 PM | Has the team chosen the story from the data (T-25)? | Default story: surface change in GCOV. Ground motion stays a Tier 2 option behind G2. **As of 6:25 PM no decision is recorded, so the default applies until the team records one.** |
 | Checkpoint | Sat 9:30 PM | Progress report, not a gate. Is the core of Tier 1 live on the public URL with real data (GCOV layers, swipe, landmark cards; text may still be placeholders)? Each person says what is left for G2. | Nothing is cut here. Problems found go into block E. |
-| G2 | Sun 1:00 AM | Go or no-go, before anyone sleeps. (a) Is all of Tier 1 live, including the polarization explainer, provisional label, sources page, and landmark text? (b) Does the ground-motion map pass the T-32 sanity check? This one gate replaces the old G2 (9:30 PM) and G3 (11:30 PM). | (a) No: no Tier 2; block G finishes Tier 1. (b) No: cut or shrink the layer; the headline becomes seasonal change. |
+| G2 | Sun 1:00 AM | Go or no-go, before anyone sleeps. **Redefined in v0.5:** are the map with radar layers, the ground-motion layer, the flood-priority map and the 7 landmark cards working end to end on the live URL? The explainer, provisional label and sources page may land by the 8:00 AM freeze. | No: Sunday 7:00 to 8:00 AM finishes the missing core piece only; the tour and slider are cut. |
 | G4 | Sun 8:00 AM | Feature freeze. Main deployed and working? | Roll back to the last good deploy. |
 | G5 | Sun 10:30 AM | All links open in a private window, all form fields drafted? | All hands on the submission. |
 
@@ -251,24 +252,25 @@ Tier 1 unless marked. "Est." is hands-on hours. Blocks refer to section 8.
 | T-10b | Rebuild the Mexico City bundle without Oct 30, 2025 (D-13): two dates of release P05023 between Nov 11, 2025 and Oct 13, 2026, one dry-season and one rainy-season. One command: `python pipeline/build_manifest.py --dates <d1> <d2>`. Until this merges, the live site shows the excluded date. | Elias (backup Eduardo) | C | 0.25 | No `2025-10-30` anywhere under `app/public/data/mexico_city/`; validator passes; live before the 7:30 PM talk |
 | ~~T-11~~ | **Cancelled in v0.4 (RB-D02).** `render.py` helpers as an exercise: nobody was assigned to write the starter and tests, and T-10 already renders. | Diego | | | |
 | T-12 | Layer switcher and legend | Diego (backup Zainab) | B, D | 2.0 | Lists layers from the manifest, shows units, range, and the provisional note; usable at 375 px wide |
-| T-13 | Time slider with play and pause (Tier 2 data, built against sample). No Oct 30, 2025 frame (D-13). | Diego | E | 1.5 | Scrubs frames of the active layer; shows the date; hidden when a layer has one frame |
+| T-13 | Time slider with play and pause for the GCOV and ground-motion frames. No Oct 30, 2025, Dec 5, 2025 or Apr 16, 2026 frame (D-13, D-17). | Diego | G | 1.5 | Scrubs frames of the active layer; shows the date; hidden when a layer has one frame |
 | T-14 | Landmark panel: list, select, fly to, card with "radar shows" and "we infer" kept separate | Zainab (backup Monica) | B, C | 2.0 | Works from `landmarks.json`; selecting on the map and in the list stay in sync |
-| T-15 | Time-series chart per landmark (Tier 2) | Zainab | E | 1.5 | Axis titles with units, gaps for missing dates, provisional note, readable on a phone |
-| T-16 | `pipeline/landmarks.py`: `sample_at_points()` against given tests | Zainab | D | 1.0 | Tests pass; pipeline fills `series` in `landmarks.json` |
-| T-17 | Project name, tagline, story outline in 6 steps, written once the story is chosen (GS) | Monica | B | 0.5 | Team agrees before dinner |
+| T-15 | Time-series chart per landmark, from `los_displacement_cm` in `landmarks.json` (values from `poc/mexico_city_sinking/landmark_series_los_cm.csv`) | Zainab | G | 1.5 | Axis titles with units, gaps for missing dates, provisional note, readable on a phone |
+| ~~T-16~~ | **Cancelled in v0.5 (D-18).** The proof of concept's landmark CSV replaces `sample_at_points()`. | Zainab | | | |
+| T-17 | Project name and tagline for the v0.5 story (Monica leans "Project Lago") | Monica | E | 0.5 | Team agrees by 12:30 AM |
 | T-18 | Intro screen and guided walkthrough driven by `content/story/mexico_city.json` | Monica (backup Zainab) | B to D | 3.0 | A first-time visitor understands the point in 60 seconds; "explore freely" exits the tour |
-| T-19 | Landmark text for 5 to 7 places with a source for every claim | Monica writes, Eduardo reviews | C to E | 1.5 + 0.75 | `content/landmarks/mexico_city.json` merged; no unsourced claim; live by G2 (Sun 1:00 AM) |
+| T-19 | Landmark cards for 7 places (new Lake Chalco, Tlahuac, Nezahualcoyotl, airport, Centro Historico, Angel de la Independencia, Chalco) with real numbers from the proof of concept and a source for every claim | Monica writes, Eduardo reviews | E, F | 1.5 + 0.5 | `landmarks.json` on `main` has the 7 cards before 1:00 AM; no unsourced claim |
 | T-20 | Typed API on Azure Functions: health, regions, manifest, landmarks | Elias (backup Zainab) | D, E | 1.0 | Four routes live on the Azure URL; error shape per contract; app still works with the API off |
-| T-21 | Borough boundaries with population as a GeoJSON context layer | Diego | F, G | 1.0 | File under 1 MB; official source and license in `SOURCES.md`. First to cut. |
+| ~~T-21~~ | **Cancelled in v0.5 (D-18).** Borough layer. | Diego | | | |
 | T-22 | Integration pass for the 9:30 PM checkpoint | Elias, everyone tests | D | 0.75 | Live URL shows real GCOV with swipe, landmarks, and tour; no console errors; works on one phone |
 | T-23 | Explainer cards (polarization; shows vs. infer), provisional badge, mobile pass | Monica | E, F | 1.5 | Badge visible on every data view; live by G2 (Sun 1:00 AM) |
 | T-24 | Sources page in the app, generated from the manifest `sources` and `SOURCES.md` | Zainab | E, F | 0.5 | Every dataset, library, and image is listed with a link; live by G2 (Sun 1:00 AM) |
 | T-30 | Tier 2: fetch the GUNW windows. All 28 pairs may be fetched, but only the 27 from Nov 11, 2025 on are used (D-13). | Diego runs, Elias backs up | C (runs during the talk) | 1.0 | Crops in `data/interim/`; failures listed in the status file |
-| T-31 | Tier 2: `pipeline/science/displacement.py` per the recipe in section 7 | Eduardo | E | 2.5 | Runs on the 28 crops; Zainab's tests (T-31t, 0.75 h) pass on synthetic data |
-| T-32 | Tier 2: sanity check for G2 | Eduardo | F | 0.5 | Written in `DECISIONS.md`: where the fastest motion is, its rate, how stable the reference area is, how that compares with the JPL article and the literature |
-| T-33 | Tier 2: add ground-motion layer and about monthly GCOV frames to the build. No Oct 30, 2025 frame (D-13). | Elias | E, F | 1.0 | Both in the manifest; validator passes; folder under 60 MB |
-| T-34 | Tier 2: show the new layers in the app (legend, slider, chart) | Diego, Zainab, Eduardo | G | 1.5 | Live before 8:00 AM Sunday |
-| T-40+ | Tier 3 items, in the order of section 2 | Unassigned | G | | Only with Eduardo's go |
+| T-31 | Ground motion from the GUNW chain. **Done by the proof of concept** (`poc/mexico_city_sinking/sinking_poc.py`, 27 pairs, shared reference, ionosphere correction, component re-attachment, gap filling). Move it to `pipeline/science/displacement.py` after the freeze if time allows. | Eduardo | done | | Output `data/Mexico_City/displacement_cumulative.npz` |
+| T-32 | Sanity check. **Done:** bowls where JPL places them; 2.0 cm per month at Nezahualcoyotl against JPL's "more than 2 centimeters per month"; control in the hills -2.2 cm over the year (about 2 cm uncertainty). Details in `poc/mexico_city_sinking/README.md`. | Eduardo | done | | |
+| T-33 | Ground-motion layer in the build: year-total WebP (and monthly frames if time allows) from the proof of concept output, with units, sign, reference area and granule IDs in the manifest. Elias runs the script himself on the 27 crops (about 20 s). | Elias | E, F | 1.0 | Layer live on the URL before 1:00 AM; validator passes |
+| T-34 | **Flood-priority map (PR #20, kept in v0.5).** Combines the line-of-sight sinking rate with dark-in-both-HH-and-HV months from the monthly GCOV crops, ranked at 500 m; hotspots endpoint in the API. Uses the real rate raster from T-33. Labeled a screening aid built on PROVISIONAL data, not a flood forecast. Water months exclude Dec 5, 2025 and Apr 16, 2026 (D-17). Old T-34 (show new layers in the app) is folded into T-12, T-13 and T-15. | Elias (backup Eduardo) | F | 1.5 | Layer and hotspots live before 1:00 AM; score weights documented in `docs/FLOOD_PRIORITY.md`; 2024 flood-zone checks reported |
+| T-35 | Confirm the GUNW unwrapped-phase sign convention in the product specification (JPL D-102272) so the app can say "sinking" in words; also look up the incidence angle for a rough vertical conversion | Eduardo | F | 0.5 | Line in `DECISIONS.md` with the page reference |
+| ~~T-40+~~ | **Cancelled in v0.5 (D-18).** Tier 3. | | | | |
 | T-50 | Demo deck, **7 slides at most** | Monica (backup Zainab) | E, H | 2.5 | Draft with placeholders by Sat 11:30 PM; final by Sun 10:30 AM; public link opens in a private window |
 | T-51 | Text for all 8 project page fields in `docs/submission/PROJECT_PAGE.md` | Monica, Eduardo reviews | F, H | 1.5 + 0.5 | Draft Sat night; reviewed by Sun 9:30 AM |
 | T-52 | References: every dataset, tool, library, image, and text source | Zainab | all | 0.75 | `SOURCES.md` complete at G5; pasted into the form field |
@@ -338,10 +340,17 @@ Answered at 6:20 PM (plan v0.4, D-13 to D-15):
 - Organizers on the pitch: 4 minutes at local judging, with a few minutes for judges' questions. We can present the app, the 7-slide deck, or a 30-second video. For global judging the Project Demo field must be the 7-slide deck or the 30-second video, and the page must be submitted by 11:59 PM CT.
 - No edits after 1:30 PM for the in-person awards. What is on the project page at 1:30 PM is final for local judging.
 
+Answered at 11:30 PM (plan v0.5, D-16 to D-18): the story is Mexico City sinking, measured with NISAR; the flood-priority map stays in; the 1:00 AM gate is the core end to end; Dec 5, 2025 and Apr 16, 2026 are dropped from GCOV frames and water counts; Venezuela, T-10c, T-16, T-21 and Tier 3 are cancelled; T-16 is no longer Zainab's.
+
 Still open:
 
+1. **The personal connection.** Which member, which place, and their consent to share it on a public page.
+2. **The sign** (T-35).
+
+Earlier open items, now closed:
+
 1. **The story.** GS passed at 5:30 PM with no decision recorded. Until the team records one, the default from section 3 applies: surface change in GCOV. With Oct 30, 2025 dropped, that means change within Nov 2025 to Oct 2026, not year over year.
-2. **Which two dates T-10b uses.** Elias picks from Diego's 29-date pictures unless the team says otherwise.
+2. (closed) **Which two dates T-10b uses.** Elias picks from Diego's 29-date pictures unless the team says otherwise.
 
 Timeline note: kickoff slipped from 2:00 to 3:10 PM. Gate times are unchanged, so block A is 70 minutes instead of two hours. T-02 and T-08 merge by 4:00 PM. If T-01 is not finished at 4:30 PM, G1 moves to 5:00 PM and nothing else moves.
 
