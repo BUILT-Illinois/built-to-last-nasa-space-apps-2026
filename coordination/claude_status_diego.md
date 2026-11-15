@@ -1,8 +1,9 @@
-# Status: Diego        Updated: Sat 7:05 PM CT        Branch: main (status only)
+# Status: Diego        Updated: Sat 8:10 PM CT        Branch: main (status only)
 Plan version read: Sat 6:25 PM | Plan v0.4: G1 passed, GS default (surface change), Oct 30, 2025 dropped (D-13), T-11 cancelled (D-15).
 
 ## Now / Next / Done
-- Now:  T-30 running unattended on my second laptop (`C:\Users\dsola\...`, Python 3.12 venv, my own Earthdata login), started 7:03 PM (that laptop's clock), expected done about 7:30 PM. It uses Elias's `pipeline/fetch_crops.py` from main (PR #9, bf3b65d: 4 GUNW layers, skips existing files) through a local, uncommitted wrapper that adds 3 tries per pair and a log (`data/interim/t30_log.txt`). At 7:06 PM: 4 of 28 pairs done (2025-10-30 to 2025-12-05), 45 to 56 s each, all 761 x 723, phase 100% finite, median coherence 0.67 to 0.73, about 5.5 MB each on disk; no failures. Pair 2025-10-30 is fetched but not used (D-13). Final count and failures after the talk.
+- Now:  Lake check for the story (Tlahuac lakes, real dB, one release): results in, writing them up with Monica.
+- Done: T-30. 28 of 28 GUNW pairs fetched on my second laptop, no failures (one timeout on 2026-04-28, retry succeeded); 7:03 to 7:30 PM, median 47 s per pair. The T-31 set is the 27 pairs from 2025-11-11 to 2026-10-01 in `data/interim/` (142 MB, all 761 x 723, phase 100% finite, median coherence 0.56 to 0.75); the 2025-10-30 pair is in `data/interim/excluded_D13/` (D-13). FYI Eduardo (T-31): there is no 2026-08-02 acquisition, so the pair starting 2026-07-21 spans 24 days, not 12. Files reach Eduardo by USB or local share; tell me which.
 - Next: T-12 layer switcher and legend once Zainab's sample data (PR #6) is on main; then T-13 time slider (no Oct 30, 2025 frame).
 - Done: T-25 findings (section at the bottom); RB-D01 accepted as D-13. T-11 cancelled (D-15).
 - Done: Python 3.13 venv with `pipeline/requirements.txt` plus `earthaccess` and `scipy` (no 3.12 on this laptop; all packages installed cleanly).
@@ -38,6 +39,14 @@ Impact on the plan (task IDs, timeline, tiers): T-11 and T-12 cannot start as wr
 Options (2 or 3, with cost in hours): (a) whoever wrote the exercise (Eduardo or Zainab) pushes the `render.py` skeleton and tests (0.25 h); (b) I write the stubs and tests myself from PLAN section 7 (0.5 h, and then it is not a "given tests" exercise); (c) merge Zainab's T-08 PR so T-12 can start.
 My recommendation: (a) and (c) after dinner; I do T-30 in the meantime.
 
+### RB-D03  [FYI]  OPEN   Needed by: before the next unattended fetch (Elias's overnight GCOV job, PLAN section 10)
+What I was trying to do: fetch 28 GCOV window crops with `pipeline/fetch_crops.py` (`fetch_crop`) for the lake check, unattended.
+What happened (exact error or evidence): `fetch_crop` hung 4 times: the HTTPS connection was dropped by the server and the process sat at zero CPU, waiting forever (no timeout, no retry). Restarted once by hand at 7:38 PM, then a watchdog restarted it 3 times (log on my second laptop: `data/interim/lake_watchdog_log.txt`). No data lost. Separately, T-30 saw one `FSTimeoutError` on 2026-04-28 (retry succeeded).
+What I already tried: restarting; the script skips finished crops, so restarts are safe.
+Impact on the plan (task IDs, timeline, tiers): any unattended fetch with `fetch_crops.py` (Elias's overnight frequencyA job, T-33 monthly frames) can stall silently.
+Options (2 or 3, with cost in hours): (a) add a read timeout to the fsspec HTTPS session and a retry in `fetch_crop` (0.25 h, Elias); (b) run fetches under a watchdog that restarts stalled runs (0.25 h, local); (c) leave as is and check jobs by hand.
+My recommendation: (a). DM to Elias sent separately.
+
 ## Reviews of other people's roadblocks
 <!-- - RB-X01: AGREE / DISAGREE / ALTERNATIVE / NEED MORE INFO. One or two lines. -->
 
@@ -51,7 +60,8 @@ All in `C:\Users\diego\Downloads\nasa data\` (outside the repo). Same files as E
 | NISAR_L2_PR_GUNW_032_113_D_079_033_4000_SH_20261008T011329_20261008T011403_20261020T011329_20261020T011403_P05023_N_F_J_001.h5 | GUNW | NISAR_L2_GUNW_PROVISIONAL_V1 | 2026-10-08 to 2026-10-20 | 113 / 79 desc | 2.35 | d020136a804f5888dc8af99152584820 | `data/quicklooks/` |
 | 58 ASF browse PNGs, `*_NATIVE_B_HHHH.png` and `*_NATIVE_B_HVHV.png`, all 29 dates | GCOV browse | NISAR_L2_GCOV_PROVISIONAL_V1 (P05023) | 2025-10-30 to 2026-10-13 | 19 / 11 asc | 0.05 | n/a (no login, public) | `data/browse/`, `data/quicklooks/browse29_*.png` |
 | 12 ASF browse PNGs (native HH/HV) + 2 BETA color browse PNGs | GCOV browse | PROVISIONAL P05023 and BETA X05009 | 2025-10-25 to 2026-01-05 (6 dates) | 113 / 79 desc | 0.01 | n/a (no login, public) | `data/browse_t113/`, `data/quicklooks/t113_northeast_HV_oct25_to_jan05.png` |
-| `mexico_city_gunw_<reference date>.npz` x 28 (T-30, in progress), on my second laptop in `data/interim/` | GUNW window crops (unwrappedPhase, coherenceMagnitude, connectedComponents, ionospherePhaseScreen) | NISAR_L2_GUNW_PROVISIONAL_V1 (P05023) | 2025-10-30 to 2026-10-01 (reference dates) | 19 / 11 asc | about 0.15 on disk (about 1 GB transferred) | n/a | for T-31 (Eduardo); move by USB or local share when he needs them |
+| `mexico_city_gunw_<reference date>.npz` x 27 (T-30 done; the 2025-10-30 pair is in `excluded_D13/`), on my second laptop in `data/interim/` | GUNW window crops (unwrappedPhase, coherenceMagnitude, connectedComponents, ionospherePhaseScreen) | NISAR_L2_GUNW_PROVISIONAL_V1 (P05023) | 2025-10-30 to 2026-10-01 (reference dates) | 19 / 11 asc | 0.142 on disk | n/a | for T-31 (Eduardo); move by USB or local share when he needs them |
+| `mexico_city_gcov_<date>.npz` x 28 (lake check), on my second laptop in `data/interim/` | GCOV frequencyB window crops (HHHH, HVHV) via `pipeline/fetch_crops.py` | NISAR_L2_GCOV_PROVISIONAL_V1 (P05023) | 2025-11-11 to 2026-10-13 | 19 / 11 asc | 0.087 on disk | n/a | `data/interim/lakes_gcov_series.csv`, `lakes_gunw_pairs.csv` |
 
 ## T-25 findings (Sat 5:45 PM CT, corrected 6:10 PM)
 
