@@ -1,18 +1,14 @@
-Elias status (10:30 PM Sat):
+Elias status (11:10 PM Sat)
+DONE: API live on Azure and Cloudflare. Merged #13, #15, #17, #18, #19. 12 months of radar frames processed.
+PARKED: T-34 flood map (Eduardo, 11:05 PM). PR #20 stays a draft.
+BLOCKED: citywide sinking layer needs Eduardo's sinking file, with units, sign, reference area and GUNW IDs.
 
-DONE
-• T-20 API live on Azure and Cloudflare: health, regions, manifest (12 dates x 3 layers), landmarks (0 entries until Monica's file lands). Unknown regions return JSON 404.
-• Merged: #13 API, #15 retry, #17 favicon, #18 hard-kill wrapper (Diego's code), #19 config-driven regions. A new region takes about 7 to 12 min.
-• Landmark frequency-A batch done (6 points, 2 dates, 0 failures). The April 16 frame checked clean.
-
-PROPOSED, NEEDS EDUARDO'S OK
-• T-34 flood-priority map (draft PR #20, unmerged). It scores 500 m cells on sinking rate plus how often water persists. It's a screening map, not a flood prediction. Water half built: New Lake Chalco 7/12 months, dry city controls 0/12. Misses small ponds (Bosque de Tláhuac 0/12).
-• Doesn't touch the core sinking + lake story. Can be parked with no impact.
-
-BLOCKED
-• T-34 needs Eduardo's sinking raster: file, units, sign, reference area, GUNW granule IDs.
-• Zainab's PRs #6 and #11 wait on her fixes: synthetic sample labeling, README notes.
-
-OPEN
-• Caracas stretch goal (Diego, cutoff 11:30 PM). Diego is away right now.
-• Story lock by 11:30 PM (Eduardo's call).
+G2 CHECKLIST (1 AM)
+Go = map + sinking + landmarks working end to end.
+• Done: both sites load with zero console errors. The API is live.
+• Needed: map with radar frames and time slider (T-09, Eduardo)
+• Needed: citywide sinking layer (Elias, once the file arrives)
+• Needed: Monica's 7 landmark cards served by the API (PR #21 into landmarks.json)
+• Needed: story locked. Option: "Mexico City is sinking up to 2 cm a month, and the old lake is coming back. NISAR lets us watch it happen."
+• Can wait until the 8 AM freeze: guided tour (PR #21)
+• Caracas: drop at 11:30 unless Diego has a clear signal
