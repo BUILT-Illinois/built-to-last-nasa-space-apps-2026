@@ -39,7 +39,8 @@ export default function Legend() {
 
   if (!layer) return null;
 
-  // 'priority' is added to LayerKind by PR #20; compare as text until that merges.
+  // 'priority' is added to LayerKind by PR #20. Until that merges, compare the kind as text;
+  // once it has, this widening to string can go and layer.kind can be compared directly.
   const kind: string = layer.kind;
   const isGroundMotion = kind === 'displacement';
   const isPriority = kind === 'priority';
@@ -50,15 +51,14 @@ export default function Legend() {
   const ramp = RAMPS[layer.colormap.name];
   const granuleCount = frame?.granules.length ?? 0;
 
-  // What the sign means, only when the manifest says so (awaySign). The pipeline writes
-  // "positive" (PR #24, T-35). Typed as text so either value is handled without a types change.
-  const awaySign: string | undefined = layer.awaySign;
-  let sign: string | null = null;
-  if (awaySign === 'negative' || awaySign === 'positive') {
-    const color = ramp && (awaySign === 'negative' ? ramp.minColor : ramp.maxColor);
-    const word = awaySign === 'negative' ? 'Negative' : 'Positive';
-    sign = `${word}${color ? ` (${color})` : ''} = moving away from the satellite`;
-  }
+  // What the sign means, only when the manifest says so. "positive" is the only value the type,
+  // the data contract and pipeline/validate_manifest.py allow (PR #24, T-35).
+  const sign =
+    layer.awaySign === 'positive'
+      ? `Positive${ramp ? ` (${ramp.maxColor})` : ''} = moving away from the satellite`
+      : null;
+  // The manifest's reference area may already end in a full stop; the legend adds its own.
+  const referenceArea = layer.referenceArea?.trim().replace(/\.$/, '');
   // The pipeline also writes the sign as a caveat; do not show it twice. Only that exact
   // sentence is dropped, so a longer caveat that mentions the satellite still shows.
   const caveats = sign ? layer.caveats.filter((c) => c.trim() !== PIPELINE_SIGN_CAVEAT) : layer.caveats;
@@ -78,7 +78,7 @@ export default function Legend() {
 
       {isPriority && (
         <p className="legend__note">
-          Screening aid built on {dataMaturity ?? 'PROVISIONAL'} data. Not a flood forecast.
+          Screening aid built on {dataMaturity} data. Not a flood forecast.
         </p>
       )}
 
@@ -101,14 +101,15 @@ export default function Legend() {
 
       {caveats.length > 0 && (
         <ul className="legend__caveats">
-          {caveats.map((caveat) => (
-            <li key={caveat}>{caveat}</li>
+          {caveats.map((caveat, i) => (
+            // The index keeps keys unique if the manifest repeats a caveat.
+            <li key={`${i}-${caveat}`}>{caveat}</li>
           ))}
         </ul>
       )}
 
       <p className="legend__source">
-        {layer.referenceArea && <>Reference area: {layer.referenceArea}. </>}
+        {referenceArea && <>Reference area: {referenceArea}. </>}
         {frame?.since && (
           <>
             Period: {frame.since} to {frame.date}.{' '}

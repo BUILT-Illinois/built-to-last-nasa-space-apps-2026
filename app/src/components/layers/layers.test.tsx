@@ -249,6 +249,21 @@ describe('Legend', () => {
     expect(text()).toContain(`Reference area: ${referenceArea}.`);
   });
 
+  it('prints one full stop when the reference area already ends in one', () => {
+    load({ ...sample, layers: [{ ...sinkingLayer, referenceArea: 'Western hills near Santa Fe.' }] });
+    render(<Legend />);
+    expect(text()).toContain('Reference area: Western hills near Santa Fe. ');
+    expect(text()).not.toContain('..');
+  });
+
+  it('shows a repeated caveat twice without a React key warning', () => {
+    const caveats = ['No conversion to vertical motion.', 'No conversion to vertical motion.'];
+    load({ ...sample, layers: [{ ...sinkingLayer, caveats }] });
+    render(<Legend />);
+    expect(container.querySelectorAll('.legend__caveats li')).toHaveLength(2);
+    // afterEach fails the test if React logged a duplicate-key error.
+  });
+
   it('labels the flood-priority layer as a screening aid, not a forecast', () => {
     load({ ...sample, dataMaturity: 'PROVISIONAL', layers: [...sample.layers, floodLayer] }, 'flood_priority');
     render(<Legend />);
