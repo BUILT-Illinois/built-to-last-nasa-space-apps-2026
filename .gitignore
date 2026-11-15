@@ -43,3 +43,8 @@ CLAUDE.local.md
 Thumbs.db
 .vscode/*
 !.vscode/extensions.json
+
+# Earthdata login side files and local browser-check output (repo-public readiness)
+.dodsrc
+.urs_cookies
+.playwright-mcp/
