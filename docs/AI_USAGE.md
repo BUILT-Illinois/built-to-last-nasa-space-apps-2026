@@ -23,3 +23,4 @@ Rules we follow (from the 2026 Project Submission Guide, summarized in `docs/cha
 | Nov 14 | Elias | Codex | Added the primary Azure and fallback Cloudflare links and checked both endpoints. | `README.md` (Live URLs section) |
 | Nov 14 | Elias | Codex | Drafting and testing the GCOV data build and reprojection | `pipeline/build_manifest.py`, `pipeline/test_build_manifest.py`, `pipeline/requirements.txt` |
 | Nov 14 | Elias | Codex | T-33: extended the GCOV build and tests to accept monthly dates, then rendered and validated the 12 cached NISAR scenes. | `pipeline/build_manifest.py`, `pipeline/test_build_manifest.py`, `app/public/data/mexico_city/` (derived from NISAR data) |
+| Nov 14 | Elias | Codex | T-20: drafted and tested the typed managed Functions API, Azure deployment wiring, and static-only app regression test. | `api/`, `app/public/staticwebapp.config.json`, `app/src/lib/data.test.ts`, `.github/workflows/ci-deploy.yml` |
