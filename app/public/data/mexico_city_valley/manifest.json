@@ -1,0 +1,437 @@
+{
+  "schemaVersion": "0.1",
+  "generatedAt": "2026-11-15T14:53:39Z",
+  "generatedBy": "pipeline/build_manifest.py (AI-assisted code, see docs/AI_USAGE.md)",
+  "region": {
+    "id": "mexico_city_valley",
+    "name": "Valley of Mexico (wider coverage)",
+    "bbox": [
+      -99.6,
+      19.0,
+      -98.6,
+      19.9
+    ],
+    "center": [
+      -99.1,
+      19.45
+    ],
+    "zoom": 10
+  },
+  "dataMaturity": "PROVISIONAL",
+  "layers": [
+    {
+      "id": "gcov_hh",
+      "title": "Radar brightness, HH",
+      "kind": "backscatter",
+      "product": "GCOV",
+      "polarization": "HH",
+      "units": "dB",
+      "bounds": [
+        -99.6,
+        19.0,
+        -98.6,
+        19.9
+      ],
+      "colormap": {
+        "name": "gray",
+        "min": -13.84371810913086,
+        "max": 1.7424090099334713
+      },
+      "description": "Radar brightness when the signal is transmitted and received horizontally.",
+      "caveats": [
+        "Provisional NISAR data. Interpret with caution."
+      ],
+      "frames": [
+        {
+          "date": "2025-11-11",
+          "image": "layers/gcov_hh/2025-11-11.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_005_019_A_011_4005_DHDH_A_20251111T120539_20251111T120614_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2025-12-17",
+          "image": "layers/gcov_hh/2025-12-17.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_008_019_A_011_4005_DHDH_A_20251217T120541_20251217T120615_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-01-10",
+          "image": "layers/gcov_hh/2026-01-10.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_010_019_A_011_4005_DHDH_A_20260110T120542_20260110T120616_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-02-15",
+          "image": "layers/gcov_hh/2026-02-15.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_013_019_A_011_4005_DHDH_A_20260215T120544_20260215T120618_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-03-11",
+          "image": "layers/gcov_hh/2026-03-11.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_015_019_A_011_4005_DHDH_A_20260311T120544_20260311T120619_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-05-10",
+          "image": "layers/gcov_hh/2026-05-10.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_020_019_A_011_4005_DHDH_A_20260510T120543_20260510T120618_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-06-15",
+          "image": "layers/gcov_hh/2026-06-15.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_023_019_A_011_4005_DHDH_A_20260615T120541_20260615T120616_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-07-09",
+          "image": "layers/gcov_hh/2026-07-09.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_025_019_A_011_4005_DHDH_A_20260709T120540_20260709T120615_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-08-14",
+          "image": "layers/gcov_hh/2026-08-14.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_028_019_A_011_4005_DHDH_A_20260814T120538_20260814T120613_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-09-19",
+          "image": "layers/gcov_hh/2026-09-19.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_031_019_A_011_4005_DHDH_A_20260919T120538_20260919T120612_P05023_F_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-10-13",
+          "image": "layers/gcov_hh/2026-10-13.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_033_019_A_011_4005_DHDH_A_20261013T120538_20261013T120612_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "id": "gcov_hv",
+      "title": "Radar brightness, HV",
+      "kind": "backscatter",
+      "product": "GCOV",
+      "polarization": "HV",
+      "units": "dB",
+      "bounds": [
+        -99.6,
+        19.0,
+        -98.6,
+        19.9
+      ],
+      "colormap": {
+        "name": "gray",
+        "min": -21.331108474731444,
+        "max": -7.215443668365479
+      },
+      "description": "Radar brightness when the signal is transmitted horizontally and received vertically.",
+      "caveats": [
+        "Provisional NISAR data. Interpret with caution."
+      ],
+      "frames": [
+        {
+          "date": "2025-11-11",
+          "image": "layers/gcov_hv/2025-11-11.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_005_019_A_011_4005_DHDH_A_20251111T120539_20251111T120614_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2025-12-17",
+          "image": "layers/gcov_hv/2025-12-17.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_008_019_A_011_4005_DHDH_A_20251217T120541_20251217T120615_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-01-10",
+          "image": "layers/gcov_hv/2026-01-10.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_010_019_A_011_4005_DHDH_A_20260110T120542_20260110T120616_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-02-15",
+          "image": "layers/gcov_hv/2026-02-15.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_013_019_A_011_4005_DHDH_A_20260215T120544_20260215T120618_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-03-11",
+          "image": "layers/gcov_hv/2026-03-11.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_015_019_A_011_4005_DHDH_A_20260311T120544_20260311T120619_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-05-10",
+          "image": "layers/gcov_hv/2026-05-10.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_020_019_A_011_4005_DHDH_A_20260510T120543_20260510T120618_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-06-15",
+          "image": "layers/gcov_hv/2026-06-15.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_023_019_A_011_4005_DHDH_A_20260615T120541_20260615T120616_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-07-09",
+          "image": "layers/gcov_hv/2026-07-09.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_025_019_A_011_4005_DHDH_A_20260709T120540_20260709T120615_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-08-14",
+          "image": "layers/gcov_hv/2026-08-14.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_028_019_A_011_4005_DHDH_A_20260814T120538_20260814T120613_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-09-19",
+          "image": "layers/gcov_hv/2026-09-19.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_031_019_A_011_4005_DHDH_A_20260919T120538_20260919T120612_P05023_F_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-10-13",
+          "image": "layers/gcov_hv/2026-10-13.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_033_019_A_011_4005_DHDH_A_20261013T120538_20261013T120612_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "id": "gcov_composite",
+      "title": "HH/HV color composite",
+      "kind": "composite",
+      "product": "GCOV",
+      "polarization": "HH+HV",
+      "units": "normalized",
+      "bounds": [
+        -99.6,
+        19.0,
+        -98.6,
+        19.9
+      ],
+      "colormap": {
+        "name": "rgb",
+        "min": 0,
+        "max": 1
+      },
+      "description": "Red shows HH, green shows HV, and blue shows HH minus HV in dB. Each channel is scaled independently using the same limits across dates.",
+      "caveats": [
+        "Provisional NISAR data. Interpret with caution."
+      ],
+      "frames": [
+        {
+          "date": "2025-11-11",
+          "image": "layers/gcov_composite/2025-11-11.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_005_019_A_011_4005_DHDH_A_20251111T120539_20251111T120614_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2025-12-17",
+          "image": "layers/gcov_composite/2025-12-17.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_008_019_A_011_4005_DHDH_A_20251217T120541_20251217T120615_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-01-10",
+          "image": "layers/gcov_composite/2026-01-10.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_010_019_A_011_4005_DHDH_A_20260110T120542_20260110T120616_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-02-15",
+          "image": "layers/gcov_composite/2026-02-15.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_013_019_A_011_4005_DHDH_A_20260215T120544_20260215T120618_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-03-11",
+          "image": "layers/gcov_composite/2026-03-11.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_015_019_A_011_4005_DHDH_A_20260311T120544_20260311T120619_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-05-10",
+          "image": "layers/gcov_composite/2026-05-10.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_020_019_A_011_4005_DHDH_A_20260510T120543_20260510T120618_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-06-15",
+          "image": "layers/gcov_composite/2026-06-15.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_023_019_A_011_4005_DHDH_A_20260615T120541_20260615T120616_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-07-09",
+          "image": "layers/gcov_composite/2026-07-09.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_025_019_A_011_4005_DHDH_A_20260709T120540_20260709T120615_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-08-14",
+          "image": "layers/gcov_composite/2026-08-14.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_028_019_A_011_4005_DHDH_A_20260814T120538_20260814T120613_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-09-19",
+          "image": "layers/gcov_composite/2026-09-19.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_031_019_A_011_4005_DHDH_A_20260919T120538_20260919T120612_P05023_F_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-10-13",
+          "image": "layers/gcov_composite/2026-10-13.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_033_019_A_011_4005_DHDH_A_20261013T120538_20261013T120612_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "vectors": [],
+  "sources": [
+    {
+      "id": "nisar-gcov",
+      "title": "NISAR L2 GCOV PROVISIONAL V1 (NASA/ISRO, ASF DAAC)",
+      "url": "https://nisar-docs.asf.alaska.edu/earthdata-search/",
+      "license": "NASA Earthdata open data (see Earthdata Data Use Guidance)"
+    }
+  ]
+}

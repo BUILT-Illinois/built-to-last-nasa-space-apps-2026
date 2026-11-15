@@ -69,6 +69,15 @@ test('manifest and landmarks return the same JSON as the static site', () => {
   }
 });
 
+test('the wider valley serves the same GCOV acquisitions as the city', () => {
+  const city = manifest(request('mexico_city', 'manifest')).jsonBody;
+  const valley = manifest(request('mexico_city_valley', 'manifest')).jsonBody;
+  assert.deepEqual(valley.region.bbox, [-99.60, 19.00, -98.60, 19.90]);
+  assert.deepEqual(valley.layers.map(({ id, frames }) => ({ id, frames })),
+    city.layers.filter(({ product }) => product === 'GCOV').map(({ id, frames }) => ({ id, frames })));
+  assert.ok(valley.layers.every(({ frames }) => frames.length === 11));
+});
+
 test('/api/landmarks serves the Mexico City monthly landmark series', () => {
   const result = mexicoCityLandmarks();
   assert.deepEqual(result, landmarks(request('mexico_city', 'landmarks')));

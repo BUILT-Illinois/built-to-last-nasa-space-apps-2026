@@ -133,9 +133,16 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
     scenes = {}
     crop_inputs = {}
     for day, row in catalog.items():
-        path = crop_dir / output_path(region_id, "GCOV", day).name
+        crop_name = output_path(region_id, "GCOV", day).name
+        path = crop_dir / crop_name
+        reference_region = region.get("gcov_reference_region")
+        if not path.is_file() and reference_region:
+            # Existing deliveries can have the reference region prefix. Keep the
+            # requested region's bounds/selection hash so a smaller crop cannot match.
+            suffix = crop_name.removeprefix(f"{region_id}_")
+            path = crop_dir / f"{reference_region}_{suffix}"
         if not path.is_file():
-            path = OUTPUT_DIR / path.name
+            path = OUTPUT_DIR / crop_name
         if not path.is_file():
             if offline:
                 raise ValueError(f"No cached GCOV crop for {day}")
