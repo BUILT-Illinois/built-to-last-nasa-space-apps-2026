@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXCLUDED = {"2025-12-05", "2026-04-16"}
 HH_CUTOFF, HV_CUTOFF = -12, -20
 
-# Six frequency-A locations plus PR #21 (three exact overlaps).
+# The 7 landmark cards (T-19). The three gcov_19_* debug points were removed Sun Nov 15.
 POINTS = (
     ("new_lake_chalco", "New Lake Chalco (Lago de Tláhuac-Xico)", -98.97, 19.27),
     ("tlahuac_ground_motion", "Tláhuac", -99.0, 19.28),
@@ -23,9 +23,6 @@ POINTS = (
     ("centro_historico", "Centro Histórico", -99.13, 19.43),
     ("angel_independencia", "Ángel de la Independencia", -99.17, 19.43),
     ("chalco_2024_flood", "Chalco", -98.90, 19.26),
-    ("gcov_19_2922", "GCOV point 19.2922° N, 99.0494° W", -99.0494, 19.2922),
-    ("gcov_19_2770", "GCOV point 19.2770° N, 99.0028° W", -99.0028, 19.277),
-    ("gcov_19_3000", "GCOV point 19.3000° N, 98.9400° W", -98.94, 19.30),
 )
 
 
