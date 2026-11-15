@@ -1,10 +1,10 @@
-# Status: Zainab        Updated: Sat 3:47 PM CT        Branch: zainab (feature branch for T-08 not created yet)
-Plan version read: Sat 3:10 PM | Plan v0.2 approved by Eduardo and in force.
+# Status: Zainab        Updated: Sat 5:52 PM CT        Branch: zainab-docs (T-07)
+Plan version read: Sat 4:00 PM | Roadblock IDs: Elias uses RB-E.., Eduardo uses RB-F.. (plan v0.3 in force since 3:55 PM)
 
 ## Now / Next / Done
-- Now:  T-08 sample dataset + validator, starting now (due 4:00 PM, likely a few minutes late)
-- Next: T-07 README skeleton, LICENSE, SOURCES.md, then T-14 landmark panel
-- Done: Kickoff: CLAUDE.local.md, synced with main, read challenge README, decision memo, my plan rows, NASA "What is SAR"
+- Now:  T-07 README skeleton, MIT LICENSE, docs/SOURCES.md
+- Next: T-14 landmark panel (now unblocked by T-02), then T-16
+- Done: T-08 complete, PR open from `zainab-sample-data`, waiting for review. Sample data in `app/public/data/sample/` (manifest, landmarks, 6 synthetic placeholder images), `pipeline/validate_manifest.py` + 30 passing tests. About 1.5 h late against the 4:00 PM target.
 
 ## Roadblocks (append-only; mark resolved, never delete)
 <!-- Copy this block for each roadblock. IDs are RB-<initial><nn>, for example RB-Z01.

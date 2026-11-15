@@ -19,3 +19,4 @@ Rules we follow (from the 2026 Project Submission Guide, summarized in `docs/cha
 | Nov 14 | Eduardo | Claude Code | T-02 app scaffold: Vite, React, TypeScript, MapLibre map, shared state store, data contract types and loader stubs, lint and build config | `app/*` (except `node_modules/`, `dist/`) |
 | Nov 14 | Zainab | Claude Code | T-08 sample dataset: guided writing of the placeholder image script (math patterns, not AI imagery, not NASA data), drafted the sample manifest, reviewed and fixed the hand-written landmarks file | `pipeline/tests/make_sample_images.py`, `app/public/data/sample/*` |
 | Nov 14 | Zainab | Claude Code | T-08 part 2: wrote the manifest validator and its tests; Zainab reviewed them | `pipeline/validate_manifest.py`, `pipeline/tests/test_validate.py` |
+| Nov 14 | Elias | Codex | Drafting and testing the GCOV data build and reprojection | `pipeline/build_manifest.py`, `pipeline/test_build_manifest.py`, `pipeline/requirements.txt` |
