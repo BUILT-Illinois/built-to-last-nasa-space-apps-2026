@@ -2,9 +2,17 @@
 // user pick the one shown on the map. It only reads the shared store and calls setLayer; it
 // never touches the map and imports no other component (docs/PLAN.md section 5).
 // A layer that is not in the manifest (for example "sinking" before T-33 lands) is simply not listed.
+// Each option shows a small swatch of the layer's own color ramp, so the list doubles as a key.
 // Owner: Diego (app/src/components/layers/). Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
 import { useAppStore } from '../../state/store';
 import './layers.css';
+
+/** Swatch class per colormap name; an unknown name gets a neutral swatch. */
+const SWATCHES: Record<string, string> = {
+  gray: 'swatch--gray',
+  rgb: 'swatch--rgb',
+  'los-blue-white-red': 'swatch--los',
+};
 
 export default function LayerSwitcher() {
   const manifest = useAppStore((s) => s.manifest);
@@ -40,6 +48,7 @@ export default function LayerSwitcher() {
             checked={layer.id === activeLayerId}
             onChange={() => setLayer(layer.id)}
           />
+          <i className={`swatch ${SWATCHES[layer.colormap.name] ?? ''}`} aria-hidden="true" />
           <span>{layer.title}</span>
         </label>
       ))}

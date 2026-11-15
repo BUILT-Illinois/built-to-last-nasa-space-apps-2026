@@ -65,8 +65,10 @@ export default function Legend() {
   // sentence is dropped, so a longer caveat that mentions the satellite still shows.
   const caveats = sign ? layer.caveats.filter((c) => c.trim() !== PIPELINE_SIGN_CAVEAT) : layer.caveats;
 
+  // Layout: the color bar is drawn like a measuring staff with tick marks under it, and the
+  // caveats and source fold away under "About this data" so the panel stays short on a phone.
   return (
-    <section className="legend" aria-label="Legend">
+    <section className={ramp ? 'legend' : 'legend legend--no-ramp'} aria-label="Legend">
       <h2 className="legend__title">
         {name}, {layer.units}
       </h2>
@@ -84,7 +86,12 @@ export default function Legend() {
         </p>
       )}
 
-      {ramp && <div className="legend__ramp" style={{ background: ramp.gradient }} aria-hidden="true" />}
+      {ramp && (
+        <>
+          <div className="legend__ramp" style={{ background: ramp.gradient }} aria-hidden="true" />
+          <div className="legend__ticks" aria-hidden="true" />
+        </>
+      )}
       <div className="legend__range">
         {/* pipeline/ingest_sinking.py caps rates at the ends of the range before coloring, so for
             ground motion the end colors mean "this value or beyond", not a limit of the data. */}
@@ -101,32 +108,35 @@ export default function Legend() {
 
       <p className="legend__description">{layer.description}</p>
 
-      {caveats.length > 0 && (
-        <ul className="legend__caveats">
-          {caveats.map((caveat, i) => (
-            // The index keeps keys unique if the manifest repeats a caveat.
-            <li key={`${i}-${caveat}`}>{caveat}</li>
-          ))}
-        </ul>
-      )}
+      <details className="legend__about">
+        <summary>About this data</summary>
+        {caveats.length > 0 && (
+          <ul className="legend__caveats">
+            {caveats.map((caveat, i) => (
+              // The index keeps keys unique if the manifest repeats a caveat.
+              <li key={`${i}-${caveat}`}>{caveat}</li>
+            ))}
+          </ul>
+        )}
 
-      <p className="legend__source">
-        {referenceArea && <>Reference area: {referenceArea}. </>}
-        {frame?.since && (
-          <>
-            Period: {frame.since} to {frame.date}.{' '}
-          </>
-        )}
-        {synthetic ? (
-          // Generated sample data must not be credited to NISAR, whatever manifest.sources lists.
-          <>Source: generated test data, not NISAR.</>
-        ) : (
-          <>
-            Source: NISAR {layer.product} (NASA/ISRO)
-            {granuleCount > 0 && <>, {granuleCount === 1 ? '1 granule' : `${granuleCount} granules`}</>}.
-          </>
-        )}
-      </p>
+        <p className="legend__source">
+          {referenceArea && <>Reference area: {referenceArea}. </>}
+          {frame?.since && (
+            <>
+              Period: {frame.since} to {frame.date}.{' '}
+            </>
+          )}
+          {synthetic ? (
+            // Generated sample data must not be credited to NISAR, whatever manifest.sources lists.
+            <>Source: generated test data, not NISAR.</>
+          ) : (
+            <>
+              Source: NISAR {layer.product} (NASA/ISRO)
+              {granuleCount > 0 && <>, {granuleCount === 1 ? '1 granule' : `${granuleCount} granules`}</>}.
+            </>
+          )}
+        </p>
+      </details>
     </section>
   );
 }

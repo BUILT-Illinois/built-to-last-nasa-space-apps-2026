@@ -1,26 +1,9 @@
-/* Styles for the layer switcher and legend (T-12). Kept in Diego's folder so the shared
-   stylesheet (Monica) does not need to change. Sized to fit a 375 px wide screen.
+/* Styles for the layer switcher, view options and legend (T-12).
+   Colors and type come from the custom properties in app/src/styles/base.css; the fallbacks
+   keep this file usable alone. Sized to fit a 375 px wide screen.
    Owner: Diego (app/src/components/layers/). Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md. */
 
-/* Optional wrapper App.tsx can use to place both controls over the map (top left is free:
-   the map's zoom buttons are top right and its scale bar is bottom left). */
-.layer-controls {
-  position: absolute;
-  top: 0.5rem;
-  left: 0.5rem;
-  z-index: 2;
-  box-sizing: border-box;
-  width: min(19rem, calc(100vw - 4.5rem));
-  max-height: calc(100% - 4rem);
-  overflow-y: auto;
-  padding: 0.6rem 0.75rem;
-  border-radius: 0.5rem;
-  background: rgba(255, 255, 255, 0.94);
-  color: #1a1a1a;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-  font-size: 0.875rem;
-  line-height: 1.35;
-}
+/* ---------- Layer switcher ---------- */
 
 .layer-switcher {
   margin: 0;
@@ -29,74 +12,209 @@
   min-width: 0;
 }
 
-.layer-switcher__heading {
+.layer-switcher__heading,
+.view-options__label {
   padding: 0;
-  font-weight: 700;
+  color: var(--panel-muted, #5a3e2b);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.layer-switcher__heading {
+  margin-bottom: 0.35rem;
 }
 
 .layer-switcher__option {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  min-height: 2.5rem; /* comfortable touch target */
-  padding: 0 0.4rem;
-  border-radius: 0.3rem;
+  gap: 0.7rem;
+  min-height: 2.75rem; /* comfortable touch target */
+  padding: 0 0.6rem;
+  border-left: 3px solid transparent;
+  border-radius: 2px;
   cursor: pointer;
 }
 
-.layer-switcher__option.is-active {
-  background: #e3ecf7;
-  font-weight: 600;
+.layer-switcher__option:hover {
+  background: var(--panel-raised, #e8bda3);
 }
 
-.layer-switcher__option:focus-within {
-  outline: 2px solid #1d4f91;
-  outline-offset: -2px;
+.layer-switcher__option.is-active {
+  border-left-color: var(--accent-strong, #a0522d);
+  background: var(--accent, #d09052);
+  font-weight: 650;
+}
+
+/* The radio stays in the page for keyboards and screen readers; the swatch is what you see. */
+.layer-switcher__option input,
+.segmented__item input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.layer-switcher__option:focus-within,
+.segmented__item:focus-within {
+  outline: 2px solid var(--accent-strong, #a0522d);
+  outline-offset: 1px;
 }
 
 .layer-switcher__loading {
   margin: 0;
+  color: var(--panel-muted, #5a3e2b);
 }
 
+/* A small sample of the layer's own colors. */
+.swatch {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--panel-muted, #5a3e2b);
+  box-shadow: 0 0 0 1px rgba(81, 33, 13, 0.35);
+}
+
+.swatch--gray {
+  background: linear-gradient(135deg, #000 10%, #fff 90%);
+}
+
+.swatch--rgb {
+  background: conic-gradient(#d9503f 0 33.3%, #4fae6b 0 66.6%, #4b79d8 0);
+}
+
+/* Same order as the legend's color bar: blue (toward the satellite) to red (away). */
+.swatch--los {
+  background: linear-gradient(135deg, #2166ac, #fff 50%, #b2182b);
+}
+
+/* ---------- View options ---------- */
+
+.view-options {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule, rgba(81, 33, 13, 0.2));
+}
+
+.view-options__row {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.view-options__label {
+  display: flex;
+  justify-content: space-between;
+}
+
+.view-options__value {
+  color: var(--panel-text, #51210d);
+  font-variant-numeric: tabular-nums;
+}
+
+.view-options__select {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0 0.6rem;
+  border: 1px solid var(--rule, rgba(81, 33, 13, 0.2));
+  border-radius: 2px;
+  background: var(--panel-raised, #e8bda3);
+  color: inherit;
+  font: inherit;
+}
+
+.view-options__select:focus-visible,
+.view-options__range:focus-visible,
+.legend__about summary:focus-visible {
+  outline: 2px solid var(--accent-strong, #a0522d);
+  outline-offset: 1px;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--rule, rgba(81, 33, 13, 0.2));
+  border-radius: 2px;
+}
+
+.segmented__item {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 2.5rem;
+  cursor: pointer;
+}
+
+.segmented__item.is-active {
+  background: var(--panel-text, #51210d);
+  color: var(--panel-bg, #fde6d4);
+  font-weight: 650;
+}
+
+.view-options__range {
+  width: 100%;
+  height: 1.5rem;
+  margin: 0;
+  accent-color: var(--accent-strong, #a0522d);
+}
+
+/* ---------- Legend ---------- */
+
 .legend {
-  margin-top: 0.6rem;
-  padding-top: 0.6rem;
-  border-top: 1px solid #c9c9c9;
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--rule, rgba(81, 33, 13, 0.2));
 }
 
 .legend__title {
-  margin: 0 0 0.3rem;
-  font-size: 0.95rem;
+  margin: 0 0 0.4rem;
+  font-size: 1.0625rem;
+  font-weight: 650;
+  line-height: 1.25;
 }
-
 
 .legend__badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.3rem;
-  margin: 0 0 0.4rem;
+  gap: 0.35rem;
+  margin: 0 0 0.7rem;
 }
 
 .legend__badge {
-  padding: 0.1rem 0.45rem;
-  border: 1px solid #8a5a00;
-  border-radius: 0.25rem;
-  background: #fff4d6;
-  color: #5c3c00;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--accent-strong, #a0522d);
+  border-radius: 999px;
+  /* Text in the panel's text color: copper letters on the peach are too faint to read. */
+  color: var(--panel-text, #51210d);
   font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-}
-
-.legend__note {
-  margin: 0 0 0.4rem;
   font-weight: 600;
 }
 
+.legend__note {
+  margin: 0 0 0.6rem;
+  font-weight: 600;
+}
+
+/* The ramp reads like a surveyor's staff: color bar on top, tick marks below it. */
 .legend__ramp {
-  height: 0.75rem;
-  border: 1px solid #777;
-  border-radius: 0.15rem;
+  height: 1.1rem;
+  border-radius: 2px 2px 0 0;
+  box-shadow: 0 0 0 1px rgba(81, 33, 13, 0.35);
+}
+
+.legend__ticks {
+  height: 0.45rem;
+  margin: 1px 0 0;
+  /* a tick every 5% of the width, a taller one at each end and in the middle */
+  background:
+    linear-gradient(to right, var(--panel-text, #51210d) 1px, transparent 1px) 0 0 / calc(50% - 0.5px) 100%,
+    linear-gradient(to right, var(--panel-muted, #5a3e2b) 1px, transparent 1px) 0 0 / calc(5% - 0.05px) 55%;
+  background-repeat: repeat-x;
 }
 
 .legend__range {
@@ -104,25 +222,43 @@
   justify-content: space-between;
   gap: 0.5rem;
   margin-top: 0.15rem;
+  font-size: 1rem;
+  font-weight: 650;
   font-variant-numeric: tabular-nums;
 }
 
+/* A color composite has no single scale, so its 0 to 1 range says nothing useful. */
+.legend--no-ramp .legend__range {
+  display: none;
+}
+
 .legend__sign {
-  margin: 0.25rem 0 0;
+  margin: 0.35rem 0 0;
   font-weight: 600;
 }
 
 .legend__description {
-  margin: 0.5rem 0 0;
+  margin: 0.6rem 0 0;
+  max-width: 34ch;
+}
+
+.legend__about {
+  margin-top: 0.7rem;
+  color: var(--panel-muted, #5a3e2b);
+  font-size: 0.8125rem;
+}
+
+.legend__about summary {
+  min-height: 2rem;
+  line-height: 2rem;
+  cursor: pointer;
 }
 
 .legend__caveats {
-  margin: 0.4rem 0 0;
+  margin: 0.2rem 0 0;
   padding-left: 1.1rem;
 }
 
 .legend__source {
   margin: 0.5rem 0 0;
-  color: #4a4a4a;
-  font-size: 0.8rem;
 }
