@@ -84,8 +84,16 @@ export default function Legend() {
 
       {ramp && <div className="legend__ramp" style={{ background: ramp.gradient }} aria-hidden="true" />}
       <div className="legend__range">
-        <span>{formatValue(layer.colormap.min, isGroundMotion)}</span>
-        <span>{formatValue(layer.colormap.max, isGroundMotion)}</span>
+        {/* pipeline/ingest_sinking.py caps rates at the ends of the range before coloring, so for
+            ground motion the end colors mean "this value or beyond", not a limit of the data. */}
+        <span>
+          {isGroundMotion && '≤ '}
+          {formatValue(layer.colormap.min, isGroundMotion)}
+        </span>
+        <span>
+          {isGroundMotion && '≥ '}
+          {formatValue(layer.colormap.max, isGroundMotion)}
+        </span>
       </div>
       {sign && <p className="legend__sign">{sign}</p>}
 

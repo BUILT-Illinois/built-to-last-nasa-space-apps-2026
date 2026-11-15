@@ -132,6 +132,7 @@ describe('Legend', () => {
     render(<Legend />);
     expect(container.querySelector('h2')?.textContent).toBe('Radar brightness, HH, dB');
     expect(container.querySelector('.legend__range')?.textContent).toBe('-250');
+    expect(text()).not.toMatch(/[≤≥]/); // brightness limits are not capped values
     expect(container.querySelector('.legend__ramp')).not.toBeNull();
     expect(text()).toContain('PROVISIONAL data');
     expect(text()).not.toContain('Synthetic test data');
@@ -171,7 +172,9 @@ describe('Legend', () => {
     load({ ...withSinking, synthetic: false }, 'sinking');
     render(<Legend />);
     expect(container.querySelector('h2')?.textContent).toBe('Radar line-of-sight rate, cm/yr');
-    expect(container.querySelector('.legend__range')?.textContent).toBe('-30+30');
+    // Rates beyond the range are capped by the pipeline, so the ends read "or beyond".
+    const ends = [...container.querySelectorAll('.legend__range span')].map((el) => el.textContent);
+    expect(ends).toEqual(['≤ -30', '≥ +30']);
     expect(text()).toContain('Positive (red) = moving away from the satellite');
     // The same statement in the caveats is not repeated.
     expect(text()).not.toContain('Positive means away from the satellite.');
