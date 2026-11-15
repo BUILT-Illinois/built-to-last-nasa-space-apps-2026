@@ -71,6 +71,23 @@ Downloaded by windowed remote reads: NISAR GCOV **frequency A at 10 m** (HH, HV)
 
 Not for the app, deck or project page.
 
+## Update, Sun Nov 15, about 11:00 AM: rainy days, flooding and lake size
+
+Question (Eduardo): use the rainy-season dates to see where water appears, whether it collects where the ground sinks, and how lake size changes between dry and rainy dates. Scripts: `flood_vs_sinking.py`, `lake_area.py`. Rain: Open-Meteo historical archive (reanalysis, about 10 km cells, not a rain gauge), summed over the 3 days before each 6:05 AM pass.
+
+![Water area and rain](fig_water_area_vs_rain.png)
+![Wet change vs sinking](fig_wet_change_vs_sinking.png)
+
+**Results (all PROVISIONAL, 40 m pixels):**
+
+- **"Open water" (HH below -15 dB) is largest in the dry season, not the rainy one.** It peaks at 39 to 46 km2 in Feb and Mar and drops to 3 to 5 km2 from late June on. Dry, bare, smooth fields are as dark as water at L-band, and the threshold picks them up. In the rainy season, wet soil and growing crops turn bright. So a simple darkness threshold does not map floods here.
+- **Brightening of 3 dB or more** (how flooded vegetation and soaked ground usually show at L-band) grows from about 2 km2 in Feb to 170 to 300 km2 from late June. It follows the rain, but it is mostly farmland in the south-east and south-west (crops and wet soil), not the sinking bowl.
+- **Against the sinking rate** (line of sight; share of rainy-season dates with brightening): stable ground 12.7%, 2 to 10 cm/yr 8.9%, 10 to 20 cm/yr 7.6%, over 20 cm/yr 12.1%. New open water on rainy dates is tiny everywhere (0.07% on stable ground, 0.38% over 20 cm/yr). **No clear sign that water collects where the ground sinks fastest.**
+- **Lakes:** new Lake Chalco (Lago de Tlahuac-Xico) reads about 4.3 to 5.0 km2 of dark water from Nov to Apr and about 2.8 to 3.9 km2 from May to Oct, about 20% smaller in the rainy season. The lake is very unlikely to really shrink in the rains. Wind and raindrops roughen the surface and floating plants spread in summer, and both make water look brighter to the radar. Xochimilco's open water is too small and too vegetated (0.0 to 0.45 km2, jumping between dates) to measure this way.
+- The Aug 14 and Sep 19 spikes from the previous section are not the wettest dates (3-day rain 19.8 and 10.1 mm; Aug 26 had 42.1 mm and no spike). Rain alone does not explain them.
+
+**Honest reading:** with backscatter brightness alone, this data cannot tell floods from wet soil, growing crops, wind on water and floating plants. The idea is sound but needs a better water detector, after the hackathon: a per-pixel dry-season reference with a change test, GUNW coherence (it drops sharply when water covers the ground), and dates matched to known floods (the 2024 Chalco flood is before NISAR's data). **Nothing here is for the app, deck or project page.**
+
 ## Run
 
 ```text

@@ -1,6 +1,7 @@
 import numpy as np, glob, os, json, datetime as dt, sys
 from pyproj import Transformer
-D=r"C:/Users/eduar/Downloads/NASA Space Apps 2026/built-to-last-nasa-space-apps-2026/data/Mexico_City/gcov_freqA_chinampas"
+# Exploratory, AI-assisted (Claude Code), see docs/AI_USAGE.md. Usage: python lake_area.py <rain_json> [gcovA_dir]
+D=sys.argv[2] if len(sys.argv) > 2 else "data/Mexico_City/gcov_freqA_chinampas"
 files=sorted(glob.glob(D+"/*.npz")); z=np.load(files[0]); x,y=z["xCoordinates"],z["yCoordinates"]
 tr=Transformer.from_crs(4326,int(z["projection"]),always_xy=True)
 def win(w,s,e,n):
