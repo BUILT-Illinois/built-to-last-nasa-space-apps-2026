@@ -5,7 +5,7 @@ Usage (from the repo root):
 
 Exits 0 when the folder follows the contract, 1 and a list of problems otherwise.
 Owner: Zainab. Written with AI assistance (Claude Code) and reviewed by Zainab.
-See docs/AI_USAGE.md.
+Sinking rate checks drafted with AI assistance (Codex); see docs/AI_USAGE.md.
 
 Every check returns a list of problem strings. An empty list means "OK".
 Each problem says WHERE it is (for example "layers[0].frames[1].date").
@@ -58,7 +58,7 @@ def each_frame(manifest: dict):
         frames = layer.get("frames") if isinstance(layer, dict) else None
         for j, frame in enumerate(frames if isinstance(frames, list) else []):
             if isinstance(frame, dict):
-                yield f"layers[{i}].frames[{j}]", frame
+                yield f"layers[{i}].frames[{j}]", frame, layer.get("id")
 
 
 # --------------------------------------------------------------------------
@@ -145,12 +145,13 @@ def check_series(series, where: str) -> list[str]:
 # --------------------------------------------------------------------------
 
 def check_files_exist(manifest: dict, folder: Path) -> list[str]:
-    """Every frame image (.webp) and vector file (.geojson) must exist inside the folder.
+    """Every frame image (.webp or sinking .png) and vector file must exist inside the folder.
     Entries with a missing key are skipped here; check_manifest reports them."""
     problems = []
-    for where, frame in each_frame(manifest):
+    for where, frame, layer_id in each_frame(manifest):
         if "image" in frame:
-            problems += check_path(frame["image"], folder, ".webp", f"{where}.image")
+            suffix = ".png" if layer_id == "sinking" else ".webp"
+            problems += check_path(frame["image"], folder, suffix, f"{where}.image")
     vectors = manifest.get("vectors")
     for k, vector in enumerate(vectors if isinstance(vectors, list) else []):
         if isinstance(vector, dict) and "file" in vector:
@@ -161,7 +162,7 @@ def check_files_exist(manifest: dict, folder: Path) -> list[str]:
 def check_size_budget(manifest: dict, folder: Path) -> list[str]:
     """Each frame image under MAX_IMAGE_BYTES; the whole folder under MAX_FOLDER_BYTES."""
     problems = []
-    for where, frame in each_frame(manifest):
+    for where, frame, _ in each_frame(manifest):
         image = folder / str(frame.get("image", ""))
         if image.is_file() and image.stat().st_size > MAX_IMAGE_BYTES:
             problems.append(f"{where}.image: {frame['image']} is over {MAX_IMAGE_BYTES / 1e6:g} MB")
@@ -204,7 +205,9 @@ def check_frame(frame, kind: str, where: str, synthetic: bool = False) -> list[s
     problems += check_date(frame["date"], f"{where}.date")
     if kind == "displacement":
         problems += check_date(frame.get("since"), f"{where}.since")
-    if not isinstance(frame["granules"], list) or (not frame["granules"] and not synthetic):
+    granules = frame["granules"]
+    if (not isinstance(granules, list) or (not granules and not synthetic)
+            or any(not isinstance(item, str) or not item.strip() for item in granules)):
         problems.append(f"{where}.granules: list the source granule names (empty only when synthetic)")
     if frame["direction"] not in DIRECTIONS:
         problems.append(f"{where}.direction: '{frame['direction']}' is not one of {sorted(DIRECTIONS)}")
@@ -230,6 +233,20 @@ def check_layer(layer, where: str, synthetic: bool = False) -> list[str]:
         return problems + [f"{where}.frames: must be a non-empty list"]
     for j, frame in enumerate(frames):
         problems += check_frame(frame, layer["kind"], f"{where}.frames[{j}]", synthetic)
+    if layer["id"] == "sinking":
+        if layer["kind"] != "displacement" or layer["product"] != "GUNW" or layer["units"] != "cm/yr":
+            problems.append(f"{where}: sinking must be a GUNW displacement rate in cm/yr")
+        if layer.get("losLabel") != "Radar line-of-sight rate" or layer.get("awaySign") != "negative":
+            problems.append(f"{where}: sinking must label the line-of-sight rate and negative-away sign")
+        reference = layer.get("referenceArea")
+        if not isinstance(reference, str) or not reference.strip():
+            problems.append(f"{where}.referenceArea: must name the reference area")
+        if layer["colormap"] != {"name": "los-red-white-blue", "min": -30, "max": 30}:
+            problems.append(f"{where}.colormap: sinking must use los-red-white-blue from -30 to 30")
+        if len(frames) != 1:
+            problems.append(f"{where}.frames: sinking must have one rate frame")
+        if synthetic and any(isinstance(frame, dict) and frame.get("granules") != [] for frame in frames):
+            problems.append(f"{where}.frames: synthetic sinking must have no granules")
     return problems
 
 
@@ -247,7 +264,11 @@ def check_manifest(manifest, folder: Path) -> list[str]:
     if "synthetic" in manifest and not isinstance(manifest["synthetic"], bool):
         problems.append("manifest.synthetic: must be true or false")
     for i, layer in enumerate(manifest["layers"]):
-        problems += check_layer(layer, f"layers[{i}]", manifest.get("synthetic") is True)
+        synthetic = manifest.get("synthetic") is True
+        problems += check_layer(layer, f"layers[{i}]", synthetic)
+        if (isinstance(layer, dict) and layer.get("id") == "sinking"
+                and synthetic != (manifest["dataMaturity"] == "SYNTHETIC")):
+            problems.append("Sinking dataMaturity SYNTHETIC requires synthetic: true and vice versa")
 
     source_ids = {s.get("id") for s in manifest["sources"] if isinstance(s, dict)}
     for k, vector in enumerate(manifest["vectors"]):
