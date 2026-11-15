@@ -51,8 +51,6 @@ jobs:
           cache: npm
           cache-dependency-path: app/package-lock.json
       - working-directory: app
-        env:
-          VITE_REGION_ID: mexico_city
         run: |
           npm ci
           npm run lint
