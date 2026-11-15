@@ -12,6 +12,7 @@ This is the interface between the Python pipeline and the web app. The pipeline 
 app/public/data/<region_id>/
   manifest.json          what layers exist and where their images are
   landmarks.json         places, their text, and their time series
+  hotspots.json          screening results when a priority layer is published
   layers/<layer_id>/<date>.webp     one image per layer per date
   vectors/<name>.geojson            optional context layers (boundaries and so on)
 app/public/data/sample/             same structure, tiny, always in git
@@ -72,7 +73,7 @@ Rules:
 - `bbox` and `bounds` are `[west, south, east, north]` in degrees, WGS84.
 - Images are rendered in Web Mercator (EPSG:3857) so they line up on the web map. `bounds` are the image's edges.
 - Image paths are relative to the folder that holds `manifest.json`.
-- `kind` is one of `backscatter`, `composite`, `change`, `displacement`, `soil_moisture`.
+- `kind` is one of `backscatter`, `composite`, `change`, `displacement`, `soil_moisture`, `priority`.
 - `polarization` is `HH`, `HV`, `HH+HV` (composites), or `null`.
 - Dates are `YYYY-MM-DD` in UTC. For `displacement` layers a frame's `date` is the end date and the frame also has `"since": "YYYY-MM-DD"`.
 - `colormap.min` and `colormap.max` are in the layer's `units`, and they are what the legend shows.
@@ -116,6 +117,18 @@ Rules:
 - `los_displacement_cm` is cumulative movement along the radar's line of sight since the first date, relative to our reference area. Negative means away from the satellite. It is not vertical sinking unless we say how we converted it.
 - Coordinates in the example above are placeholders. Take real ones from a named source.
 
+## Flood-prevention priority
+
+A `priority` layer combines GCOV open-water persistence with a GUNW line-of-sight rate. The
+legend spans 0 to 1 in `index (0–1)` units. The single frame is dated at the last monthly
+GCOV acquisition. Pixels missing either input are transparent. The index is for screening
+flood-prevention investments and does not predict flooding.
+
+`hotspots.json` includes the exact dates, thresholds, units, and LOS source, sign, granules and
+reference area. `areas` contains the ten highest-scoring 500 m cells and their ranks.
+`landmarks`, `checks`, and `lakeCheck` report pixel values and the containing cell's rank, with
+JSON null for unavailable values. See [the T-34 build and checks](FLOOD_PRIORITY.md).
+
 ## API (same data, typed)
 
 | Route | Returns |
@@ -124,6 +137,7 @@ Rules:
 | `GET /api/regions` | list of `{ id, name, bbox }` |
 | `GET /api/regions/{id}/manifest` | the manifest |
 | `GET /api/regions/{id}/landmarks` | the landmarks file |
+| `GET /api/regions/{id}/hotspots` | the hotspots file, or the standard JSON 404 if the priority layer is unavailable |
 
 Errors use `{ "success": false, "message": "..." }` with a matching HTTP status. The TypeScript types live in `app/src/types/manifest.ts` and are shared with `api/`.
 

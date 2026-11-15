@@ -22,7 +22,13 @@ for (const entry of readdirSync(dataRoot, { withFileTypes: true }).sort((a, b) =
   if (manifest.region?.id !== id || landmarks.regionId !== id) {
     throw new Error(`Region IDs in ${dir} must match the directory name`);
   }
-  regions.push({ manifest, landmarks });
+  const hotspotPath = join(dir, 'hotspots.json');
+  const hasPriority = manifest.layers.some((layer) => layer.kind === 'priority');
+  const hotspots = hasPriority ? JSON.parse(readFileSync(hotspotPath, 'utf8')) : undefined;
+  if (hotspots && (hotspots.regionId !== id || hotspots.schemaVersion !== '0.1')) {
+    throw new Error(`Hotspots in ${dir} must use contract v0.1 and match the region ID`);
+  }
+  regions.push({ manifest, landmarks, hotspots });
 }
 
 writeFileSync(join(root, 'api/dist/bundle.json'), JSON.stringify({ version, regions }));
