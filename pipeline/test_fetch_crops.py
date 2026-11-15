@@ -1,6 +1,7 @@
 """Offline crop smoke test. Drafted with AI assistance."""
 
 from types import SimpleNamespace
+import sys
 
 import h5py
 import numpy as np
@@ -90,3 +91,14 @@ def test_remote_timeouts_retry_with_backoff(monkeypatch, recovers):
             fetch_crops.read_with_retries(*args)
     assert attempts == [args] * 4
     assert delays == [2, 4, 8]
+
+
+def test_worker_that_never_returns_is_killed_and_retried(monkeypatch, capsys):
+    delays = []
+    monkeypatch.setattr(fetch_crops, "sleep", delays.append)
+    command = [sys.executable, "-c", "import time; time.sleep(60)"]
+    assert not fetch_crops.run_fetch(command, 0.2, "fake crop")
+    assert delays == [20, 40]
+    lines = capsys.readouterr().out.splitlines()
+    assert len(lines) == 3
+    assert all(line.startswith("fake crop HANG ") for line in lines)
