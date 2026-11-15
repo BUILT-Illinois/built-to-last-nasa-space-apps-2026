@@ -44,10 +44,11 @@ DATASETS = {
 def gcov_config(region):
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     try:
-        entry = config["regions"][region]
-        if region == "mexico_city":
-            return entry.get("gcov", MEXICO_CITY_GCOV)
-        return entry["gcov"]
+        regions = config["regions"]
+        catalog_region = regions[region].get("gcov_reference_region", region)
+        entry = regions[catalog_region]
+        settings = entry.get("gcov", MEXICO_CITY_GCOV) if catalog_region == "mexico_city" else entry["gcov"]
+        return {**settings, "catalog_region": catalog_region}
     except KeyError:
         raise ValueError(f"Add a gcov configuration for region {region}") from None
 
@@ -62,8 +63,7 @@ def monthly_dates(region):
     return sorted(dates)
 
 
-def selection(region, product):
-    settings = gcov_config(region) if product == "GCOV" else MEXICO_CITY_GCOV
+def selection(settings):
     try:
         return tuple(str(settings[key]) for key in ("track", "frame", "direction", "release"))
     except KeyError as error:
@@ -71,8 +71,12 @@ def selection(region, product):
 
 
 def find_granule(region, product, day):
-    track, frame, direction, release = selection(region, product)
-    report = HERE / "reports" / f"granules_{region}.csv"
+    settings = gcov_config(region) if product == "GCOV" else MEXICO_CITY_GCOV
+    catalog_region = settings.get("catalog_region", region)
+    if catalog_region != region and day not in settings["dates"]:
+        raise ValueError(f"No approved {product} granule for {region} on {day}")
+    track, frame, direction, release = selection(settings)
+    report = HERE / "reports" / f"granules_{catalog_region}.csv"
     if not report.is_file():
         raise ValueError(f"No catalog report for {region}: {report.name}")
     with report.open(newline="", encoding="utf-8") as catalog:
@@ -165,7 +169,7 @@ def output_path(region, product, day):
     tag = ""
     if product == "GCOV":
         bbox = region_bbox(region)
-        scene = selection(region, product)
+        scene = selection(gcov_config(region))
         if (region, bbox, scene) != ("mexico_city", MEXICO_CITY_BBOX, ("19", "11", "ASCENDING", "P05023")):
             # A changed window or selection must not reuse an old crop.
             tag = "_" + sha256(json.dumps([bbox, scene]).encode()).hexdigest()[:16]
