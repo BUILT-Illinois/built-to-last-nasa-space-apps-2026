@@ -91,7 +91,7 @@
         "The fastest movement is in the east, around Nezahualcóyotl, the airport, and Tláhuac. In the west, near the Ángel de la Independencia, the ground moves much less. (Provisional data, along the radar's line of sight, relative to a reference area in the western hills.)"
       ],
       "set": {
-        "layer": "gcov_composite",
+        "layer": "sinking",
         "date": "2026-10-13"
       },
       "camera": {
@@ -104,8 +104,7 @@
       "sourceIds": [
         "nisar-gunw",
         "iahs-2020"
-      ],
-      "todo": "Switch \"layer\" (and the sourceIds) to the ground-motion layer once T-33 adds it to the manifest; there is no displacement layer yet, so this shows the HH/HV composite."
+      ]
     },
     {
       "id": "lake",
