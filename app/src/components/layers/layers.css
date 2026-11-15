@@ -1,0 +1,128 @@
+/* Styles for the layer switcher and legend (T-12). Kept in Diego's folder so the shared
+   stylesheet (Monica) does not need to change. Sized to fit a 375 px wide screen.
+   Owner: Diego (app/src/components/layers/). Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md. */
+
+/* Optional wrapper App.tsx can use to place both controls over the map (top left is free:
+   the map's zoom buttons are top right and its scale bar is bottom left). */
+.layer-controls {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 2;
+  box-sizing: border-box;
+  width: min(19rem, calc(100vw - 4.5rem));
+  max-height: calc(100% - 4rem);
+  overflow-y: auto;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.94);
+  color: #1a1a1a;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+.layer-switcher {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.layer-switcher__heading {
+  padding: 0;
+  font-weight: 700;
+}
+
+.layer-switcher__option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.5rem; /* comfortable touch target */
+  padding: 0 0.4rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
+.layer-switcher__option.is-active {
+  background: #e3ecf7;
+  font-weight: 600;
+}
+
+.layer-switcher__option:focus-within {
+  outline: 2px solid #1d4f91;
+  outline-offset: -2px;
+}
+
+.layer-switcher__loading {
+  margin: 0;
+}
+
+.legend {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid #c9c9c9;
+}
+
+.legend__title {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+
+.legend__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0 0 0.4rem;
+}
+
+.legend__badge {
+  padding: 0.1rem 0.45rem;
+  border: 1px solid #8a5a00;
+  border-radius: 0.25rem;
+  background: #fff4d6;
+  color: #5c3c00;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.legend__note {
+  margin: 0 0 0.4rem;
+  font-weight: 600;
+}
+
+.legend__ramp {
+  height: 0.75rem;
+  border: 1px solid #777;
+  border-radius: 0.15rem;
+}
+
+.legend__range {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.legend__sign {
+  margin: 0.25rem 0 0;
+  font-weight: 600;
+}
+
+.legend__description {
+  margin: 0.5rem 0 0;
+}
+
+.legend__caveats {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.legend__source {
+  margin: 0.5rem 0 0;
+  color: #4a4a4a;
+  font-size: 0.8rem;
+}
