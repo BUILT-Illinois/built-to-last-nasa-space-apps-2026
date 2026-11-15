@@ -1,11 +1,11 @@
-# Status: Diego        Updated: Sat 6:20 PM CT        Branch: main (status only)
-Plan version read: Sat 4:00 PM | Roadblock IDs E for Elias, F for Eduardo; RB-M01 option (a) accepted. (Plan v0.3: one go/no-go at Sun 1:00 AM.)
+# Status: Diego        Updated: Sat 6:35 PM CT        Branch: main (status only)
+Plan version read: Sat 6:25 PM | Plan v0.4: G1 passed, GS default (surface change), Oct 30, 2025 dropped (D-13), T-11 cancelled (D-15).
 
 ## Now / Next / Done
-- Now:  T-30 GUNW fetch job (28 pairs) before the 7:30 PM talk.
-- Next: T-11 `pipeline/render.py` (coached exercise), then T-12 layer switcher and legend. Both are waiting on starter files (RB-D02).
-- Done: T-25 findings, corrected at 6:10 PM (RB-D01: the NE-zone change is most likely a data artifact of the 2025-10-30 acquisition). See the section "T-25 findings" at the bottom of this file. The story choice is the team's (GS); no decision is in `DECISIONS.md` yet.
-- Done: Python 3.13 venv with `pipeline/requirements.txt` (no 3.12 on this laptop; all packages installed cleanly).
+- Now:  T-30 GUNW window fetch, to start before the 7:30 PM talk on this laptop (NVIDIA laptop 1). All 28 track 19 pairs; only the 27 from Nov 11, 2025 on are used (D-13). Waiting on: (1) my Earthdata login on this laptop (`earthaccess` installed, `.netrc` not yet created); (2) Elias: asked by DM at about 6:30 PM to add `coherenceMagnitude`, `connectedComponents` and `ionospherePhaseScreen` to GUNW in `pipeline/fetch_crops.py` (PLAN section 7, GUNW step 1) and to skip files that already exist. If that is not in by 7:15 PM I run a local, uncommitted copy that fetches the four layers into `data/interim/` in the same format, and leave his file alone. Size: about 10 MB per layer per pair, so about 1 GB in total (about 0.3 GB with phase only).
+- Next: T-12 layer switcher and legend once Zainab's sample data (PR #6) is on main; then T-13 time slider (no Oct 30, 2025 frame).
+- Done: T-25 findings (section at the bottom); RB-D01 accepted as D-13. T-11 cancelled (D-15).
+- Done: Python 3.13 venv with `pipeline/requirements.txt` plus `earthaccess` and `scipy` (no 3.12 on this laptop; all packages installed cleanly).
 
 ## Roadblocks (append-only; mark resolved, never delete)
 <!-- Copy this block for each roadblock. IDs are RB-<initial><nn>, for example RB-D01.
@@ -18,7 +18,7 @@ Options (2 or 3, with cost in hours):
 My recommendation:
 -->
 
-### RB-D01  [FYI]  OPEN   Needed by: before T-10 picks its dates and before any NE-zone claim goes in the app or slides
+### RB-D01  [FYI]  RESOLVED Sat 6:25 PM (option a accepted, D-13, plan v0.4)   Needed by: before T-10 picks its dates and before any NE-zone claim goes in the app or slides
 What I was trying to do: T-25, find the cause of the NE-zone HV darkening (the flat zone north-east of the airport) so the team could use it in the story.
 What happened (exact error or evidence): The darkening is most likely an artifact of the track 19 GCOV acquisition of 2025-10-30, not a ground change.
 (1) In the 29 ASF browse PNGs (track 19, one release P05023), the NE zone is mean gray 112 in HV on 2025-10-30 and 12 to 36 on all 28 later GCOV dates (browse previews, not GUNW pairs); HH shows no step.
@@ -30,7 +30,7 @@ Impact on the plan (task IDs, timeline, tiers): PLAN section 1 and the decision 
 Options (2 or 3, with cost in hours): (a) drop 2025-10-30 from all HV layers and frames, start at 2025-11-11 (0 h); (b) keep it with a visible "acquisition artifact" note (0.25 h, confusing); (c) check real dB values for 2025-10-30 vs 2025-11-11 with remote reads (0.25 h, Elias).
 My recommendation: (a), plus (c) if someone has 15 minutes, and Eduardo corrects the memo line.
 
-### RB-D02  [DEGRADED]  OPEN   Needed by: Sat 6:45 PM (after dinner)
+### RB-D02  [DEGRADED]  PARTLY RESOLVED Sat 6:25 PM: T-11 cancelled (D-15); T-12 still waits on PR #6   Needed by: Sat 6:45 PM (after dinner)
 What I was trying to do: start T-11 and T-12.
 What happened (exact error or evidence): at 6:06 PM on main there is no `pipeline/render.py`, no `pipeline/tests/` (T-11 says "against given tests"), and no `app/public/data/sample/` (Zainab's status: T-08 done, PR open, not merged yet).
 What I already tried: `git pull --rebase origin main` at 6:06 PM; `ls` of all three paths.
