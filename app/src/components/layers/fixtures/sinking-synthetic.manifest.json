@@ -32,16 +32,16 @@
         19.65
       ],
       "colormap": {
-        "name": "los-red-white-blue",
+        "name": "los-blue-white-red",
         "min": -30,
         "max": 30
       },
       "losLabel": "Radar line-of-sight rate",
       "referenceArea": "Generated test area",
-      "awaySign": "negative",
+      "awaySign": "positive",
       "description": "Generated test pattern. Annual rate of motion along the radar line of sight, relative to the reference area.",
       "caveats": [
-        "Negative means away from the satellite.",
+        "Positive means away from the satellite.",
         "No conversion to vertical motion.",
         "Synthetic test data."
       ],
@@ -49,7 +49,7 @@
         {
           "date": "2026-10-13",
           "since": "2025-11-11",
-          "image": "layers/sinking/2026-10-13-07a33c461135d2a2.png",
+          "image": "layers/sinking/2026-10-13-e7cefbcd791895ce.png",
           "granules": [],
           "track": 19,
           "frame": 11,
@@ -60,6 +60,6 @@
   ],
   "vectors": [],
   "sources": [],
-  "generatedAt": "2026-11-15T05:35:21Z",
+  "generatedAt": "2026-11-15T06:58:06Z",
   "generatedBy": "pipeline/ingest_sinking.py (AI-assisted code, see docs/AI_USAGE.md)"
 }

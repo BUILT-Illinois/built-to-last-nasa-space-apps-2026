@@ -160,9 +160,9 @@ describe('Legend', () => {
     render(<Legend />);
     expect(container.querySelector('h2')?.textContent).toBe('Radar line-of-sight rate, cm/yr');
     expect(container.querySelector('.legend__range')?.textContent).toBe('-30+30');
-    expect(text()).toContain('Negative (red) = moving away from the satellite');
+    expect(text()).toContain('Positive (red) = moving away from the satellite');
     // The same statement in the caveats is not repeated.
-    expect(text()).not.toContain('Negative means away from the satellite.');
+    expect(text()).not.toContain('Positive means away from the satellite.');
     expect(text()).toContain('No conversion to vertical motion.');
     expect(text()).toContain('Reference area: Generated test area.');
     expect(text()).toContain('Period: 2025-11-11 to 2026-10-13.');
@@ -182,8 +182,28 @@ describe('Legend', () => {
     render(<Legend />);
     expect(container.querySelector('h2')?.textContent).toBe('Line-of-sight movement, cm/yr');
     expect(text()).not.toContain('= moving away');
-    expect(text()).toContain('Negative means away from the satellite.'); // manifest caveat, shown as written
+    expect(text()).toContain('Positive means away from the satellite.'); // manifest caveat, shown as written
     expect(text()).toContain('Source: NISAR GUNW (NASA/ISRO), 3 granules.');
+  });
+
+  it('draws the los-blue-white-red color bar from blue through white to red', () => {
+    load(withSinking, 'sinking');
+    render(<Legend />);
+    expect(sinkingLayer.colormap.name).toBe('los-blue-white-red');
+    const ramp = container.querySelector<HTMLElement>('.legend__ramp');
+    // jsdom may rewrite hex colors as rgb(), so accept either spelling, in order.
+    expect(ramp?.style.background).toMatch(
+      /(#2166ac|rgb\(33, 102, 172\)).*(#ffffff|rgb\(255, 255, 255\)).*(#b2182b|rgb\(178, 24, 43\))/i,
+    );
+  });
+
+  it('shows the reference area exactly as the manifest gives it', () => {
+    // Wording from poc/mexico_city_sinking/provenance.json ("referenceArea", Eduardo).
+    const referenceArea =
+      'Western hills near Santa Fe, assumed stable (not yet a literature-named outcrop); its median is zero on every date';
+    load({ ...sample, layers: [{ ...sinkingLayer, referenceArea }] });
+    render(<Legend />);
+    expect(text()).toContain(`Reference area: ${referenceArea}.`);
   });
 
   it('labels the flood-priority layer as a screening aid, not a forecast', () => {

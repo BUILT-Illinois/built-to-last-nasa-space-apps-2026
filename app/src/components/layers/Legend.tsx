@@ -9,14 +9,15 @@ import './layers.css';
 /**
  * The colormap names the pipeline writes, as a CSS gradient plus the color name of each end.
  * A name that is not listed here (for example "rgb", which has no single ramp) shows the numbers
- * without a color bar. The red-white-blue stops are fixed in docs/DATA_CONTRACT.md.
+ * without a color bar. The blue-white-red stops match pipeline/ingest_sinking.py (PR #24):
+ * min is blue #2166ac, zero is white, max is red #b2182b.
  */
 const RAMPS: Record<string, { gradient: string; minColor: string; maxColor: string }> = {
   gray: { gradient: 'linear-gradient(to right, #000000, #ffffff)', minColor: 'black', maxColor: 'white' },
-  'los-red-white-blue': {
-    gradient: 'linear-gradient(to right, #b2182b, #ffffff, #2166ac)',
-    minColor: 'red',
-    maxColor: 'blue',
+  'los-blue-white-red': {
+    gradient: 'linear-gradient(to right, #2166ac, #ffffff, #b2182b)',
+    minColor: 'blue',
+    maxColor: 'red',
   },
 };
 
@@ -39,14 +40,15 @@ export default function Legend() {
   const isGroundMotion = kind === 'displacement';
   const isPriority = kind === 'priority';
 
-  // Ground motion is named by its line-of-sight label, never "sinking", until T-35 confirms the sign.
+  // Ground motion is named by its line-of-sight label from the manifest; this file adds no
+  // "sinking" wording of its own.
   const name = isGroundMotion ? (layer.losLabel ?? 'Line-of-sight movement') : layer.title;
   const ramp = RAMPS[layer.colormap.name];
   const frame = layer.frames[dateIndex] ?? layer.frames[0];
   const granuleCount = frame?.granules.length ?? 0;
 
-  // What the sign means, only when the manifest says so (awaySign). Typed as text so a future
-  // "positive" value is handled without a types change.
+  // What the sign means, only when the manifest says so (awaySign). The pipeline writes
+  // "positive" (PR #24, T-35). Typed as text so either value is handled without a types change.
   const awaySign: string | undefined = layer.awaySign;
   let sign: string | null = null;
   if (awaySign === 'negative' || awaySign === 'positive') {
