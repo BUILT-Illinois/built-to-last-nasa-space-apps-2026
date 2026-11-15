@@ -1,5 +1,25 @@
-/* Minimal base styles so the map fills the window. Owner: Monica (app/src/styles/).
-   Placeholder from the T-02 scaffold, drafted with AI assistance (Claude Code). */
+/* Base styles and the look of the page chrome. Owner: Monica (app/src/styles/).
+   Control panel look by Diego (UI proof of concept, chosen by the team Sun Nov 15, 7:45 AM).
+   Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
+
+   Colors: the B[U]ILT @ UIUC palette, taken from the color variables in the built-illinois.org
+   stylesheet (the site's own names are in the comments below): a light peach surface with dark
+   brown text, a deeper peach for raised parts, and copper as the one accent. The radar pictures
+   are gray and the ground-motion map runs blue to white to red, so the peach panel stays clear
+   of the data colors. */
+:root {
+  --panel-bg: #fde6d4; /* panel surface: the site's --light-bg */
+  --panel-raised: #e8bda3; /* hover and form fields: the site's --mission-bg and --header-bg */
+  --panel-text: #51210d; /* text: the site's --main-brown */
+  --panel-muted: #5a3e2b; /* secondary text: the site's --dark-brown */
+  --accent: #d09052; /* the one accent, as a fill: the site's --copper-end */
+  --accent-strong: #a0522d; /* thin marks that must stand out on peach (focus ring, slider): the site's --button-hover-bg */
+  --rule: rgba(81, 33, 13, 0.2);
+  --panel-width: 20rem;
+  /* The device's own font: no request to an outside font service (the venue may filter them). */
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
 html,
 body,
 #root {
@@ -8,15 +28,162 @@ body,
 }
 
 body {
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font);
+  background: var(--panel-bg);
 }
 
 .app {
   position: relative;
   height: 100%;
+  /* The intro, tour card and reading guide (story.css, #35) read their colors from these
+     variables. Set here, inside .app, they give those panels the same palette in light and dark
+     mode: peach surface, dark brown text, copper border. Their accent is the dark brown, not
+     the copper, because it is also used for link text on the peach surface. */
+  --story-bg: #fde6d4;
+  --story-text: #51210d;
+  --story-muted: #5a3e2b;
+  --story-border: #d09052;
+  --story-accent: #51210d;
+  --story-accent-text: #fde6d4;
+  --story-backdrop: rgba(45, 22, 10, 0.6);
 }
 
 .map {
   position: absolute;
   inset: 0;
+}
+
+/* ---------- The control panel: the <aside className="layer-controls"> in App.tsx ---------- */
+
+.layer-controls {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  box-sizing: border-box;
+  width: var(--panel-width);
+  overflow-y: auto;
+  padding: 1.25rem 1.1rem 1.5rem;
+  background: var(--panel-bg);
+  color: var(--panel-text);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  box-shadow: 1px 0 0 rgba(0, 0, 0, 0.4);
+  /* On a short window the panel scrolls; keep its scrollbar thin and dark like the panel. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--panel-raised) var(--panel-bg);
+}
+
+.panel__header {
+  margin-bottom: 1.25rem;
+}
+
+.panel__title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.panel__byline {
+  margin: 0.5rem 0 0;
+  color: var(--panel-muted);
+  font-size: 0.8125rem;
+}
+
+/* Keep the map (and everything Eduardo's map screen draws on it) clear of the panel. */
+.app .map-screen {
+  left: var(--panel-width);
+}
+
+/* The tour card (story.css, #35) is pinned bottom left of the page, which is where the panel is.
+   Start it to the right of the panel so the legend stays readable during the tour. */
+.app .story-card {
+  left: calc(var(--panel-width) + 16px);
+  max-width: calc(100% - var(--panel-width) - 32px);
+}
+
+/* On a short desktop window (a laptop with the browser zoomed in) the longest tour step did not
+   fit, so its Back and Next buttons fell below the card's visible part. Let the card be wider
+   there, which makes it shorter, and give it a little more of the height. */
+@media (min-width: 601px) and (max-height: 720px) {
+  .app .story-card {
+    bottom: 24px;
+    width: min(540px, calc(100% - var(--panel-width) - 32px));
+    max-height: calc(100% - 48px);
+  }
+}
+
+/* ---------- Map furniture, restyled to match (overrides MapLibre and map.css) ---------- */
+
+.app .swipe-label {
+  border-radius: 2px;
+  background: var(--panel-bg);
+  color: var(--panel-text);
+  box-shadow: none;
+}
+
+.app .maplibregl-ctrl-group {
+  border-radius: 2px;
+  background: var(--panel-bg);
+  box-shadow: none;
+}
+
+.app .maplibregl-ctrl-group button + button {
+  border-top-color: var(--rule);
+}
+
+.app .maplibregl-ctrl-scale {
+  border-color: var(--panel-text);
+  background: rgba(253, 230, 212, 0.85);
+  color: var(--panel-text);
+}
+
+/* ---------- Phones: the panel becomes a sheet along the bottom ----------
+   Same 600 px breakpoint as story.css, so the sheet and the tour card switch together. */
+
+@media (max-width: 600px) {
+  .layer-controls {
+    top: auto;
+    width: 100%;
+    max-height: 46%;
+    padding: 0.9rem 1rem 1.1rem;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+  }
+
+  .panel__header {
+    margin-bottom: 0.8rem;
+  }
+
+  .panel__title {
+    font-size: 1.25rem;
+  }
+
+  .panel__byline {
+    display: none;
+  }
+
+  .app .map-screen {
+    left: 0;
+    bottom: 46%;
+  }
+
+  /* On phones story.css hides the panel while the tour card is open and shows the card as its
+     own bottom sheet, so the card and the map go back to the full width and height. */
+  .app .story-card {
+    left: 0;
+    max-width: none;
+  }
+
+  .app:has(.story-card) .map-screen {
+    bottom: 0;
+  }
+
+  /* Outside the tour, lift the "How to read this map" bar above the sheet (story.css keeps it
+     92 px above the bottom of the map to clear the credits). */
+  .app:not(:has(.story-card)) .reading-guide {
+    bottom: calc(46% + 92px);
+  }
 }
