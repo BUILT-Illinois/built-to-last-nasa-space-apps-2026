@@ -191,9 +191,9 @@ def test_broken_landmarks_reports_the_right_problem(broken_copy, name, change, e
     assert any(expected in p for p in problems), f"{name}: expected '{expected}' in {problems}"
 
 def test_missing_image_file_reports_it(broken_copy):
-    (broken_copy / "layers" / "gcov_hh" / "2026-04-16.webp").unlink()
+    (broken_copy / "layers" / "gcov_hh" / "2026-10-13.webp").unlink()
     problems = vm.validate_folder(broken_copy)
-    assert any("file not found: layers/gcov_hh/2026-04-16.webp" in p for p in problems), problems
+    assert any("file not found: layers/gcov_hh/2026-10-13.webp" in p for p in problems), problems
 
 def test_duplicate_key_reports_it(broken_copy):
     # The bug from the first landmarks draft: the same key written twice.

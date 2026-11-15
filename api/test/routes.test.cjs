@@ -47,6 +47,19 @@ test('manifest and landmarks return the same JSON as the static site', () => {
   }
 });
 
+test('published region manifests exclude the D-17 frame dates', () => {
+  const excluded = new Set(['2025-12-05', '2026-04-16']);
+  for (const { id } of regions().jsonBody) {
+    const { status, jsonBody } = manifest(request(id, 'manifest'));
+    assert.equal(status, 200);
+    for (const layer of jsonBody.layers) {
+      for (const { date } of layer.frames) {
+        assert.ok(!excluded.has(date), `${id}/${layer.id} serves D-17 excluded frame ${date}`);
+      }
+    }
+  }
+});
+
 test('unknown IDs return the contract 404 for both region file routes', () => {
   for (const [file, handler] of Object.entries({ manifest, landmarks })) {
     for (const id of ['missing', '__proto__', '../mexico_city']) {

@@ -13,8 +13,8 @@
       "drivers": { "human": null, "natural": null },
       "sourceIds": ["nisar-gcov"],
       "series": {
-        "hh_db": [{ "date": "2026-04-16", "value": -7.2 }, { "date": "2026-10-13", "value": -8.1 }],
-        "hv_db": [{ "date": "2026-04-16", "value": -14.9 }, { "date": "2026-10-13", "value": null }],
+        "hh_db": [{ "date": "2026-10-13", "value": -8.1 }],
+        "hv_db": [{ "date": "2026-10-13", "value": null }],
         "los_displacement_cm": [{ "date": "2025-11-11", "value": -0.6 }, { "date": "2026-10-13", "value": -2.4 }]
       }
     },
@@ -29,7 +29,7 @@
       "drivers": { "human": "Placeholder human driver", "natural": null },
       "sourceIds": ["nisar-gcov"],
       "series": {
-        "hh_db": [{ "date": "2026-04-16", "value": -10.4 }, { "date": "2026-10-13", "value": -9.6 }]
+        "hh_db": [{ "date": "2026-10-13", "value": -9.6 }]
       }
     }
   ]
