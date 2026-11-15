@@ -1,6 +1,44 @@
 {
   "schemaVersion": "0.1",
   "regionId": "mexico_city",
+  "sources": [
+    {
+      "id": "nisar-gunw",
+      "title": "NISAR L2 GUNW PROVISIONAL V1 (NASA/ISRO, ASF DAAC)",
+      "url": "https://nisar-docs.asf.alaska.edu/earthdata-search/",
+      "license": "NASA Earthdata open data (see Earthdata Data Use Guidance)"
+    },
+    {
+      "id": "jpl-2026-mexico-city",
+      "title": "NASA/JPL, \"US-Indian Space Mission Maps Extreme Subsidence in Mexico City\", Apr 29, 2026",
+      "url": "https://www.jpl.nasa.gov/news/us-indian-space-mission-maps-extreme-subsidence-in-mexico-city/",
+      "license": "Cited for reference; see the source page for its terms"
+    },
+    {
+      "id": "earthdata-sar",
+      "title": "NASA Earthdata, \"What is Synthetic Aperture Radar?\"",
+      "url": "https://www.earthdata.nasa.gov/learn/earth-observation-data-basics/sar",
+      "license": "Cited for reference; see the source page for its terms"
+    },
+    {
+      "id": "unam-2007-chalco",
+      "title": "Ortiz Zamora and Ortega Guerrero (2007), \"Origen y evolución de un nuevo lago en la planicie de Chalco\", Investigaciones Geográficas (UNAM) no. 64, pp. 26-42",
+      "url": "https://scielo.org.mx/pdf/igeo/n64/n64a3.pdf",
+      "license": "Cited for reference; see the source page for its terms"
+    },
+    {
+      "id": "iahs-2020",
+      "title": "Fernández-Torres et al. (2020), \"Land Subsidence risk maps and InSAR based angular distortion structural vulnerability assessment: an example in Mexico City\", Proc. IAHS 382, 583",
+      "url": "https://piahs.copernicus.org/articles/382/583/2020/",
+      "license": "Cited for reference; see the source page for its terms"
+    },
+    {
+      "id": "ap-2024-chalco",
+      "title": "AP, \"Residents of Mexico City suburb are anxious after living over a month in black sewage water\", Sep 13, 2024",
+      "url": "https://apnews.com/article/mexico-flooding-chalco-climate-8ecc2eb4d9fabd5219fe6850de5addf6",
+      "license": "Cited for reference; see the source page for its terms"
+    }
+  ],
   "landmarks": [
     {
       "id": "new_lake_chalco",
