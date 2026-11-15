@@ -10,7 +10,7 @@ Plan version read: v0.4 (D-13 drops Oct 30, 2025; D-14 organizer answers)
 - **T-06** Radar explainer drafted in `content/radar_explainer.md`. Waiting on Eduardo's review. Two lines need the NASA "What is SAR" source row.
 - **T-25** Data exploration with Diego. New Lake Chalco (Lago de Tláhuac-Xico) and the Bosque de Tláhuac lake are visible in the 2026 composite and matched on Google Maps. Change images (2025 → 2026) show both lakes much brighter in HH and HV, consistent with vegetation spreading across the water; Google Earth historical imagery agrees. **Caveat (D-13):** if these change images used the Oct 30, 2025 scene, they must be redone from Nov 11, 2025 before the finding goes into the story or slides.
 - **Sources** 8 new rows sent to Eduardo on Slack (UNAM 2007 Lake Chalco study, IAHS 2020, AP 2024 Chalco flood, NASA "What is SAR", challenge page, Tláhuac sources). AP numbers need confirming on the AP page.
-- **GS** Story chosen: Option A, "The lake that came back."
+- **GS** Story chosen: Option A (surface change across seasons), "The lake that came back."
 
 ## In progress
 - **T-17** 6-step story outline drafted. Name and tagline ideas next, then a team vote at dinner.
