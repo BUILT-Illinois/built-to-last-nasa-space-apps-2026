@@ -91,10 +91,10 @@ Rules:
 | `units` | `cm/yr` |
 | `losLabel` | `Radar line-of-sight rate` |
 | `referenceArea` | Name of the reference area Eduardo used |
-| `awaySign` | `negative` (negative means away from the satellite) |
-| `colormap` | `{"name":"los-red-white-blue","min":-30,"max":30}` |
+| `awaySign` | `positive` (positive means away from the satellite) |
+| `colormap` | `{"name":"los-blue-white-red","min":-30,"max":30}` |
 
-The PNG uses a fixed scale: −30 cm/yr is red (`#b2182b`), zero is white, and +30 cm/yr is blue (`#2166ac`). Colors interpolate between these points and saturate at the ends. No-data and uncovered pixels are transparent. The pipeline resamples to an approximately 80 m Web Mercator grid whose edges match the configured Mexico City bbox. It converts units and, when needed, flips the input sign. It does not change the reference area or convert radar line-of-sight motion into vertical motion.
+The PNG uses a fixed scale: −30 cm/yr is blue (`#2166ac`), zero is white, and +30 cm/yr is red (`#b2182b`). Colors interpolate between these points and saturate at the ends. No-data and uncovered pixels are transparent. The pipeline resamples to an approximately 80 m Web Mercator grid whose edges match the configured Mexico City bbox. It converts units and, flips the input sign when the input is negative-away. It does not change the reference area or convert radar line-of-sight motion into vertical motion.
 
 After Eduardo's science check (T-32), confirm the raster is the approved HH ascending track 19/frame 11 product (D-01). From the repo root with the pipeline requirements installed, run this one line in PowerShell. Enter the delivered metadata at the prompts, with the granule IDs separated by spaces.
 

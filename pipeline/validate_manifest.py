@@ -247,13 +247,13 @@ def check_layer(layer, where: str, synthetic: bool = False) -> list[str]:
     if layer["id"] == "sinking":
         if layer["kind"] != "displacement" or layer["product"] != "GUNW" or layer["units"] != "cm/yr":
             problems.append(f"{where}: sinking must be a GUNW displacement rate in cm/yr")
-        if layer.get("losLabel") != "Radar line-of-sight rate" or layer.get("awaySign") != "negative":
-            problems.append(f"{where}: sinking must label the line-of-sight rate and negative-away sign")
+        if layer.get("losLabel") != "Radar line-of-sight rate" or layer.get("awaySign") != "positive":
+            problems.append(f"{where}: sinking must label the line-of-sight rate and positive-away sign")
         reference = layer.get("referenceArea")
         if not isinstance(reference, str) or not reference.strip():
             problems.append(f"{where}.referenceArea: must name the reference area")
-        if layer["colormap"] != {"name": "los-red-white-blue", "min": -30, "max": 30}:
-            problems.append(f"{where}.colormap: sinking must use los-red-white-blue from -30 to 30")
+        if layer["colormap"] != {"name": "los-blue-white-red", "min": -30, "max": 30}:
+            problems.append(f"{where}.colormap: sinking must use los-blue-white-red from -30 to 30")
         if len(frames) != 1:
             problems.append(f"{where}.frames: sinking must have one rate frame")
         if synthetic and any(isinstance(frame, dict) and frame.get("granules") != [] for frame in frames):

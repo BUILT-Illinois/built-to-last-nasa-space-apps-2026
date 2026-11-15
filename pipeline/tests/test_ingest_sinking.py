@@ -55,9 +55,9 @@ def test_synthetic_rate_clips_converts_and_masks(tmp_path, units, sign, factor):
     assert layer["bounds"] == BBOX
     assert layer["units"] == "cm/yr"
     assert layer["referenceArea"] == "Generated test area"
-    assert layer["awaySign"] == "negative"
+    assert layer["awaySign"] == "positive"
     assert layer["losLabel"] == "Radar line-of-sight rate"
-    assert layer["colormap"] == {"name": "los-red-white-blue", "min": -30, "max": 30}
+    assert layer["colormap"] == {"name": "los-blue-white-red", "min": -30, "max": 30}
     frame, = layer["frames"]
     assert frame["granules"] == []
     assert (frame["since"], frame["date"]) == ("2025-11-11", "2026-10-13")

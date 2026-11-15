@@ -62,7 +62,7 @@ export interface Layer {
   /** Rate layer metadata, present for sinking. */
   losLabel?: 'Radar line-of-sight rate';
   referenceArea?: string;
-  awaySign?: 'negative';
+  awaySign?: 'positive';
   frames: Frame[];
 }
 
