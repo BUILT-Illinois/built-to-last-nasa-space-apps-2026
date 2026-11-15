@@ -13,7 +13,9 @@ Plan version read: v0.4 (D-13 drops Oct 30, 2025; D-14 organizer answers)
 - **GS** Story chosen: Option A (surface change across seasons), "The lake that came back."
 
 ## In progress
-- **T-17** 6-step story outline drafted. Name and tagline ideas next, then a team vote at dinner.
+- **T-17** 6-step story outline drafted. Name and tagline ideas next, then a team vote at dinner. Eduardo (9:55 PM): keep the personal story and add the 2024 flood angle (sinking makes flooding worse; NISAR can flag problems early and help target prevention funds). Possibly add Caracas (June earthquakes) if the data shows a clear sign.
+- **T-18** Intro screen and 6-step tour on `monica/intro-tour` (not merged): `content/story/mexico_city.json`, `app/src/story/`, `app/src/styles/story.css`, 22 tests passing. Unsourced claims are held in `pendingClaims` and not shown. **For Eduardo:** small edits in his files: `cameraTarget` in `state/store.ts`, a `flyTo` effect in `map/MapView.tsx`, `<StoryTour />` in `App.tsx`. A tour for another region (e.g. Caracas) is one new `content/story/<region>.json`.
+- **T-19** `content/landmarks/mexico_city.json`: 8 cards (structure plus approximate coordinates, text TODO). Bosque de Tláhuac lake has no coordinates yet; Santa Cecilia and Tláhuac share a point.
 
 ## Next
 - **T-18** Intro screen and guided walkthrough (against sample data)
