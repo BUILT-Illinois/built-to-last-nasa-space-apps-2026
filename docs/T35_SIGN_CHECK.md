@@ -2,7 +2,7 @@
 
 # T-35: what sign the GUNW unwrapped phase has, and the incidence angle
 
-Checked Sat Nov 14, 11:50 PM CT.
+Checked Sat Nov 14, 11:35 PM CT.
 
 ## Answer
 
@@ -46,7 +46,7 @@ ISRO's format document gives 42° as the "mid swath incidence angle used for gro
 
 ## Open items for other people
 
-1. **The data contract and the CSV disagree on the sign.**
+1. **The data contract and the CSV disagree on the sign** (filed as RB-F03 in Eduardo's status file).
    - `docs/DATA_CONTRACT.md` says `los_displacement_cm`: "Negative means away from the satellite."
    - `poc/mexico_city_sinking/landmark_series_los_cm.csv` and `displacement_cumulative.npz` are **positive away**.
    - Whoever writes `landmarks.json` (Elias, T-33) must multiply by −1, or the contract must change (Elias's call, with a line in `DECISIONS.md`).
