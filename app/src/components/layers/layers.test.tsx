@@ -198,6 +198,23 @@ describe('Legend', () => {
     expect(text()).toContain('Source: NISAR GUNW (NASA/ISRO), 3 granules.');
   });
 
+  it('shows the last frame, like the map, when the date index is past the end', () => {
+    const frame = sinkingLayer.frames[0]!;
+    const layer: Layer = {
+      ...sinkingLayer,
+      frames: [
+        { ...frame, since: '2025-11-11', date: '2026-04-22' },
+        { ...frame, since: '2025-11-11', date: '2026-10-13' },
+      ],
+    };
+    load({ ...sample, layers: [layer] });
+    render(<Legend />);
+    expect(text()).toContain('Period: 2025-11-11 to 2026-04-22.');
+    act(() => useAppStore.setState({ dateIndex: 99 }));
+    expect(text()).toContain('Period: 2025-11-11 to 2026-10-13.');
+    expect(text()).not.toContain('2026-04-22');
+  });
+
   it('draws the los-blue-white-red color bar from blue through white to red', () => {
     load(withSinking, 'sinking');
     render(<Legend />);

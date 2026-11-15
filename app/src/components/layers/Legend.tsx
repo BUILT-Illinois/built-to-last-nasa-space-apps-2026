@@ -3,7 +3,7 @@
 // manifest fields (docs/DATA_CONTRACT.md); this file adds only neutral labels.
 // It only reads the shared store; it never touches the map and imports no other component.
 // Owner: Diego (app/src/components/layers/). Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
-import { selectActiveLayer, useAppStore } from '../../state/store';
+import { selectActiveFrame, selectActiveLayer, useAppStore } from '../../state/store';
 import './layers.css';
 
 /**
@@ -31,7 +31,8 @@ export default function Legend() {
   const dataMaturity = useAppStore((s) => s.manifest?.dataMaturity);
   const synthetic = useAppStore((s) => s.manifest?.synthetic === true);
   const layer = useAppStore(selectActiveLayer);
-  const dateIndex = useAppStore((s) => s.dateIndex);
+  // The same frame the map draws: the store clamps a date index that is past the end.
+  const frame = useAppStore(selectActiveFrame);
 
   if (!layer) return null;
 
@@ -44,7 +45,6 @@ export default function Legend() {
   // "sinking" wording of its own.
   const name = isGroundMotion ? (layer.losLabel ?? 'Line-of-sight movement') : layer.title;
   const ramp = RAMPS[layer.colormap.name];
-  const frame = layer.frames[dateIndex] ?? layer.frames[0];
   const granuleCount = frame?.granules.length ?? 0;
 
   // What the sign means, only when the manifest says so (awaySign). The pipeline writes
