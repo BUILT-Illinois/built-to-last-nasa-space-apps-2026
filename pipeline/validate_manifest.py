@@ -197,15 +197,15 @@ def check_region(region) -> list[str]:
     return problems
 
 
-def check_frame(frame, kind: str, where: str) -> list[str]:
+def check_frame(frame, kind: str, where: str, synthetic: bool = False) -> list[str]:
     problems = missing_fields(frame, FRAME_FIELDS, where)
     if problems:
         return problems
     problems += check_date(frame["date"], f"{where}.date")
     if kind == "displacement":
         problems += check_date(frame.get("since"), f"{where}.since")
-    if not (isinstance(frame["granules"], list) and frame["granules"]):
-        problems.append(f"{where}.granules: list the source granule names")
+    if not isinstance(frame["granules"], list) or (not frame["granules"] and not synthetic):
+        problems.append(f"{where}.granules: list the source granule names (empty only when synthetic)")
     if frame["direction"] not in DIRECTIONS:
         problems.append(f"{where}.direction: '{frame['direction']}' is not one of {sorted(DIRECTIONS)}")
     for key in ("track", "frame"):
@@ -214,7 +214,7 @@ def check_frame(frame, kind: str, where: str) -> list[str]:
     return problems
 
 
-def check_layer(layer, where: str) -> list[str]:
+def check_layer(layer, where: str, synthetic: bool = False) -> list[str]:
     problems = missing_fields(layer, LAYER_FIELDS, where)
     if problems:
         return problems
@@ -229,7 +229,7 @@ def check_layer(layer, where: str) -> list[str]:
     if not (isinstance(frames, list) and frames):
         return problems + [f"{where}.frames: must be a non-empty list"]
     for j, frame in enumerate(frames):
-        problems += check_frame(frame, layer["kind"], f"{where}.frames[{j}]")
+        problems += check_frame(frame, layer["kind"], f"{where}.frames[{j}]", synthetic)
     return problems
 
 
@@ -244,8 +244,10 @@ def check_manifest(manifest, folder: Path) -> list[str]:
         return problems
 
     problems += check_region(manifest["region"])
+    if "synthetic" in manifest and not isinstance(manifest["synthetic"], bool):
+        problems.append("manifest.synthetic: must be true or false")
     for i, layer in enumerate(manifest["layers"]):
-        problems += check_layer(layer, f"layers[{i}]")
+        problems += check_layer(layer, f"layers[{i}]", manifest.get("synthetic") is True)
 
     source_ids = {s.get("id") for s in manifest["sources"] if isinstance(s, dict)}
     for k, vector in enumerate(manifest["vectors"]):

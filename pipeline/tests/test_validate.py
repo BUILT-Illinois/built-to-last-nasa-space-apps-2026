@@ -152,6 +152,8 @@ MANIFEST_CASES = [
     ("image is not a .webp",    lambda m: frame0(m).update(image="../sample/manifest.json"), "must be a .webp file"),
     ("missing sources",         lambda m: m.pop("sources"),                            "missing field 'sources'"),
     ("missing vectors",         lambda m: m.pop("vectors"),                            "missing field 'vectors'"),
+    ("no granules on real data", lambda m: m.update(synthetic=False),                  "granules"),
+    ("synthetic is text",       lambda m: m.update(synthetic="yes"),                   "manifest.synthetic"),
     # These used to crash the validator (review on PR #6):
     ("frame without image",     lambda m: frame0(m).pop("image"),                      "missing field 'image'"),
     ("vector without file",     lambda m: m["vectors"].append({"id": "v", "title": "t", "source": "nisar-gcov"}),
