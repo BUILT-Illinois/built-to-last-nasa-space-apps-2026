@@ -53,12 +53,28 @@ test('/api/landmarks serves the Mexico City monthly landmark series', () => {
   const entries = result.jsonBody.landmarks;
   assert.ok(entries.length >= 10);
   const lake = entries.find(({ id }) => id === 'new_lake_chalco');
-  assert.equal(lake.series.hh_db.length, 12);
-  assert.equal(lake.series.hv_db.length, 12);
-  assert.deepEqual(lake.series.hh_db.find(({ date }) => date === '2026-04-16'),
-    { date: '2026-04-16', value: null });
+  assert.equal(lake.series.hh_db.length, 11);
+  assert.equal(lake.series.hv_db.length, 11);
   assert.equal(lake.series.water_months.provisional, true);
   assert.equal(lake.series.water_months.valid_months, 11);
+});
+
+test('published region manifests and radar series exclude the D-17 dates', () => {
+  const excluded = new Set(['2025-12-05', '2026-04-16']);
+  for (const { id } of regions().jsonBody) {
+    const { status, jsonBody } = manifest(request(id, 'manifest'));
+    assert.equal(status, 200);
+    for (const layer of jsonBody.layers) {
+      for (const { date } of layer.frames) {
+        assert.ok(!excluded.has(date), `${id}/${layer.id} serves D-17 excluded frame ${date}`);
+      }
+    }
+    for (const landmark of landmarks(request(id, 'landmarks')).jsonBody.landmarks) {
+      for (const { date } of [...(landmark.series.hh_db ?? []), ...(landmark.series.hv_db ?? [])]) {
+        assert.ok(!excluded.has(date), `${id}/${landmark.id} serves D-17 excluded radar date ${date}`);
+      }
+    }
+  }
 });
 
 test('unknown IDs return the contract 404 for both region file routes', () => {

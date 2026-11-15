@@ -25,14 +25,6 @@
       "caveats": ["Synthetic placeholder images, not NISAR data."],
       "frames": [
         {
-          "date": "2026-04-16",
-          "image": "layers/gcov_hh/2026-04-16.webp",
-          "granules": [],
-          "track": 19,
-          "frame": 11,
-          "direction": "ASCENDING"
-        },
-        {
           "date": "2026-10-13",
           "image": "layers/gcov_hh/2026-10-13.webp",
           "granules": [],
@@ -55,14 +47,6 @@
       "caveats": ["Synthetic placeholder images, not NISAR data."],
       "frames": [
         {
-          "date": "2026-04-16",
-          "image": "layers/gcov_hv/2026-04-16.webp",
-          "granules": [],
-          "track": 19,
-          "frame": 11,
-          "direction": "ASCENDING"
-        },
-        {
           "date": "2026-10-13",
           "image": "layers/gcov_hv/2026-10-13.webp",
           "granules": [],
@@ -84,14 +68,6 @@
       "description": "Generated test pattern, not NISAR data. Red is HH, green is HV, blue is HH minus HV.",
       "caveats": ["Synthetic placeholder images, not NISAR data."],
       "frames": [
-        {
-          "date": "2026-04-16",
-          "image": "layers/gcov_composite/2026-04-16.webp",
-          "granules": [],
-          "track": 19,
-          "frame": 11,
-          "direction": "ASCENDING"
-        },
         {
           "date": "2026-10-13",
           "image": "layers/gcov_composite/2026-10-13.webp",
