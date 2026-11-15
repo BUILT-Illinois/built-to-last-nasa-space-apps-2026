@@ -1,4 +1,4 @@
-# Status: Diego        Updated: Sat 6:10 PM CT        Branch: main (status only)
+# Status: Diego        Updated: Sat 6:20 PM CT        Branch: main (status only)
 Plan version read: Sat 4:00 PM | Roadblock IDs E for Elias, F for Eduardo; RB-M01 option (a) accepted. (Plan v0.3: one go/no-go at Sun 1:00 AM.)
 
 ## Now / Next / Done
@@ -21,7 +21,7 @@ My recommendation:
 ### RB-D01  [FYI]  OPEN   Needed by: before T-10 picks its dates and before any NE-zone claim goes in the app or slides
 What I was trying to do: T-25, find the cause of the NE-zone HV darkening (the flat zone north-east of the airport) so the team could use it in the story.
 What happened (exact error or evidence): The darkening is most likely an artifact of the track 19 GCOV acquisition of 2025-10-30, not a ground change.
-(1) In the 29 ASF browse PNGs (track 19, one release P05023), the NE zone is mean gray 112 in HV on 2025-10-30 and 12 to 36 on all 28 later dates; HH shows no step.
+(1) In the 29 ASF browse PNGs (track 19, one release P05023), the NE zone is mean gray 112 in HV on 2025-10-30 and 12 to 36 on all 28 later GCOV dates (browse previews, not GUNW pairs); HH shows no step.
 (2) On 2025-10-30 every dark pixel in the whole valley is lifted, most in HV: the darkest 4% of pixels +72 gray against their typical value, then +55, +33, +16, +6, and +4 in the brightest. A normal date (2026-03-11) shows no such pattern. That is the signature of a higher noise floor in that acquisition. It is in both the BETA (X05009) and PROVISIONAL (P05023) processing of the same acquisition.
 (3) The other track (113, descending) shows no drop in the NE zone between 2025-10-25 and 2025-11-06 (BETA browse 82 then 91), and its 2025-11-06 PROVISIONAL value (29.5) already equals the later dates (29.6, 30.4).
 ASF's PROVISIONAL known-issues page (updated Jul 30, 2026) does not list this; closest item: "low-level ripples ... in areas with dark backgrounds".
@@ -50,10 +50,31 @@ All in `C:\Users\diego\Downloads\nasa data\` (outside the repo). Same files as E
 | NISAR_L2_PR_GCOV_035_019_A_011_4005_DHDH_A_20261106T120539_20261106T120613_P05036_N_F_J_001.h5 | GCOV | NISAR_L2_GCOV_V1 | 2026-11-06 | 19 / 11 asc | 6.98 | 8c1d5537d8b546352b474035f0254ea4 | `data/quicklooks/` |
 | NISAR_L2_PR_GUNW_032_113_D_079_033_4000_SH_20261008T011329_20261008T011403_20261020T011329_20261020T011403_P05023_N_F_J_001.h5 | GUNW | NISAR_L2_GUNW_PROVISIONAL_V1 | 2026-10-08 to 2026-10-20 | 113 / 79 desc | 2.35 | d020136a804f5888dc8af99152584820 | `data/quicklooks/` |
 | 58 ASF browse PNGs, `*_NATIVE_B_HHHH.png` and `*_NATIVE_B_HVHV.png`, all 29 dates | GCOV browse | NISAR_L2_GCOV_PROVISIONAL_V1 (P05023) | 2025-10-30 to 2026-10-13 | 19 / 11 asc | 0.05 | n/a (no login, public) | `data/browse/`, `data/quicklooks/browse29_*.png` |
+| 12 ASF browse PNGs (native HH/HV) + 2 BETA color browse PNGs | GCOV browse | PROVISIONAL P05023 and BETA X05009 | 2025-10-25 to 2026-01-05 (6 dates) | 113 / 79 desc | 0.01 | n/a (no login, public) | `data/browse_t113/`, `data/quicklooks/t113_northeast_HV_oct25_to_jan05.png` |
 
 ## T-25 findings (Sat 5:45 PM CT, corrected 6:10 PM)
 
-**Correction, 6:10 PM:** finding (1) below, the NE-zone HV darkening, is most likely a data artifact of the 2025-10-30 acquisition, not a ground change. Evidence in RB-D01. Additions from Claude's analysis of all 29 dates (for Diego to review) are listed after the table.
+**Correction, 6:10 PM:** finding (1) below, the NE-zone HV darkening, is most likely a data artifact of the 2025-10-30 acquisition, not a ground change. Evidence in RB-D01. Additions from Claude's analysis of the 29 GCOV browse previews (for Diego to review) are listed after the table.
+
+**Where each finding comes from. None of it uses the 28 GUNW pairs; those are fetched in T-30.**
+
+| Source | What it is |
+|---|---|
+| Local GCOV files | 2 full GCOV files, track 19: 2025-10-30 (BETA X05009) and 2026-11-06 (P05036). Real dB values. |
+| Local GUNW pair | 1 GUNW pair, track 113 (descending), 2026-10-08 to 10-20. Not part of the 28-pair track 19 chain. |
+| Previews | ASF browse PNGs, one per GCOV date: 29 dates on track 19 (2025-10-30 to 2026-10-13) and 6 on track 113 (2025-10-25 to 2026-01-05). 8-bit pictures: shapes and timing, approximate dB only. |
+
+| Finding | Source | Status |
+|---|---|---|
+| HH vs HV basics (city, mountains, dark zones) | Local GCOV files | Stands |
+| NE zone darker in HV, 2025 to 2026 | Local GCOV files, then previews | Most likely a 2025-10-30 artifact (RB-D01) |
+| Noise-floor diagnosis of 2025-10-30 | Previews (track 19 and track 113) | Our diagnosis, not documented by ASF |
+| South wetland brighter, 2025 to 2026 | Local GCOV files | Not confirmed by the previews |
+| South wetland late-June 2026 step | Previews (29 dates) | Stands |
+| Southern farm belt brighter in Jul-Oct (Claude's analysis) | Previews (29 dates) | Stands, cause open |
+| NE seasonal water patches (Claude's analysis) | Previews (29 dates) | Low confidence |
+| West-edge bright dots, bright in HH and HV | Local GCOV files | Stands, cause unknown |
+| No sinking visible in one pair (1 to 2 cm patches everywhere) | Local GUNW pair (track 113) | Stands; the 28 track 19 pairs (T-30) are the real test |
 
 Observations by Diego; every number checked by his Claude session against the files. Everything is PROVISIONAL. "Radar shows" is what is in the pictures; "we infer" is a guess to be checked. Place names are approximate and not yet map-checked unless stated.
 
