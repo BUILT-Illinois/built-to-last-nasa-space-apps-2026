@@ -1,9 +1,11 @@
-# Status: Diego        Updated: Sat 10:55 PM CT        Branch: main (status only)
-Plan version read: Sat 6:25 PM | Plan v0.4: G1 passed, GS default (surface change), Oct 30, 2025 dropped (D-13), T-11 cancelled (D-15).
+# Status: Diego        Updated: Sat 11:35 PM CT        Branch: main (status only)
+Plan version read: Sat 11:30 PM | Plan v0.5: sinking story (D-16), Dec 5 and Apr 16 dropped (D-17, my RB-D04), Venezuela/T-21/Tier 3 cancelled (D-18).
 
 ## Now / Next / Done
-- Now:  Lake check done (numbers in the new "Lake check results" section); writing it up with Monica. Data-quality FYI in RB-D04.
-- Next: T-12 layer switcher and legend against the real `app/public/data/mexico_city/manifest.json`. Not started; Tier 1, so at risk for the 1:00 AM go/no-go. Then T-13 time slider (Elias's 12 monthly frames, no 2025-10-30 frame).
+- Now:  T-12 layer switcher and legend, now including the ground-motion layer and the flood-priority map (old T-34 folded in, plan v0.5), for the 1:00 AM gate. Building against the merged sample data and Elias's draft sinking-layer PR. Branch `diego/layer-controls`, draft PR.
+- Next: T-13 time slider (no 2025-10-30, 2025-12-05 or 2026-04-16 frame).
+- Done: Lake check ("Lake check results" section); RB-D04 accepted as D-17. Caracas stretch goal dropped (never started).
+- For T-33 (Elias): the 27 GUNW granule IDs used (reference dates 2025-11-11 to 2026-10-01) are listed from the catalog in `data/t30/gunw_granule_ids_27.txt` on my laptops; each crop also stores its `granule`. Units, sign and reference area come from Eduardo's proof of concept (T-35 for the sign). Open question for Eduardo: are the two pairs using 2026-03-23 (RB-D04 part 2, coherence band) masked in the proof of concept?
 - FYI Eduardo (T-31): `displacement.py` is not on main yet. A top-level glob of `data/interim/mexico_city_gunw_*.npz` skips `excluded_D13/`, but `rglob` or `**` would pick up the 2025-10-30 pair, and a re-fetch of 2025-10-30 lands back in `data/interim/`. Recommend T-31 also drops 2025-10-30 by date. PLAN T-31 row still says "Runs on the 28 crops"; under D-13 it is 27. (Elias asked; answered in Slack.)
 - FYI Elias (root config): the earthaccess login created an untracked `.dodsrc` in the repo root on my second laptop. Not committed; consider adding `.dodsrc` to `.gitignore`.
 - Done: T-30. 28 of 28 GUNW pairs fetched on my second laptop, no failures (one timeout on 2026-04-28, retry succeeded); 7:03 to 7:30 PM, median 47 s per pair. The T-31 set is the 27 pairs from 2025-11-11 to 2026-10-01 in `data/interim/` (142 MB, all 761 x 723, phase 100% finite, median coherence 0.56 to 0.75); the 2025-10-30 pair is in `data/interim/excluded_D13/` (D-13). FYI Eduardo (T-31): there is no 2026-08-02 acquisition, so the pair starting 2026-07-21 spans 24 days, not 12. Files reach Eduardo by USB or local share; tell me which. Hand-off: DM sent to Eduardo with the file notes; waiting on his choice of USB or local share. Quick-look pictures of all 27 pairs (coherence and phase): `data/interim/views/` on my second laptop (script `data/t30/view_gunw.py`).
