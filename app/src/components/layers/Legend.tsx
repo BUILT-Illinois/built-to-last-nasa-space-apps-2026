@@ -21,6 +21,9 @@ const RAMPS: Record<string, { gradient: string; minColor: string; maxColor: stri
   },
 };
 
+/** The sign caveat pipeline/ingest_sinking.py writes; the legend's own sign line replaces it. */
+const PIPELINE_SIGN_CAVEAT = 'Positive means away from the satellite.';
+
 /** Legend numbers: at most one decimal, so -12.965582 reads as -13. */
 function formatValue(value: number, showPlus: boolean): string {
   const rounded = Number(value.toFixed(1));
@@ -56,10 +59,9 @@ export default function Legend() {
     const word = awaySign === 'negative' ? 'Negative' : 'Positive';
     sign = `${word}${color ? ` (${color})` : ''} = moving away from the satellite`;
   }
-  // The pipeline also writes the sign as a caveat; do not show it twice.
-  const caveats = sign
-    ? layer.caveats.filter((c) => !c.toLowerCase().includes('away from the satellite'))
-    : layer.caveats;
+  // The pipeline also writes the sign as a caveat; do not show it twice. Only that exact
+  // sentence is dropped, so a longer caveat that mentions the satellite still shows.
+  const caveats = sign ? layer.caveats.filter((c) => c.trim() !== PIPELINE_SIGN_CAVEAT) : layer.caveats;
 
   return (
     <section className="legend" aria-label="Legend">

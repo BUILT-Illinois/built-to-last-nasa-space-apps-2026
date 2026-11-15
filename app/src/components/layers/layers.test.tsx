@@ -215,6 +215,17 @@ describe('Legend', () => {
     expect(text()).not.toContain('2026-04-22');
   });
 
+  it('drops only the exact sign sentence, and keeps a longer caveat that mentions the satellite', () => {
+    const longer =
+      'Motion away from the satellite can be vertical, horizontal or both; one viewing direction cannot tell them apart.';
+    const caveats = ['  Positive means away from the satellite. ', longer];
+    load({ ...sample, layers: [{ ...sinkingLayer, caveats }] });
+    render(<Legend />);
+    const items = [...container.querySelectorAll('.legend__caveats li')].map((li) => li.textContent);
+    expect(items).toEqual([longer]);
+    expect(text()).toContain('Positive (red) = moving away from the satellite');
+  });
+
   it('draws the los-blue-white-red color bar from blue through white to red', () => {
     load(withSinking, 'sinking');
     render(<Legend />);
