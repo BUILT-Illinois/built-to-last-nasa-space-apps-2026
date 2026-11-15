@@ -59,8 +59,10 @@ export default function Legend() {
     ? layer.caveats.filter((c) => !c.toLowerCase().includes('away from the satellite'))
     : layer.caveats;
 
+  // UI proof of concept (branch diego/ui-poc): the ramp is drawn as a measuring staff with tick
+  // marks, the badges sit next to the title, and the caveats and source fold away under "About".
   return (
-    <section className="legend" aria-label="Legend">
+    <section className={ramp ? 'legend' : 'legend legend--no-ramp'} aria-label="Legend">
       <h2 className="legend__title">
         {name}, {layer.units}
       </h2>
@@ -78,7 +80,12 @@ export default function Legend() {
         </p>
       )}
 
-      {ramp && <div className="legend__ramp" style={{ background: ramp.gradient }} aria-hidden="true" />}
+      {ramp && (
+        <>
+          <div className="legend__ramp" style={{ background: ramp.gradient }} aria-hidden="true" />
+          <div className="legend__ticks" aria-hidden="true" />
+        </>
+      )}
       <div className="legend__range">
         <span>{formatValue(layer.colormap.min, isGroundMotion)}</span>
         <span>{formatValue(layer.colormap.max, isGroundMotion)}</span>
@@ -87,24 +94,27 @@ export default function Legend() {
 
       <p className="legend__description">{layer.description}</p>
 
-      {caveats.length > 0 && (
-        <ul className="legend__caveats">
-          {caveats.map((caveat) => (
-            <li key={caveat}>{caveat}</li>
-          ))}
-        </ul>
-      )}
-
-      <p className="legend__source">
-        {layer.referenceArea && <>Reference area: {layer.referenceArea}. </>}
-        {frame?.since && (
-          <>
-            Period: {frame.since} to {frame.date}.{' '}
-          </>
+      <details className="legend__about">
+        <summary>About this data</summary>
+        {caveats.length > 0 && (
+          <ul className="legend__caveats">
+            {caveats.map((caveat) => (
+              <li key={caveat}>{caveat}</li>
+            ))}
+          </ul>
         )}
-        Source: NISAR {layer.product} (NASA/ISRO)
-        {granuleCount > 0 && <>, {granuleCount === 1 ? '1 granule' : `${granuleCount} granules`}</>}.
-      </p>
+
+        <p className="legend__source">
+          {layer.referenceArea && <>Reference area: {layer.referenceArea}. </>}
+          {frame?.since && (
+            <>
+              Period: {frame.since} to {frame.date}.{' '}
+            </>
+          )}
+          Source: NISAR {layer.product} (NASA/ISRO)
+          {granuleCount > 0 && <>, {granuleCount === 1 ? '1 granule' : `${granuleCount} granules`}</>}.
+        </p>
+      </details>
     </section>
   );
 }
