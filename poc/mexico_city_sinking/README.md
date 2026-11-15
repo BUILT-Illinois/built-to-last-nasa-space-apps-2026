@@ -89,3 +89,19 @@ Needs numpy, pyproj, matplotlib, rasterio. The big outputs are written into the 
 - NASA JPL, "US-Indian Space Mission Maps Extreme Subsidence in Mexico City", Apr 29, 2026: <https://www.jpl.nasa.gov/news/us-indian-space-mission-maps-extreme-subsidence-in-mexico-city/>
 - Chaussard, E., et al. (2021). Over a century of sinking in Mexico City. JGR Solid Earth, doi:10.1029/2020JB020648
 - ASF, NISAR PROVISIONAL known issues: <https://nisar-docs.asf.alaska.edu/provisional-known-issues/>
+
+## Valley-wide run (Sun Nov 15, 10:15 AM CT)
+
+The same script, run on Diego's 27 valley-wide crops (lon -99.60 to -98.60, lat 19.00 to 19.90, 1315 x 1246 pixels at 80 m), shows the two sinking bowls against stable surroundings. The place numbers are identical to the city box (same reference area, same pixels): Nezahualcoyotl 21.9 cm, Tlahuac 16.4 cm, airport 15.3 cm.
+
+- Whole box: 99th percentile 22.6 cm/yr; about 433 km2 faster than 10 cm/yr and 153 km2 faster than 20 cm/yr. These are larger than the city-box figures only because the box is larger; the story keeps the city-box numbers.
+- 84% of pixels have all 27 pairs, 14% are gap-filled, 2% are dropped.
+- **Swath-edge artifact.** The north-west corner of the box touches the edge of the radar swath. A band about 5 km wide there reads 80 to 90 cm/yr, which is not physical. `mask_swath_edge.py` sets everything within 6 km of that edge to NaN and writes `*_masked.tif`. Only the masked files go to the app.
+- Run metadata: `provenance_valley.json`. The rasters stay out of git.
+
+```text
+python poc/mexico_city_sinking/sinking_poc.py --data data/Mexico_City/valley_gunw_27_for_Eduardo
+python poc/mexico_city_sinking/mask_swath_edge.py data/Mexico_City/valley_gunw_27_for_Eduardo
+```
+
+The first command also rewrites the figure, CSV and `provenance.json` in this folder; restore them with `git restore` afterwards, or rename the valley `provenance.json` to `provenance_valley.json`.
