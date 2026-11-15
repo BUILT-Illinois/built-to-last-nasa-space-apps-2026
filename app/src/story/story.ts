@@ -31,6 +31,8 @@ export type StoryStep = {
   sourceIds: string[];
   /** Claims waiting for a source row or a data check. Never shown in the app. */
   pendingClaims?: string[];
+  /** Work left on this step (e.g. a layer that does not exist yet). Never shown in the app. */
+  todo?: string;
 };
 
 export type StorySource = { id: string; title: string; url: string };

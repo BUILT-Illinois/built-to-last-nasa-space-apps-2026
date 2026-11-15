@@ -7,26 +7,35 @@
       "name": "New Lake Chalco (Lago de Tláhuac-Xico)",
       "lon": -98.97,
       "lat": 19.27,
-      "summary": "A lake on the city's southeast edge, where the ground is moving fast and the water changes with the seasons.",
-      "radarShows": "The ground around this lake is among the fastest-moving areas we measured (see the Tláhuac card). The lake surface itself changes with the seasons far more than the city: in the rainy season (Jul–Oct 2026) its HV signal is about 1.2 dB higher than in the dry season (Jan–Apr), vs. about 0.4 dB for the city center. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area; pending Eduardo's review.)",
-      "weInfer": "This is consistent with the land still sinking. The rainy-season change is consistent with more water and plant growth on and around the lake. This is our interpretation, not a direct measurement.",
-      "drivers": { "human": "The lake exists because of people.", "natural": "The rains are natural." },
-      "sourceIds": ["nisar-gunw", "nisar-gcov", "earthdata-sar", "unam-2007-chalco"],
+      "summary": "A new lake that formed where the ground sank, as a consequence of groundwater pumping.",
+      "radarShows": "The ground-motion number for the lake itself is still being sampled; see the Tláhuac card for the nearest measured point. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area in the western hills.)",
+      "weInfer": "We think the land here is still sinking, as it is in nearby Tláhuac. This is our interpretation, not a direct measurement.",
+      "drivers": {
+        "human": "The lake exists because of people.",
+        "natural": "The rains are natural."
+      },
+      "sourceIds": [
+        "nisar-gunw",
+        "unam-2007-chalco"
+      ],
       "series": {}
     },
     {
       "id": "tlahuac_ground_motion",
       "name": "Tláhuac",
-      "lon": -99.0,
+      "lon": -99,
       "lat": 19.28,
       "summary": "A borough on the old Lake Chalco bed, and one of the fastest-moving places we measured.",
-      "radarShows": "The ground here moved about 16 cm away from the satellite in under a year, the second-fastest of the places we measured. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area; pending Eduardo's review.)",
+      "radarShows": "The ground here moved about 16 cm away from the satellite in under a year, among the fastest of the places we measured. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area in the western hills.)",
       "weInfer": "The land is still sinking quickly, the same process that created the nearby lake.",
       "drivers": {
         "human": "Groundwater pumping from wells under the old lakebed.",
         "natural": "Soft lakebed clay that compresses easily."
       },
-      "sourceIds": ["nisar-gunw", "unam-2007-chalco"],
+      "sourceIds": [
+        "nisar-gunw",
+        "unam-2007-chalco"
+      ],
       "series": {}
     },
     {
@@ -35,10 +44,16 @@
       "lon": -99.02,
       "lat": 19.4,
       "summary": "A city on the eastern edge of the valley, and the fastest-moving place we measured.",
-      "radarShows": "The ground here moved about 22 cm away from the satellite in under a year, the most of any place we measured. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area; pending Eduardo's review.)",
+      "radarShows": "The ground here moved about 22 cm away from the satellite in under a year, the most of any place we measured. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area in the western hills.)",
       "weInfer": "This is one of the fastest-sinking areas in the valley.",
-      "drivers": { "human": "Groundwater pumping.", "natural": "Soft former-lakebed sediment." },
-      "sourceIds": ["nisar-gunw", "iahs-2020"],
+      "drivers": {
+        "human": "Groundwater pumping.",
+        "natural": "Soft former-lakebed sediment."
+      },
+      "sourceIds": [
+        "nisar-gunw",
+        "iahs-2020"
+      ],
       "series": {}
     },
     {
@@ -47,10 +62,16 @@
       "lon": -99.07,
       "lat": 19.44,
       "summary": "The city's main airport, in one of the valley's sinking hotspots.",
-      "radarShows": "The ground here moved about 15 cm away from the satellite in under a year. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area; pending Eduardo's review.)",
-      "weInfer": "The airport area is sinking at a similar pace to the fastest parts of the city.",
-      "drivers": { "human": "Groundwater pumping and the weight of urban development.", "natural": "Soft lakebed clay." },
-      "sourceIds": ["nisar-gunw", "jpl-2026-mexico-city"],
+      "radarShows": "The ground here moved about 15 cm away from the satellite in under a year. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area in the western hills.)",
+      "weInfer": "The airport area is sinking at a pace close to Tláhuac's.",
+      "drivers": {
+        "human": "Groundwater pumping and the weight of urban development.",
+        "natural": "Soft lakebed clay."
+      },
+      "sourceIds": [
+        "nisar-gunw",
+        "jpl-2026-mexico-city"
+      ],
       "series": {}
     },
     {
@@ -59,13 +80,16 @@
       "lon": -99.13,
       "lat": 19.43,
       "summary": "The historic heart of the city, built on the old lakebed.",
-      "radarShows": "The ground here moved about 9 cm away from the satellite in under a year, slower than the eastern hotspots but still clearly moving. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area; pending Eduardo's review.)",
+      "radarShows": "The ground here moved about 9 cm away from the satellite in under a year, slower than the eastern hotspots but still clearly moving. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area in the western hills.)",
       "weInfer": "Even the historic center is sinking, though less than the east.",
       "drivers": {
         "human": "Groundwater pumping and the weight of urban development.",
         "natural": "Compaction of the ancient lakebed."
       },
-      "sourceIds": ["nisar-gunw", "jpl-2026-mexico-city"],
+      "sourceIds": [
+        "nisar-gunw",
+        "jpl-2026-mexico-city"
+      ],
       "series": {}
     },
     {
@@ -74,10 +98,16 @@
       "lon": -99.17,
       "lat": 19.43,
       "summary": "The city's famous monument, which has needed new steps as the ground around it sank.",
-      "radarShows": "The ground here moved about 4 cm away from the satellite in under a year, much slower than the east. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area; pending Eduardo's review.)",
+      "radarShows": "The ground here moved about 4 cm away from the satellite in under a year, much slower than the east. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area in the western hills.)",
       "weInfer": "The west side of the city is moving less than the east.",
-      "drivers": { "human": "Groundwater pumping.", "natural": null },
-      "sourceIds": ["nisar-gunw", "jpl-2026-mexico-city"],
+      "drivers": {
+        "human": "Groundwater pumping.",
+        "natural": null
+      },
+      "sourceIds": [
+        "nisar-gunw",
+        "jpl-2026-mexico-city"
+      ],
       "series": {}
     },
     {
@@ -86,13 +116,16 @@
       "lon": -98.9,
       "lat": 19.26,
       "summary": "A city at the edge of the old lake, where floodwater stayed for over a month in 2024.",
-      "radarShows": "The ground here moved about 8 cm away from the satellite in under a year. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area; pending Eduardo's review.)",
+      "radarShows": "The ground here moved about 8 cm away from the satellite in under a year. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area in the western hills.)",
       "weInfer": "Chalco is also sinking, though more slowly than nearby Tláhuac.",
       "drivers": {
-        "human": "Unchecked urban growth and failing infrastructure.",
-        "natural": "Low-lying former lakebed and heavy seasonal rain."
+        "human": "Residents point to unchecked growth and failing infrastructure.",
+        "natural": "Low-lying ground at the edge of an ancient lake."
       },
-      "sourceIds": ["nisar-gunw", "ap-2024-chalco"],
+      "sourceIds": [
+        "nisar-gunw",
+        "ap-2024-chalco"
+      ],
       "series": {}
     }
   ]

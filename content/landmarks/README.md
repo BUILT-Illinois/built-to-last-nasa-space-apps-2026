@@ -6,71 +6,67 @@
 
 Rules for the text:
 - `radarShows` is what the data shows, with no interpretation. `weInfer` is a hypothesis, worded as one.
-- Every factual claim needs a row in the "Numbers we may quote" table in `docs/DECISION_MEMO.md`. If the row is missing, the claim waits here instead of going in the card.
+- Every factual claim needs a row in the "Numbers we may quote" table in `docs/DECISION_MEMO.md`. If the row is missing, or the memo lists the claim under "keep them out of visible text", the claim waits here instead of going in the card.
 - `sourceIds` must be ids in the manifest `sources` list.
+- D-19: "sinking" is fine in words as long as every number stays labeled "line of sight".
 
-Cards (Sat Nov 14, ~10:45 PM): New Lake Chalco, Tláhuac, Nezahualcóyotl, the airport, Centro Histórico, Ángel de la Independencia, Chalco. The list may still change with Eduardo's answer about matching his ground-motion chart points.
+Cards (Sun Nov 15): New Lake Chalco, Tláhuac, Nezahualcóyotl, the airport, Centro Histórico, Ángel de la Independencia, Chalco.
 
-## Before merge
+## Numbers (memo row `nisar-gunw`)
 
-### 1. Numbers (all cards): pending Eduardo's review
-Every `radarShows` ends with "pending Eduardo's review". Remove that only after he signs off.
+Line of sight, Nov 11, 2025 to Oct 13, 2026, relative to a reference box in the western hills (-99.27 to -99.22 E, 19.33 to 19.38 N). About 2 cm is the uncertainty of any single number, so quote "about".
 
-| Card | Line-of-sight movement, Nov 2025–Oct 2026 | Ranking claim in the text |
+| Card | Memo value | Card text |
 |---|---|---|
-| nezahualcoyotl | about 22 cm | "the most of any place we measured" |
-| tlahuac_ground_motion | about 16 cm | "the second-fastest" |
-| new_lake_chalco | no cm figure (points to the Tláhuac card); HV +1.2 dB rainy vs dry, city center +0.4 dB | "among the fastest-moving areas we measured" |
-| aicm | about 15 cm | |
-| centro_historico | about 9 cm | |
-| chalco_2024_flood | about 8 cm | |
-| angel_independencia | about 4 cm | |
+| nezahualcoyotl | 21.9 cm | about 22 cm, "the most of any place we measured" |
+| tlahuac_ground_motion | 16.4 cm | about 16 cm, "among the fastest". Not "second-fastest": the airport (15.3) is within the 2 cm uncertainty |
+| aicm | 15.3 cm | about 15 cm |
+| centro_historico | 9.2 cm | about 9 cm |
+| chalco_2024_flood | 7.6 cm | about 8 cm |
+| angel_independencia | 4.3 cm | about 4 cm |
+| new_lake_chalco | **not sampled** | No number. The lake point is not in `landmark_series_los_cm.csv` yet (memo, "keep out of visible text") |
 
-- **D-08:** "relative to a reference area" must name the area once Eduardo confirms it.
-- **"Sinking" wording:** the data is movement along the radar's line of sight, not vertical sinking (DATA_CONTRACT rule). Summaries say "moving"; "sinking" appears only in `weInfer`.
+## Still open
 
-### 2. Source ids to add to the memo table and the manifest `sources`
-Requested from Eduardo (memo rows) and Elias (manifest `sources`).
+### Source ids not yet in the manifest `sources`
+All seven ids now have memo rows. Elias adds them to the manifest: `nisar-gunw` (with the T-33 ground-motion layer), `earthdata-sar`, `jpl-2026-mexico-city`, `unam-2007-chalco`, `iahs-2020`, `ap-2024-chalco`.
 
-| id | Status |
-|---|---|
-| `nisar-gunw` | Not in the manifest yet; should come with the T-33 ground-motion layer (Elias) |
-| `earthdata-sar` | Memo row exists; not in the manifest `sources` |
-| `jpl-2026-mexico-city` | Memo rows exist; not in the manifest `sources` |
-| `unam-2007-chalco` | **No memo row.** Ortiz Zamora & Ortega Guerrero (2007), UNAM |
-| `iahs-2020` | **No memo row** |
-| `ap-2024-chalco` | **No memo row.** Confirm the AP numbers on the AP page first |
+### Held from the lake card (memo: "keep them out of visible text")
+- "The ground around this lake is among the fastest-moving areas we measured." Waiting on the lake point being sampled.
+- "The lake surface itself changes with the seasons far more than the city: in the rainy season (Jul–Oct 2026) its HV signal is about 1.2 dB higher than in the dry season (Jan–Apr), vs. about 0.4 dB for the city center." Waiting on review of Diego's lake check.
+- weInfer: "The rainy-season change is consistent with more water and plant growth on and around the lake." Goes back with the HV sentence.
+- drivers.natural "The rains are natural." stays on the card, but only makes sense with the HV sentence.
 
-### 3. Claims that need a source before they are final
-- **Lake, `drivers.human`:** "The lake exists because of people." Cites `unam-2007-chalco`, which needs its memo row.
-- **Tláhuac, `weInfer`:** "the same process that created the nearby lake". Needs `unam-2007-chalco`.
-- **Chalco, `drivers.human`:** "Unchecked urban growth and failing infrastructure." Check that AP 2024 supports this.
-- **Ángel, `drivers.natural`:** "Lakebed sediment, thinner here than in the east" was marked "needs a source, or delete". Set to `null` for now; the line is held below.
+### Held from the Ángel card
+- drivers.natural: "Lakebed sediment, thinner here than in the east." Needs a source, or delete.
 
 ## Held text (no field in the contract yet)
 
-These go into the cards once the contract gets a `context` field (agree it with Zainab and Elias) and each source has its memo row.
+These go into the cards once the contract gets a `context` field (agree it with Zainab and Elias). Corrected against the memo rows on Sun Nov 15.
 
-**new_lake_chalco: context** (source `unam-2007-chalco`, no memo row yet)
-> This lake didn't exist 40 years ago. Pumping groundwater from wells here, starting in 1984, made the clay underground compress and the land sink. By 1991, water had filled the hollow, forming a new lake about 12 meters below the original ground. A 2007 study warned it could keep growing toward nearby neighborhoods.
+**new_lake_chalco: context** (`unam-2007-chalco`)
+> Lake Chalco covered this plain for thousands of years, until it was drained in the early 20th century. Groundwater pumping, intensive since the early 1960s and from a system of 14 wells since 1984, compacted the clay and the ground sank, by up to 40 cm a year at the center of the plain. Water began to pool in the hollow in 1988, and by 1991 the pools had joined into a small lake. By 2006 its surface was 12 meters below the original ground. A 2007 study projected it would keep growing, increasing the flood risk to Tláhuac and Valle de Chalco.
 
-**tlahuac_ground_motion: personal** (second sentence: `unam-2007-chalco`, no memo row yet)
-> My family is from Santa Cecilia, a neighborhood in central Tláhuac. A 2007 study named nearby San José among the areas at risk of flooding from the growing lake.
+What changed from the first draft: pumping did not "begin" in 1984 (memo); the 12 m is a 2006 figure, not 1991; "warned" is now "projected", because it is a 2007 projection we have not checked.
 
-**nezahualcoyotl: context** (source `iahs-2020`, no memo row yet)
+**tlahuac_ground_motion: personal** (`unam-2007-chalco`)
+> My family is from Santa Cecilia, a neighborhood in central Tláhuac. A 2007 study projected that the growing lake could reach San José, a Tláhuac neighborhood next to the lake.
+
+What changed: "nearby San José" is removed. The memo says the source for Santa Cecilia being next to San José has not been read.
+
+**nezahualcoyotl: context** (`iahs-2020`)
 > A 2020 study found the fastest sinking in the eastern part of the city, and that lower-income residents bear a proportionally greater share of the cost.
 
-**centro_historico: context** (source `jpl-2026-mexico-city`, memo row exists)
+**centro_historico: context** (`jpl-2026-mexico-city`)
 > NASA/JPL names groundwater pumping, the weight of development, and compaction of the ancient lakebed as the causes of Mexico City's sinking.
 
-**angel_independencia: context** (source `jpl-2026-mexico-city`, memo row exists)
+**angel_independencia: context** (`jpl-2026-mexico-city`)
 > According to NASA/JPL, the Ángel has had 14 steps added to its base as the land around it sank.
 
-**angel_independencia: drivers.natural** (needs a source, or delete)
-> Lakebed sediment, thinner here than in the east.
+**chalco_2024_flood: context** (`ap-2024-chalco`, context only: do not tie it to the lake, sinking or our data)
+> In 2024, floodwater mixed with sewage stayed in homes in Chalco for over a month. According to Chalco's government, more than 2,000 homes and over 7,000 residents were affected. (Our data starts in 2025 and does not show this flood.)
 
-**chalco_2024_flood: context** (source `ap-2024-chalco`, no memo row yet; confirm numbers on the AP page)
-> In August 2024, sewage-mixed flooding lasted over a month in Chalco. According to Chalco's government, more than 2,000 homes and over 7,000 residents were affected. (Our data starts in 2025 and does not show this flood.)
+What changed: "August" is removed. The AP row does not give the month the flood started.
 
-## Coordinates (lat, lon): all approximate, check against the map and Eduardo's chart points
+## Coordinates (lat, lon): approximate, sent to Elias (all inside the frame)
 new_lake_chalco 19.27, -98.97 · tlahuac_ground_motion 19.28, -99.00 · nezahualcoyotl 19.40, -99.02 · aicm 19.44, -99.07 · centro_historico 19.43, -99.13 · angel_independencia 19.43, -99.17 · chalco_2024_flood 19.26, -98.90
