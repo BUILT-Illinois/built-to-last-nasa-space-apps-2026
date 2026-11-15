@@ -41,11 +41,42 @@ const dateIndex = useAppStore((s) => s.dateIndex);
 const setDate = useAppStore((s) => s.setDate);
 ```
 
+What the map reacts to (all in `src/state/store.ts`):
+
+| State or action | What the map does |
+|---|---|
+| `activeLayerId`, `dateIndex` (`setLayer`, `setDate`) | Shows that layer's frame on the left side, or the whole map when not comparing |
+| `compareLayerId`, `compareDateIndex` (`setCompare`, `setCompareDate`) | Turns on the swipe and shows that frame on the right. `setCompare(null)` turns it off. Use the same layer id with another date to compare two dates. `compareDateIndex: null` means "same index as `dateIndex`". |
+| `basemap` (`setBasemap('streets' \| 'satellite')`) | Street map or optical satellite imagery under the radar |
+| `layerOpacity` (`setLayerOpacity(0..1)`) | Radar image opacity |
+| `flyTo(center, zoom)` | Flies the camera there (story steps, landmark clicks) |
+
+Selectors for components: `selectActiveLayer`, `selectActiveFrame`, `selectCompareLayer`, `selectCompareFrame`.
+
+**Try it before the UI exists.** In `npm run dev`, the store is on `window.appStore`. In the browser console:
+
+```js
+appStore.getState().manifest.layers.map((l) => l.id)   // layer ids
+appStore.getState().setCompare('gcov_hh', 1)           // swipe: date 0 on the left, date 1 on the right
+appStore.getState().setBasemap('satellite')
+appStore.getState().flyTo([-99.072, 19.436], 13)
+```
+
 ## Data
 
-The app loads `/data/<region>/manifest.json`. The region is `sample` unless `VITE_REGION_ID` is set in `app/.env.local` (see `.env.example`). If the manifest is missing, the map still shows and a warning is logged in the browser console.
+The app loads `/data/<region>/manifest.json`. The region is `sample` unless `VITE_REGION_ID` is set in `app/.env.local` (see `.env.example`). If the manifest is missing, the map still shows and a warning is logged in the browser console. Frame images are placed by the layer's `bounds` and must be in Web Mercator (data contract).
+
+## Map sources (no API keys)
+
+| Layer | Source | License and credit |
+|---|---|---|
+| Street basemap | OpenFreeMap "positron" style, OpenStreetMap data | Free, no key. Credit "OpenFreeMap © OpenMapTiles Data from OpenStreetMap" (from the style) |
+| Satellite imagery | EOxCloudless 2024 (Sentinel-2 cloud-free mosaic) by EOX IT Services GmbH | CC BY-NC-SA 4.0 for non-commercial use; credit must stay visible on the map |
+| Radar | NISAR, from our pipeline | Credit "NISAR data: NASA and ISRO, via the ASF DAAC (provisional)" |
+
+The credits show in the map's bottom-right corner.
 
 ## Notes
 
-- No API keys in the front end. The basemap is keyless (OpenFreeMap); T-09 confirms the final choice and records attribution in `docs/SOURCES.md`.
 - MapLibre's worker is loaded from an explicit URL (`src/map/MapView.tsx`). Without it, tiles never load after Vite bundles the library. The deployed host must serve `.mjs` files as JavaScript.
+- The swipe uses two stacked maps that share one camera; the top one is clipped to the right of the divider. Both load the basemap, so tile traffic doubles while the app is open.

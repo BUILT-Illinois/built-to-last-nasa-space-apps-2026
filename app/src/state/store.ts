@@ -3,9 +3,15 @@
 // Owner: Eduardo (app/src/state/). Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
 import { create } from 'zustand';
 import { loadLandmarks, loadManifest } from '../lib/data';
-import type { Landmark, Layer, Manifest } from '../types/manifest';
+import type { Frame, Landmark, Layer, LngLat, Manifest } from '../types/manifest';
 
 export type LoadStatus = 'idle' | 'loading' | 'ready' | 'error';
+
+/** What sits under the radar image: a street map, or optical satellite imagery. */
+export type Basemap = 'streets' | 'satellite';
+
+/** A request for the map to move. `seq` changes on every request so repeating one still moves. */
+export type CameraRequest = { center: LngLat; zoom: number; seq: number };
 
 export type AppState = {
   /**
@@ -19,14 +25,19 @@ export type AppState = {
   loadingRegionId: string | null;
   /** Layer shown (left side of the swipe). Empty string until a manifest is loaded. */
   activeLayerId: string;
-  /** Right side of the swipe; null = no swipe. */
+  /** Right side of the swipe; null = no swipe. May equal activeLayerId to compare two dates. */
   compareLayerId: string | null;
   /** Index into the active layer's frames. */
   dateIndex: number;
+  /** Index into the compare layer's frames; null = same index as dateIndex. */
   compareDateIndex: number | null;
   selectedLandmarkId: string | null;
   /** null = free exploration. */
   storyStep: number | null;
+  basemap: Basemap;
+  /** Opacity of the radar image, 0 to 1. */
+  layerOpacity: number;
+  cameraRequest: CameraRequest | null;
   /** State of the most recent load request. */
   loadStatus: LoadStatus;
   /** Why the most recent load failed; the previous region's data is still shown. */
@@ -36,7 +47,13 @@ export type AppState = {
 /** The part of the state a story step may set. Region and data change only through loadRegion. */
 export type ViewState = Pick<
   AppState,
-  'activeLayerId' | 'compareLayerId' | 'dateIndex' | 'compareDateIndex' | 'selectedLandmarkId' | 'storyStep'
+  | 'activeLayerId'
+  | 'compareLayerId'
+  | 'dateIndex'
+  | 'compareDateIndex'
+  | 'selectedLandmarkId'
+  | 'storyStep'
+  | 'basemap'
 >;
 
 export type AppActions = {
@@ -49,8 +66,13 @@ export type AppActions = {
   setLayer: (layerId: string) => void;
   setCompare: (layerId: string | null, dateIndex?: number | null) => void;
   setDate: (dateIndex: number) => void;
+  setCompareDate: (dateIndex: number | null) => void;
   selectLandmark: (landmarkId: string | null) => void;
   setStoryStep: (step: number | null) => void;
+  setBasemap: (basemap: Basemap) => void;
+  setLayerOpacity: (opacity: number) => void;
+  /** Ask the map to fly to a place (story steps, landmark clicks). */
+  flyTo: (center: LngLat, zoom: number) => void;
   /** Apply a story step's `set` block (content/story/<region>.json). */
   applyPartial: (partial: Partial<ViewState>) => void;
 };
@@ -72,6 +94,9 @@ export const useAppStore = create<AppState & AppActions>()((set) => ({
   compareDateIndex: null,
   selectedLandmarkId: null,
   storyStep: null,
+  basemap: 'streets',
+  layerOpacity: 0.9,
+  cameraRequest: null,
   loadStatus: 'idle',
   loadError: null,
 
@@ -110,11 +135,41 @@ export const useAppStore = create<AppState & AppActions>()((set) => ({
   setCompare: (layerId, dateIndex = null) =>
     set({ compareLayerId: layerId, compareDateIndex: layerId === null ? null : dateIndex }),
   setDate: (dateIndex) => set({ dateIndex }),
+  setCompareDate: (dateIndex) => set({ compareDateIndex: dateIndex }),
   selectLandmark: (landmarkId) => set({ selectedLandmarkId: landmarkId }),
   setStoryStep: (step) => set({ storyStep: step }),
+  setBasemap: (basemap) => set({ basemap }),
+  setLayerOpacity: (opacity) => set({ layerOpacity: Math.min(1, Math.max(0, opacity)) }),
+  flyTo: (center, zoom) =>
+    set((s) => ({ cameraRequest: { center, zoom, seq: (s.cameraRequest?.seq ?? 0) + 1 } })),
   applyPartial: (partial) => set(partial),
 }));
 
+// In development, expose the store as `window.appStore` so anyone can drive the map from the
+// browser console before the UI exists, e.g. appStore.getState().setCompare('gcov_hh', 1).
+if (import.meta.env.DEV && typeof window !== 'undefined') Object.assign(window, { appStore: useAppStore });
+
+/** Find a layer by id in the loaded manifest. */
+function findLayer(s: AppState, id: string | null): Layer | undefined {
+  return id === null ? undefined : s.manifest?.layers.find((l) => l.id === id);
+}
+
+/** Frame at `index`, clamped to the layer's frames so a stale index never breaks the map. */
+function frameAt(layer: Layer | undefined, index: number): Frame | undefined {
+  if (!layer || layer.frames.length === 0) return undefined;
+  return layer.frames[Math.min(Math.max(0, index), layer.frames.length - 1)];
+}
+
 /** The active layer, or undefined if no manifest is loaded. */
-export const selectActiveLayer = (s: AppState): Layer | undefined =>
-  s.manifest?.layers.find((l) => l.id === s.activeLayerId);
+export const selectActiveLayer = (s: AppState): Layer | undefined => findLayer(s, s.activeLayerId);
+
+/** The frame shown on the left side (or the whole map when not comparing). */
+export const selectActiveFrame = (s: AppState): Frame | undefined =>
+  frameAt(selectActiveLayer(s), s.dateIndex);
+
+/** The compare layer, or undefined when the swipe is off. */
+export const selectCompareLayer = (s: AppState): Layer | undefined => findLayer(s, s.compareLayerId);
+
+/** The frame shown on the right side of the swipe. */
+export const selectCompareFrame = (s: AppState): Frame | undefined =>
+  frameAt(selectCompareLayer(s), s.compareDateIndex ?? s.dateIndex);
