@@ -3,9 +3,12 @@
 // Owner: Eduardo (app/src/state/). Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
 import { create } from 'zustand';
 import { loadLandmarks, loadManifest } from '../lib/data';
-import type { Landmark, Layer, Manifest } from '../types/manifest';
+import type { Landmark, Layer, LngLat, Manifest } from '../types/manifest';
 
 export type LoadStatus = 'idle' | 'loading' | 'ready' | 'error';
+
+/** Where a story step asks the map to fly. Added for T-18 (Monica). */
+export type CameraTarget = { center: LngLat; zoom: number };
 
 export type AppState = {
   /**
@@ -27,6 +30,8 @@ export type AppState = {
   selectedLandmarkId: string | null;
   /** null = free exploration. */
   storyStep: number | null;
+  /** Last camera a story step asked for; the map flies there when it changes. null = no request. */
+  cameraTarget: CameraTarget | null;
   /** State of the most recent load request. */
   loadStatus: LoadStatus;
   /** Why the most recent load failed; the previous region's data is still shown. */
@@ -36,7 +41,13 @@ export type AppState = {
 /** The part of the state a story step may set. Region and data change only through loadRegion. */
 export type ViewState = Pick<
   AppState,
-  'activeLayerId' | 'compareLayerId' | 'dateIndex' | 'compareDateIndex' | 'selectedLandmarkId' | 'storyStep'
+  | 'activeLayerId'
+  | 'compareLayerId'
+  | 'dateIndex'
+  | 'compareDateIndex'
+  | 'selectedLandmarkId'
+  | 'storyStep'
+  | 'cameraTarget'
 >;
 
 export type AppActions = {
@@ -72,6 +83,7 @@ export const useAppStore = create<AppState & AppActions>()((set) => ({
   compareDateIndex: null,
   selectedLandmarkId: null,
   storyStep: null,
+  cameraTarget: null,
   loadStatus: 'idle',
   loadError: null,
 

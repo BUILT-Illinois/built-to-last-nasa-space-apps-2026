@@ -23,6 +23,7 @@ export default function MapView() {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const region = useAppStore((s) => s.manifest?.region);
+  const cameraTarget = useAppStore((s) => s.cameraTarget);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -48,6 +49,16 @@ export default function MapView() {
       mapRef.current.jumpTo({ center: region.center, zoom: region.zoom });
     }
   }, [region]);
+
+  // Fly to the camera a story step asks for (T-18). Declared after the region jump so it wins
+  // when both change together. Jumps instead of flying for people who ask for reduced motion.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !cameraTarget) return;
+    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+    if (reduceMotion) map.jumpTo(cameraTarget);
+    else map.flyTo({ ...cameraTarget, duration: 1600 });
+  }, [cameraTarget]);
 
   return <div ref={containerRef} className="map" aria-label="Map of the study region" />;
 }
