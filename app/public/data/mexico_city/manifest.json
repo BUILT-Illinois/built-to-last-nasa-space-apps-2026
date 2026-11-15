@@ -93,16 +93,6 @@
           "direction": "ASCENDING"
         },
         {
-          "date": "2026-04-16",
-          "image": "layers/gcov_hh/2026-04-16.webp",
-          "granules": [
-            "NISAR_L2_PR_GCOV_018_019_A_011_4005_DHDH_A_20260416T120544_20260416T120619_P05023_N_F_J_001"
-          ],
-          "track": 19,
-          "frame": 11,
-          "direction": "ASCENDING"
-        },
-        {
           "date": "2026-05-10",
           "image": "layers/gcov_hh/2026-05-10.webp",
           "granules": [
@@ -238,16 +228,6 @@
           "direction": "ASCENDING"
         },
         {
-          "date": "2026-04-16",
-          "image": "layers/gcov_hv/2026-04-16.webp",
-          "granules": [
-            "NISAR_L2_PR_GCOV_018_019_A_011_4005_DHDH_A_20260416T120544_20260416T120619_P05023_N_F_J_001"
-          ],
-          "track": 19,
-          "frame": 11,
-          "direction": "ASCENDING"
-        },
-        {
           "date": "2026-05-10",
           "image": "layers/gcov_hv/2026-05-10.webp",
           "granules": [
@@ -377,16 +357,6 @@
           "image": "layers/gcov_composite/2026-03-11.webp",
           "granules": [
             "NISAR_L2_PR_GCOV_015_019_A_011_4005_DHDH_A_20260311T120544_20260311T120619_P05023_N_F_J_001"
-          ],
-          "track": 19,
-          "frame": 11,
-          "direction": "ASCENDING"
-        },
-        {
-          "date": "2026-04-16",
-          "image": "layers/gcov_composite/2026-04-16.webp",
-          "granules": [
-            "NISAR_L2_PR_GCOV_018_019_A_011_4005_DHDH_A_20260416T120544_20260416T120619_P05023_N_F_J_001"
           ],
           "track": 19,
           "frame": 11,

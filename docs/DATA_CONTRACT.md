@@ -50,8 +50,8 @@ The app loads `/data/<region_id>/manifest.json` as a same-origin static file. Th
       "caveats": ["Provisional NISAR data. Not validated for this area."],
       "frames": [
         {
-          "date": "2026-04-16",
-          "image": "layers/gcov_hh/2026-04-16.webp",
+          "date": "2026-03-11",
+          "image": "layers/gcov_hh/2026-03-11.webp",
           "granules": ["NISAR_L2_PR_GCOV_..."],
           "track": 19,
           "frame": 11,
@@ -126,8 +126,8 @@ Text is hand-written in `content/landmarks/<region_id>.json` (Monica writes, Edu
       "drivers": { "human": "text or null", "natural": "text or null" },
       "sourceIds": ["jpl-2026-mexico-city"],
       "series": {
-        "hh_db": [{ "date": "2026-04-16", "value": -7.2 }],
-        "hv_db": [{ "date": "2026-04-16", "value": -14.9 }],
+        "hh_db": [{ "date": "2026-03-11", "value": -7.2 }],
+        "hv_db": [{ "date": "2026-03-11", "value": -14.9 }],
         "los_displacement_cm": [{ "date": "2025-11-11", "value": -0.6 }]
       }
     }
@@ -140,7 +140,7 @@ Rules:
 - `series` is optional. A point without data can have an empty object. A named series a landmark does not have is left out. The app hides the matching chart.
 - `value` may be `null` for a date with no valid data. The chart shows a gap, not a zero.
 - `los_displacement_cm` is cumulative movement along the radar's line of sight since the first date, relative to our reference area. Negative means away from the satellite. It is not vertical sinking unless we say how we converted it.
-- Mexico City `hh_db` and `hv_db` use the median of finite dB pixels in a centered 5×5 window on the native 80 m frequency-B grid of the monthly GCOV frames. Windows that do not fit in the crop are missing. The 12 monthly slots run from November 2025 to October 2026. April 16, 2026 is a null gap per D-17; the alternate December 5 acquisition is also excluded.
+- Mexico City `hh_db` and `hv_db` use the median of finite dB pixels in a centered 5×5 window on the native 80 m frequency-B grid of the monthly GCOV frames. Windows that do not fit in the crop are missing. The 11 monthly slots run from November 2025 to October 2026 and omit the April 16 and December 5 acquisitions per D-17.
 - `series.water_months` is optional and has the shape `{ "count": 0, "valid_months": 11, "provisional": true }`. A month counts when its HH median is ≤ −12 dB and its HV median is ≤ −20 dB. Only months with both medians contribute to `valid_months`. This is a provisional radar proxy, not confirmed water or a flood history.
 - To refresh the checked-in Mexico City series without rendering map images, run `python pipeline/landmark_series.py --crop-dir <monthly-NPZ-directory>`. The script validates the source granule IDs against the existing manifest.
 
