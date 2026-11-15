@@ -62,7 +62,7 @@ it("mexico_city: lists Monica's 7 cards", () => {
 it("mexico_city: the card shows Monica's text, not the pipeline placeholder", () => {
   show('mexico_city');
   click('Tláhuac');
-  expect(container.querySelector('.landmark-radar')?.textContent).toContain('about 16 cm away from the satellite');
+  expect(container.querySelector('.landmark-radar')?.textContent).toContain('about 16.4 cm away from the satellite');
   expect(container.querySelector('.landmark-infer')?.textContent).toContain('still sinking quickly');
   expect(container.textContent).not.toContain('Monthly radar backscatter sampling point');
 });
