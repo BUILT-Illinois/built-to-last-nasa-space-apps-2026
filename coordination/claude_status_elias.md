@@ -1,5 +1,5 @@
 Elias status (12:57 AM Sun)
-DONE: API live on Azure and Cloudflare. Merged #13, #15, #17, #18, #19. 12 months of radar frames processed.
+DONE: API live on Azure and Cloudflare. Merged #13, #15, #17, #18, #19. The published Mexico City map has 11 GCOV acquisition months and 11 frames per radar layer after D-17.
 SIGNED OFF: RBF-03 sign mismatch (Elias, 12:57 AM). LOS positive = away from the satellite, matching Eduardo's #26 files. DATA_CONTRACT.md updated on the PR #24 branch (f1b668d). Still pending: Eduardo's DECISIONS.md line and T-35 confirmation.
 OPEN PRs: #24 sinking ingest (draft, waits on raster + T-32). #22 smoke checks (CI green). #28 landmark backscatter series (CI green). #29 AI usage audit (docs only).
 PARKED: T-34 flood map (Eduardo, 11:05 PM). PR #20 stays a draft.
