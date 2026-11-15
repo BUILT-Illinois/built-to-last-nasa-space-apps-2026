@@ -24,7 +24,7 @@ CONFIG = ROOT / "pipeline" / "config" / "regions.json"
 LIVE_DATA = ROOT / "app" / "public" / "data"
 WEB_CRS = "EPSG:3857"
 PIXEL_METERS = 80
-SCALE = {"name": "los-red-white-blue", "min": -30, "max": 30}
+SCALE = {"name": "los-blue-white-red", "min": -30, "max": 30}
 LOS_LABEL = "Radar line-of-sight rate"
 SOURCE = {
     "id": "nisar-gunw",
@@ -54,7 +54,7 @@ def render(path, bbox, units, sign):
         )
     if units == "mm/yr":
         rates /= 10
-    if sign == "positive-away":
+    if sign == "negative-away":
         rates *= -1
     valid = np.isfinite(rates)
     if not valid.any():
@@ -64,7 +64,7 @@ def render(path, bbox, units, sign):
     indexes = np.zeros(rates.shape, dtype=np.uint8)
     low, high = SCALE["min"], SCALE["max"]
     indexes[valid] = 1 + np.rint((np.clip(rates[valid], low, high) - low) * 254 / (high - low)).astype(np.uint8)
-    anchors = ((178, 24, 43), (255, 255, 255), (33, 102, 172))
+    anchors = ((33, 102, 172), (255, 255, 255), (178, 24, 43))
     palette = np.column_stack([np.interp(np.arange(255), [0, 127, 254], channel) for channel in zip(*anchors)])
     image = Image.fromarray(indexes)
     image.putpalette([0, 0, 0, *np.rint(palette).astype(np.uint8).ravel().tolist()])
@@ -126,10 +126,10 @@ def ingest(args):
         "id": "sinking", "title": "Ground motion along the radar line of sight",
         "kind": "displacement", "product": "GUNW", "polarization": "HH", "units": "cm/yr",
         "bounds": bbox, "colormap": SCALE, "losLabel": LOS_LABEL,
-        "referenceArea": reference, "awaySign": "negative",
+        "referenceArea": reference, "awaySign": "positive",
         "description": ("Generated test pattern. " if args.synthetic else "") +
                        "Annual rate of motion along the radar line of sight, relative to the reference area.",
-        "caveats": ["Negative means away from the satellite.", "No conversion to vertical motion.",
+        "caveats": ["Positive means away from the satellite.", "No conversion to vertical motion.",
                     "Synthetic test data." if args.synthetic else "Provisional NISAR data."],
         "frames": [{
             "date": args.date, "since": args.since, "image": relative.as_posix(),

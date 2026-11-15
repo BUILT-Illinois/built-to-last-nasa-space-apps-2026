@@ -10,9 +10,9 @@ test('the manifest route serves the synthetic LOS rate and its provenance unchan
     product: 'GUNW',
     units: 'cm/yr',
     bounds: [-99.40, 19.10, -98.85, 19.65],
-    colormap: { name: 'los-red-white-blue', min: -30, max: 30 },
+    colormap: { name: 'los-blue-white-red', min: -30, max: 30 },
     losLabel: 'Radar line-of-sight rate',
-    awaySign: 'negative',
+    awaySign: 'positive',
     referenceArea: 'Generated test area',
     frames: [{
       since: '2025-11-11',
