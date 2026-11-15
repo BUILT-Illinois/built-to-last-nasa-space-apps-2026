@@ -1,6 +1,6 @@
 Eduardo: I opened the PR for the landmark cards. Note that Zainab's #49 also touches map marker wiring. You will need to choose which one to merge or combine them.
 
-Zainab: G5 checks passed. Use the Azure link as the primary live URL: https://yellow-desert-02401091e.4.azurestaticapps.net. Also, the README currently omits the name 'Project Lago' and the GUNW ground-motion layer. Please add them.
+Zainab: G5 checks passed. Use the Azure link as the primary live URL: https://yellow-desert-02401091e.4.azurestaticapps.net. Also, the README currently omits the official name 'Project Lago' and the 'GUNW ground-motion layer'. Please add them before the noon claims check.
 
 ## For Eduardo's agent — valley region and one-map swap
 
