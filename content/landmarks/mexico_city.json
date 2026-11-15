@@ -155,10 +155,10 @@
       "lat": 19.26,
       "summary": "A city at the edge of the old lake, where floodwater stayed for over a month in 2024.",
       "radarShows": "The ground here moved about 7.6 cm away from the satellite in under a year. (Provisional NISAR data, Nov 2025–Oct 2026, line of sight, relative to a reference area in the western hills.)",
-      "weInfer": "Chalco is also sinking, though more slowly than nearby Tláhuac.",
+      "weInfer": "Chalco is also sinking, though more slowly than nearby Tláhuac. We do not link the 2024 flood to sinking or to our data.",
       "drivers": {
-        "human": "Residents point to unchecked growth and failing infrastructure.",
-        "natural": "Low-lying ground at the edge of an ancient lake."
+        "human": "For the 2024 flood, per AP: residents point to unchecked growth and failing infrastructure.",
+        "natural": "For the 2024 flood, per AP: low-lying ground at the edge of an ancient lake."
       },
       "sourceIds": [
         "nisar-gunw",
