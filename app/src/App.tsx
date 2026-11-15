@@ -29,7 +29,7 @@ export default function App() {
       <MapView />
       <aside className="layer-controls">
         <header className="panel__header">
-          <h1 className="panel__title">NISAR over Mexico City</h1>
+          <h1 className="panel__title">Project Lago</h1>
           <p className="panel__byline">Team B[U]ILT to Last, NASA Space Apps 2026</p>
         </header>
         <LayerSwitcher />
