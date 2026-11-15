@@ -1,0 +1,13 @@
+{
+  // Drafted with AI assistance (Codex); see docs/AI_USAGE.md.
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "strict": true,
+    "rootDir": "..",
+    "outDir": "dist",
+    "noEmitOnError": true,
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts"]
+}
