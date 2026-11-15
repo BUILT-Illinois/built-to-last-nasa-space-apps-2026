@@ -35,10 +35,10 @@ SOURCE = {
 }
 
 
-def render(path, bbox, units, sign):
+def render(path, bbox, units, sign, *, pixel_meters=PIXEL_METERS):
     west, south, east, north = transform_bounds("EPSG:4326", WEB_CRS, *bbox)
-    width = ceil((east - west) / PIXEL_METERS)
-    height = ceil((north - south) / PIXEL_METERS)
+    width = ceil((east - west) / pixel_meters)
+    height = ceil((north - south) / pixel_meters)
     target = from_bounds(west, south, east, north, width, height)
     with rasterio.open(path) as source:
         if source.driver != "GTiff" or source.count != 1 or source.crs is None:
@@ -59,7 +59,7 @@ def render(path, bbox, units, sign):
         )
     valid = np.isfinite(rates)
     if not valid.any():
-        raise ValueError("No valid rate pixels inside the Mexico City bounds")
+        raise ValueError("No valid rate pixels inside the configured region bounds")
 
     # Palette index 0 is transparent; 1–255 are linearly spaced from min to max.
     indexes = np.zeros(rates.shape, dtype=np.uint8)
@@ -93,7 +93,8 @@ def ingest(args):
     if problems or args.since >= args.date:
         raise ValueError("; ".join(problems) or "--since must be earlier than --date")
 
-    output = (args.output or LIVE_DATA / REGION).resolve()
+    region_id = args.region
+    output = (args.output or LIVE_DATA / region_id).resolve()
     if args.synthetic:
         parts = tuple(part.casefold() for part in output.parts)
         if any(parts[i:i + 3] == ("app", "public", "data") for i in range(len(parts))):
@@ -101,26 +102,29 @@ def ingest(args):
         if output.exists() and (not output.is_dir() or any(output.iterdir())):
             raise ValueError("Synthetic output requires a new or empty folder")
 
-    region = json.loads(CONFIG.read_text(encoding="utf-8"))["regions"][REGION]
+    region = json.loads(CONFIG.read_text(encoding="utf-8"))["regions"][region_id]
     bbox = region["bbox"]
     if args.synthetic:
         manifest = {
             "schemaVersion": "0.1", "dataMaturity": "SYNTHETIC", "synthetic": True,
             "region": {
-                "id": REGION, "name": region["name"], "bbox": bbox, "zoom": 10,
+                "id": region_id, "name": region["name"], "bbox": bbox, "zoom": 10,
                 "center": [(bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2],
             },
             "layers": [], "vectors": [], "sources": [],
         }
     else:
         manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
-        if (manifest["region"]["id"] != REGION or manifest["region"]["bbox"] != bbox
+        if (manifest["region"]["id"] != region_id or manifest["region"]["bbox"] != bbox
                 or manifest["dataMaturity"] != "PROVISIONAL" or manifest.get("synthetic")):
-            raise ValueError("Real ingest needs an existing PROVISIONAL mexico_city bundle with the configured bbox")
+            raise ValueError(f"Real ingest needs an existing PROVISIONAL {region_id} bundle with the configured bbox")
         if not any(source["id"] == SOURCE["id"] for source in manifest["sources"]):
             manifest["sources"].append(SOURCE)
 
-    png = render(args.tiff, bbox, args.units, args.sign)
+    png = render(
+        args.tiff, bbox, args.units, args.sign,
+        pixel_meters=region.get("sinking_pixel_meters", PIXEL_METERS),
+    )
     digest = hashlib.sha256(png).hexdigest()[:16]
     relative = Path("layers") / "sinking" / f"{args.date}-{digest}.png"
     layer = {
@@ -133,7 +137,7 @@ def ingest(args):
         "caveats": ["Positive means away from the satellite.", "No conversion to vertical motion.",
                     "Synthetic test data." if args.synthetic else "Provisional NISAR data.",
                     f"Pixels with absolute rates above {MAX_ABS_LOS_RATE_CM_PER_YEAR} cm/yr "
-                    "are masked as likely phase-unwrapping artifacts."],
+                    "are masked as phase-unwrapping artifacts (likely noise, pending review)."],
         "frames": [{
             "date": args.date, "since": args.since, "image": relative.as_posix(),
             "granules": args.granules,
@@ -149,7 +153,7 @@ def ingest(args):
     with TemporaryDirectory(prefix=".sinking-", dir=output.parent) as directory:
         stage = Path(directory)
         if args.synthetic:
-            write_json(stage / "landmarks.json", {"schemaVersion": "0.1", "regionId": REGION, "landmarks": []})
+            write_json(stage / "landmarks.json", {"schemaVersion": "0.1", "regionId": region_id, "landmarks": []})
         else:
             shutil.copytree(output, stage, dirs_exist_ok=True)
         (stage / relative).parent.mkdir(parents=True, exist_ok=True)
@@ -178,7 +182,8 @@ def main():
     parser.add_argument("--granules", nargs="+", default=[], metavar="ID")
     parser.add_argument("--since", required=True, help="First acquisition date (YYYY-MM-DD)")
     parser.add_argument("--date", required=True, help="Last acquisition date (YYYY-MM-DD)")
-    parser.add_argument("--output", type=Path, help="Region bundle (default: app/public/data/mexico_city)")
+    parser.add_argument("--region", default=REGION, choices=(REGION, "mexico_city_valley"))
+    parser.add_argument("--output", type=Path, help="Region bundle (default: app/public/data/<region>)")
     parser.add_argument("--synthetic", action="store_true", help="Write only to a new or empty test folder")
     try:
         manifest = ingest(parser.parse_args())
