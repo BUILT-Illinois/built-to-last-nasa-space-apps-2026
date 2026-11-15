@@ -210,6 +210,32 @@ body {
     bottom: 0;
   }
 
+  /* The landmarks panel (LandmarkPanel.css) sits over the top of the map. Two phone rules so it
+     never hides the whole map:
+     - While the tour card is open, it steps aside, like the layer panel does (story.css). A tour
+       step can select a landmark, and its card on top plus the tour card below left no map at
+       all, not even the swipe that step 5 asks you to drag.
+     - Outside the tour it stops well above the sheet, so a strip of map always stays in view
+       under it; a long card scrolls inside the panel. */
+  .app:has(.story-card) .landmark-panel {
+    display: none;
+  }
+
+  .app .landmark-panel {
+    max-height: calc(100% - var(--sheet-height) - 170px);
+  }
+
+  /* While the tour card is open the map is full height and the card covers its lower half, so
+     the swipe grip (map.css centers it) ended up under the card on the step that says "drag the
+     slider". Keep the grip in the upper part of the map there. UI audit item 2. */
+  .app:has(.story-card) .swipe-handle {
+    align-items: flex-start;
+  }
+
+  .app:has(.story-card) .swipe-handle__grip {
+    margin-top: 22vh;
+  }
+
   /* Outside the tour, the reading-guide buttons leave the map: they become one row across the
      top of the sheet, in the panel's colors. */
   .app:not(:has(.story-card)) .reading-guide {
