@@ -20,7 +20,7 @@
         "My grandpa's neighborhood in Tláhuac sits next to a lake that shouldn't exist.",
         "This tour looks at that lake, and the sinking city around it, through NISAR radar images."
       ],
-      "set": { "layer": "gcov_composite", "date": "2026-10-13", "landmark": "santa_cecilia_tlahuac" },
+      "set": { "layer": "gcov_composite", "date": "2026-10-13", "landmark": "tlahuac_ground_motion" },
       "camera": { "center": [-99.0, 19.28], "zoom": 13 },
       "sourceIds": ["nisar-gcov"]
     },
