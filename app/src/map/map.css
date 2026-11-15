@@ -1,0 +1,88 @@
+/* Map screen and swipe compare. Owner: Eduardo (app/src/map/).
+   Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
+   Stacking: base map, then the compare map (clipped), then the base map's controls (MapLibre gives
+   them z-index 2, so the credits and zoom buttons stay on top), then the swipe handle and labels. */
+
+.map-screen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.swipe-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 44px; /* wide enough to grab with a finger */
+  transform: translateX(-50%);
+  z-index: 3;
+  cursor: ew-resize;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swipe-handle:focus-visible {
+  outline: none;
+}
+
+.swipe-handle__line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  transform: translateX(-50%);
+  background: #fff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+}
+
+.swipe-handle__grip {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  color: #333;
+  user-select: none;
+}
+
+.swipe-handle:focus-visible .swipe-handle__grip {
+  outline: 3px solid #1a73e8;
+  outline-offset: 2px;
+}
+
+.swipe-label {
+  position: absolute;
+  top: 10px;
+  z-index: 3;
+  max-width: calc(50% - 50px);
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-size: 13px;
+  line-height: 1.3;
+  pointer-events: none;
+}
+
+.swipe-label__date {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.swipe-label--left {
+  left: 10px;
+}
+
+.swipe-label--right {
+  right: 50px; /* clear of the zoom buttons */
+  text-align: right;
+}

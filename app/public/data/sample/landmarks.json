@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "0.1",
+  "regionId": "sample",
+  "landmarks": [
+    {
+      "id": "placeholder_a",
+      "name": "Placeholder landmark A",
+      "lon": -99.072,
+      "lat": 19.436,
+      "summary": "Placeholder text. Real landmarks are chosen after the story decision (gate GS, 5:30 PM).",
+      "radarShows": "Placeholder: what the data shows here, with no interpretation.",
+      "weInfer": "Placeholder: what we think causes it, worded as a hypothesis.",
+      "drivers": { "human": null, "natural": null },
+      "sourceIds": ["nisar-gcov"],
+      "series": {
+        "hh_db": [{ "date": "2026-04-16", "value": -7.2 }, { "date": "2026-10-13", "value": -8.1 }],
+        "hv_db": [{ "date": "2026-04-16", "value": -14.9 }, { "date": "2026-10-13", "value": null }],
+        "los_displacement_cm": [{ "date": "2025-11-11", "value": -0.6 }, { "date": "2026-10-13", "value": -2.4 }]
+      }
+    },
+    {
+      "id": "placeholder_b",
+      "name": "Placeholder landmark B",
+      "lon": -99.15,
+      "lat": 19.30,
+      "summary": "Placeholder text for a second landmark. It has no HV series, so its HV chart should be hidden.",
+      "radarShows": "Placeholder: what the data shows here.",
+      "weInfer": "Placeholder: our hypothesis for the cause.",
+      "drivers": { "human": "Placeholder human driver", "natural": null },
+      "sourceIds": ["nisar-gcov"],
+      "series": {
+        "hh_db": [{ "date": "2026-04-16", "value": -10.4 }, { "date": "2026-10-13", "value": -9.6 }]
+      }
+    }
+  ]
+}

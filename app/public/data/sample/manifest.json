@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "0.1",
+  "generatedAt": "2026-11-14T22:30:00Z",
+  "generatedBy": "Hand-written sample by Zainab with AI assistance (Claude Code), see docs/AI_USAGE.md. Images are synthetic placeholders from pipeline/tests/make_sample_images.py.",
+  "region": {
+    "id": "sample",
+    "name": "Sample data (Mexico City extent, synthetic images)",
+    "bbox": [-99.40, 19.10, -98.85, 19.65],
+    "center": [-99.13, 19.40],
+    "zoom": 10
+  },
+  "dataMaturity": "SYNTHETIC",
+  "synthetic": true,
+  "layers": [
+    {
+      "id": "gcov_hh",
+      "title": "Radar brightness, HH",
+      "kind": "backscatter",
+      "product": "GCOV",
+      "polarization": "HH",
+      "units": "dB",
+      "bounds": [-99.40, 19.10, -98.85, 19.65],
+      "colormap": { "name": "gray", "min": -25, "max": 0 },
+      "description": "Generated test pattern, not NISAR data.",
+      "caveats": ["Synthetic placeholder images, not NISAR data."],
+      "frames": [
+        {
+          "date": "2026-04-16",
+          "image": "layers/gcov_hh/2026-04-16.webp",
+          "granules": [],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-10-13",
+          "image": "layers/gcov_hh/2026-10-13.webp",
+          "granules": [],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "id": "gcov_hv",
+      "title": "Radar brightness, HV",
+      "kind": "backscatter",
+      "product": "GCOV",
+      "polarization": "HV",
+      "units": "dB",
+      "bounds": [-99.40, 19.10, -98.85, 19.65],
+      "colormap": { "name": "gray", "min": -30, "max": -5 },
+      "description": "Generated test pattern, not NISAR data.",
+      "caveats": ["Synthetic placeholder images, not NISAR data."],
+      "frames": [
+        {
+          "date": "2026-04-16",
+          "image": "layers/gcov_hv/2026-04-16.webp",
+          "granules": [],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-10-13",
+          "image": "layers/gcov_hv/2026-10-13.webp",
+          "granules": [],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "id": "gcov_composite",
+      "title": "Radar color composite, HH and HV",
+      "kind": "composite",
+      "product": "GCOV",
+      "polarization": "HH+HV",
+      "units": "dB",
+      "bounds": [-99.40, 19.10, -98.85, 19.65],
+      "colormap": { "name": "rgb", "min": -30, "max": 0 },
+      "description": "Generated test pattern, not NISAR data. Red is HH, green is HV, blue is HH minus HV.",
+      "caveats": ["Synthetic placeholder images, not NISAR data."],
+      "frames": [
+        {
+          "date": "2026-04-16",
+          "image": "layers/gcov_composite/2026-04-16.webp",
+          "granules": [],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-10-13",
+          "image": "layers/gcov_composite/2026-10-13.webp",
+          "granules": [],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "vectors": [],
+  "sources": [
+    {
+      "id": "nisar-gcov",
+      "title": "NISAR L2 GCOV PROVISIONAL V1",
+      "url": "https://nisar-docs.asf.alaska.edu/",
+      "license": "NASA open data"
+    }
+  ]
+}

@@ -1,10 +1,15 @@
-# Status: Zainab        Updated: Sat 5:52 PM CT        Branch: zainab-docs (T-07)
-Plan version read: Sat 4:00 PM | Roadblock IDs: Elias uses RB-E.., Eduardo uses RB-F.. (plan v0.3 in force since 3:55 PM)
+# Status: Zainab        Updated: Sat 10:48 PM CT        Branch: zainab-sample-data (PR #6), then zainab-docs (PR #11)
+Plan version read: Sat 6:25 PM | Plan v0.4. G1 passed, GS default story (surface change in GCOV), Oct 30, 2025 dropped (D-13)
 
 ## Now / Next / Done
-- Now:  T-07 README skeleton, MIT LICENSE, docs/SOURCES.md
-- Next: T-14 landmark panel (now unblocked by T-02), then T-16
-- Done: T-08 complete, PR open from `zainab-sample-data`, waiting for review. Sample data in `app/public/data/sample/` (manifest, landmarks, 6 synthetic placeholder images), `pipeline/validate_manifest.py` + 30 passing tests. About 1.5 h late against the 4:00 PM target.
+- Now:  Second-round review fixes on PR #6 and PR #11.
+  - PR #6: sample is labelled synthetic (`dataMaturity: "SYNTHETIC"`, `"synthetic": true`, empty `granules`, "generated test pattern" descriptions). Validator allows empty granules only when `synthetic` is true. 57 tests pass.
+  - PR #11: README says Node 24, separates the local test sample from the live dataset, explains static site vs. Azure API, updates the Earthdata link.
+- Next: T-14 landmark panel in `app/src/components/landmarks/`. Builds on `app/src/lib/data.ts`, loads the live region's `landmarks.json` (not only the sample), and shows a clean empty state until Monica's landmarks land. Then T-24 sources page (live by Sun 1:00 AM).
+- Done:
+  - T-08: sample data + validator (PR #6), first review round addressed (no crashes on bad input, matches `manifest.ts`, `"vectors": []`).
+  - T-07: README, MIT LICENSE, `docs/SOURCES.md` (PR #11), live URLs added, no region names.
+- Open question for Eduardo: is T-16 (`sample_at_points()`) still mine?
 
 ## Roadblocks (append-only; mark resolved, never delete)
 <!-- Copy this block for each roadblock. IDs are RB-<initial><nn>, for example RB-Z01.
