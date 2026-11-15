@@ -1,5 +1,5 @@
-# Status: Eduardo        Updated: Sat 5:55 PM CT        Branch: eduardo/map-screen (T-09)
-Plan version read: Sat 5:55 PM, plan v0.3 plus roadblock ID change
+# Status: Eduardo        Updated: Sat 6:25 PM CT        Branch: eduardo/map-screen (T-09)
+Plan version read: Sat 6:25 PM, plan v0.4
 
 ## Now / Next / Done
 - Now:  T-09 map screen (built and tested locally; PR after rebasing on main). FYI Elias: repo secret AZURE_STATIC_WEB_APPS_API_TOKEN is set (Sat 5:52 PM) for PR #4. CLOUDFLARE_API_TOKEN is not set.
@@ -7,7 +7,7 @@ Plan version read: Sat 5:55 PM, plan v0.3 plus roadblock ID change
 - Done: T-02 merged (PR #2, with the region-loading race fix and regression tests); Azure deploy secret set; plan v0.3 (D-12) pushed; RB-M01 claims added to the memo; T-02 pushed; plan v0.2 approved and pushed; Phase 0 to 3 planning; catalog check (`pipeline/reports/`); first look at local files (`data/quicklooks/`, `pipeline/quicklook.py`)
 
 ## Roadblocks (append-only; mark resolved, never delete)
-### RB-F01 (was RB-E01)  [FYI]  OPEN   Needed by: Sat 4:30 PM
+### RB-F01 (was RB-E01)  [FYI]  RESOLVED Sat 6:25 PM   Needed by: Sat 4:30 PM
 What I was trying to do: check whether the downloaded files can be used together in the app.
 What happened (exact error or evidence): the two GCOV files are different processing releases (`compositeReleaseId` X05009 = BETA for 2025-10-30, P05036 for 2026-11-06). The HV difference between them has a scene-wide median of +1.36 dB, which is probably processing and not the ground. A third file is truncated: `h5py` reports `truncated file: eof = 104904968, stored_eof = 6983516160`.
 What I already tried: confirmed in the catalog CSV that a PROVISIONAL (P05023) version of the 2025-10-30 scene exists.
@@ -15,6 +15,7 @@ Impact on the plan (task IDs, timeline, tiers): T-10 must use two GCOV dates of 
 Options (2 or 3, with cost in hours): (a) read both dates from the PROVISIONAL collection remotely once T-01 works, 0 extra hours; (b) download the PROVISIONAL 2025-10-30 file, 7 GB, about 26 min; (c) keep the mixed pair and say so in the app.
 My recommendation: (a), with (b) as the G1 fallback.
 Update Sat 3:10 PM: the truncated file was deleted on Eduardo's instruction. Fallback (b) is pre-approved.
+Resolved Sat 6:25 PM: G1 passed, so option (a) is in use. T-10 reads PROVISIONAL (P05023) scenes remotely and the fallback downloads are cancelled.
 
 ### RB-F02 (was RB-E02)  [FYI]  OPEN   Needed by: Sat 5:30 PM
 What I was trying to do: see whether ground sinking shows in the one GUNW pair we have (track 113, 2026-10-08 to 2026-10-20).
@@ -26,6 +27,8 @@ My recommendation: the team decides at GS (5:30 PM) after T-25.
 Update Sat 4:00 PM: G3 is merged into G2 at Sun 1:00 AM (plan v0.3, D-12). Renamed from RB-E01 and RB-E02 because Elias uses E.
 
 ## Reviews of other people's roadblocks
+- RB-D01: AGREE with (a). Eduardo decided at 6:20 PM to drop Oct 30, 2025 from every layer and frame (D-13, plan v0.4). The memo and plan lines are corrected. Option (c), real dB values for Oct 30 against Nov 11, is still welcome if Elias has 15 minutes, but nothing waits on it.
+- RB-D02: T-11 is cancelled (plan v0.4); the plan never assigned anyone to write its starter and tests. AGREE with (c): T-12 starts when PR #6 merges.
 - RB-M01: AGREE with (a), done at 4:00 PM: T-06 claims 1 to 7 are rows in the decision memo table. (b) the HV definition and dark/bright guidance are still needed before T-23.
 
 ## Local data (so nobody downloads the same file twice)

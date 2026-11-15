@@ -1,6 +1,7 @@
 # Hackathon plan: Dancing with the SARs, Mexico City
 
-**Status: v0.3, approved by Eduardo and in force since Sat Nov 14, 3:55 PM CT.**
+**Status: v0.4, approved by Eduardo and in force since Sat Nov 14, 6:25 PM CT.**
+v0.4 records G1 as passed, drops the Oct 30, 2025 acquisition from every layer (D-13), cancels T-11, marks T-04 and T-05 done, and sets the live pitch to 4 minutes (D-14).
 v0.3 merges the 9:30 PM and 11:30 PM gates into one go/no-go at Sun 1:00 AM (G2), keeps 9:30 PM as a progress checkpoint, and moves the G1-fallback GUNW download to Eduardo's laptop in the evening (see section 13).
 v0.2 added Eduardo's answers (map owner, Azure, repo, slide deck), a first look at the files in `Datasets/`, and a story decision gate: the team analyses the data and picks the story.
 Only the plan agent (Eduardo's session) edits this file, and only after Eduardo says yes. Everyone else raises problems in their own status file and references task IDs (T-01, T-02, ...).
@@ -19,7 +20,7 @@ Related pages: [challenge requirements](challenge/README.md) · [decision memo](
 | We can edit and resubmit until Sun 11:59 PM, and only the last saved version is judged. | Submission Guide | Still treat 1:30 PM as final. Local judges start at 2:00 PM. |
 | The AI field is called "Use of Super Intelligence (SI)". AI should not come up with the idea. Generated code needs a notice in text and metadata, generated images and video need a watermark. | Submission Guide | The team makes the story decision (see memo). Every AI-written file gets a header comment. We generate no images or video with AI. |
 | Judging criteria are Impact, Creativity, Validity, Relevance, Presentation, each 1 to 5. | Judging Guide | Same as 2025. |
-| One track (19, frame 11, ascending) covers all of Mexico City with **29 GCOV dates and 28 chained GUNW pairs, Oct 30, 2025 to Oct 13, 2026, all PROVISIONAL**. | [catalog summary](../pipeline/reports/summary_mexico_city.md) | No January to June gap. No mixing of BETA and PROVISIONAL. A one-year story is possible. |
+| One track (19, frame 11, ascending) covers all of Mexico City with **29 GCOV dates and 28 chained GUNW pairs, Oct 30, 2025 to Oct 13, 2026, all PROVISIONAL**. | [catalog summary](../pipeline/reports/summary_mexico_city.md) | No January to June gap. No mixing of BETA and PROVISIONAL. A one-year story is possible. **Since v0.4 the Oct 30, 2025 acquisition is excluded (D-13), so we use 28 GCOV dates and 27 chained GUNW pairs, Nov 11, 2025 to Oct 13, 2026.** |
 | Polarizations are HH and HV only. | Same | The polarization answer is HH vs. HV. We do not have VV. |
 | Files are big: GCOV 7.1 GB, GUNW 2.3 GB each. The full one-track set is 205 GB + 65 GB. | Same | We cannot download the time series. We read only our window from the cloud-hosted files (gate G1), with sized fallbacks. |
 | Soil moisture (SME2) exists here as PROVISIONAL, 0.12 GB per file, "not yet fully calibrated". | Catalog + ASF known issues | Optional Tier 3 extra, not a dependency. |
@@ -36,7 +37,7 @@ First look at the four files in `Datasets/` (16 GB, on Eduardo's laptop, git-ign
 | The three complete files do not match each other. The Oct 30, 2025 GCOV is **BETA** (release X05009). The Nov 6, 2026 GCOV is release P05036 from the `NISAR_L2_GCOV_V1` collection, not the PROVISIONAL collection. The GUNW is track 113 (descending), Oct 8 to Oct 20, 2026. | Fine for exploring. For the app, use one release per layer. A PROVISIONAL version of the Oct 30, 2025 scene exists. Check how ASF labels `NISAR_L2_GCOV_V1` before we describe that file. |
 | A fourth file (105 MB, same name as the Nov 6 file without "(2)") was a truncated download that would not open. | Deleted on Eduardo's instruction, Nov 14, 3:09 PM. |
 | **One 12-day GUNW pair does not show sinking on its own.** The raw picture is a smooth tilt of several centimeters across the valley. After removing the tilt, blobs of about 1 cm remain everywhere, including over the mountains. That is the size of the motion we expect in 12 days, so signal and noise cannot be told apart in one pair. | A ground-motion layer needs many pairs added together. It depends on G1 (remote reads) or on about 32 to 65 GB of downloads. Do not promise it before G2 (Sun 1:00 AM). |
-| GCOV from Oct 30, 2025 to Nov 6, 2026 (same season, one year apart): the dark lakebed zone north-east of the airport is clearly darker in HV in 2026, and patches in the southern wetland and farm zone are brighter. The whole scene is also about 1.4 dB brighter in HV, which is probably the different processing releases, not the ground. Place names are read off pixel positions and need checking on a map. | Year-over-year and seasonal surface change is visible in GCOV with almost no processing. It is a real candidate story. Repeat with two files of the same release before believing any number. |
+| **Corrected in v0.4.** We first read the Oct 30, 2025 to Nov 6, 2026 comparison as real change: the flat zone north-east of the airport darker in HV, the southern wetland brighter. Diego's check of all 29 dates (RB-D01) shows the Oct 30, 2025 acquisition has measurement errors: every dark area in the valley is lifted on that date only, most in HV, and the other track shows no such drop. In same-release data without that date, the north-east zone changes by under 1 dB and the southern wetland shows no year-over-year change. | **Oct 30, 2025 is dropped from every layer and frame (D-13).** What still stands from T-25: a step in the southern wetland in late June 2026 (medium confidence), and a seasonal brightening of the farm belt on the southern edge of the box that Diego has not reviewed yet. Place names still need checking on a map. |
 
 Other Mexican regions with data (granule counts for GCOV / GUNW / SME2, all collections): Monterrey 120 / 94 / 112, Mexicali Valley 117 / 100 / 112, Popocatepetl 95 / 83 / 89, Guadalajara and Chapala 90 / 72 / 82, Aguascalientes 87 / 71 / 82, Tabasco wetlands 81 / 64 / 73. Stretch only.
 
@@ -49,7 +50,7 @@ Building does not wait for the decision. Tier 1 below is the same for every cand
 | Tier | What ships | Deadline |
 |---|---|---|
 | **1, must ship** | Map with GCOV layers (HH, HV, HH/HV composite) for one dry-season and one rainy-season date, swipe slider, 5 to 7 landmark cards, polarization explainer, provisional label, sources page. Static, on Azure, with bundled sample data. | Core live at the Sat 9:30 PM checkpoint; complete and live by Sun 1:00 AM (G2) |
-| **2** | Ground-motion layer from 28 GUNW pairs with a chart per landmark. GCOV time slider with about monthly frames. | Checked Sun 1:00 AM (G2), in the app by Sun 8:00 AM |
+| **2** | Ground-motion layer from 27 GUNW pairs with a chart per landmark. GCOV time slider with about monthly frames. | Checked Sun 1:00 AM (G2), in the app by Sun 8:00 AM |
 | **3** | Soil moisture layer, second region, Spanish/English toggle, point query API, Azure AI helper, data-quality flag. | Only if Tier 2 is in by Sun 7:30 AM |
 
 If we fall behind, cut in this order: all of Tier 3, the borough context layer (T-21), GCOV time slider, per-landmark charts, ground-motion layer, HH/HV composite. Never cut: real NISAR data on the map, the swipe, the landmark text, the polarization explainer, the provisional label, the sources.
@@ -58,8 +59,8 @@ If we fall behind, cut in this order: all of Tier 3, the borough context layer (
 
 | Gate | Time | Question | If no |
 |---|---|---|---|
-| G1 | Sat 4:30 PM | Can we read our window out of a remote GCOV file and a remote GUNW file? | Full-file downloads, **pre-approved by Eduardo**: 2 GCOV of one release (14 GB, about 55 min). Tier 2 shrinks to 14 GUNW pairs (32 GB, about 2 h), downloaded on Eduardo's laptop as soon as G1 fails, after the GCOV files so they do not split the Wi-Fi. Not overnight. Shared with other machines through LocalSend over a direct Ethernet link. Anything beyond these two sets still needs Eduardo's yes. |
-| GS | Sat 5:30 PM | Has the team chosen the story from the data (T-25)? | Default story: surface change in GCOV. Ground motion stays a Tier 2 option behind G2. |
+| G1 | Sat 4:30 PM | Can we read our window out of a remote GCOV file and a remote GUNW file? | **Passed.** Elias read both track 19 / frame 11 PROVISIONAL windows over HTTPS (T-01): GCOV HH and HV in 31.9 s and 14 MB, GUNW unwrapped phase in 21.0 s and 10 MB. The pre-approved fallback downloads are cancelled. |
+| GS | Sat 5:30 PM | Has the team chosen the story from the data (T-25)? | Default story: surface change in GCOV. Ground motion stays a Tier 2 option behind G2. **As of 6:25 PM no decision is recorded, so the default applies until the team records one.** |
 | Checkpoint | Sat 9:30 PM | Progress report, not a gate. Is the core of Tier 1 live on the public URL with real data (GCOV layers, swipe, landmark cards; text may still be placeholders)? Each person says what is left for G2. | Nothing is cut here. Problems found go into block E. |
 | G2 | Sun 1:00 AM | Go or no-go, before anyone sleeps. (a) Is all of Tier 1 live, including the polarization explainer, provisional label, sources page, and landmark text? (b) Does the ground-motion map pass the T-32 sanity check? This one gate replaces the old G2 (9:30 PM) and G3 (11:30 PM). | (a) No: no Tier 2; block G finishes Tier 1. (b) No: cut or shrink the layer; the headline becomes seasonal change. |
 | G4 | Sun 8:00 AM | Feature freeze. Main deployed and working? | Roll back to the last good deploy. |
@@ -81,7 +82,7 @@ Eduardo confirmed he owns the map screen (Nov 14, 2:30 PM) and approved the rest
 
 Estimated share of coding hours (about 32 hours in total): Elias 28%, Zainab 23%, Eduardo 18%, Diego 18%, Monica 13%. Monica's lower share is offset by the slides, project page, and pitch (about 6 hours).
 
-What was moved off Elias, per the workload rule: ground-motion math (Eduardo), landmark sampling and validator (Zainab), image rendering helpers and fetch-job babysitting (Diego), all docs (Zainab), demo and page (Monica). Elias keeps pipeline, API, deploy, integration.
+What was moved off Elias, per the workload rule: ground-motion math (Eduardo), landmark sampling and validator (Zainab), fetch-job babysitting (Diego; the rendering helpers went back into T-10 when T-11 was cancelled in v0.4), all docs (Zainab), demo and page (Monica). Elias keeps pipeline, API, deploy, integration.
 
 Coding exercises that are real project code:
 
@@ -90,7 +91,7 @@ Coding exercises that are real project code:
 | Zainab | T-08 write the sample manifest by hand from the contract, then `validate_manifest.py` | `pytest pipeline/tests/test_validate.py` passes; a broken fixture fails |
 | Zainab | T-16 complete `sample_at_points()` | Given tests with a synthetic raster pass |
 | Zainab | T-31t write tests for `displacement.py` and explain the module in `docs/ARCHITECTURE.md` | Tests pass; Eduardo reads the explanation |
-| Diego | T-11 complete `to_db()`, `stretch()`, `apply_colormap()` in `pipeline/render.py` | Given tests pass; one PNG looks right |
+| Diego | ~~T-11~~ cancelled in v0.4: no starter files or tests were ever assigned, and T-10 does its own rendering | |
 | Diego | T-12, T-13 build the layer controls against the sample manifest | Works with sample data before real data exists |
 | Diego | T-59t follow the README on a clean clone | App runs with no help; gaps filed to Zainab |
 
@@ -103,7 +104,7 @@ Coding exercises that are real project code:
 | `pipeline/` (except below), `api/`, `.github/`, root config files | Elias |
 | `pipeline/science/` | Eduardo |
 | `pipeline/validate_manifest.py`, `pipeline/landmarks.py`, `pipeline/tests/` | Zainab |
-| `pipeline/render.py` | Diego |
+| `pipeline/render.py` (not created; T-11 cancelled) | nobody |
 | `app/src/App.tsx`, `app/src/map/`, `app/src/state/` | Eduardo |
 | `app/src/types/`, `app/src/lib/` (manifest loader) | Elias |
 | `app/src/story/`, `app/src/styles/`, `content/` | Monica |
@@ -184,12 +185,12 @@ Dates: one late dry-season date and one late rainy-season date, both on track 19
 
 **GUNW recipe (Tier 2, if the team chooses ground motion).** Spec: JPL D-102272 (linked from the ASF product pages). Dataset names are confirmed on the local file: `/science/LSAR/GUNW/grids/frequencyA/unwrappedInterferogram/HH/` holds `unwrappedPhase`, `coherenceMagnitude`, `connectedComponents`, and `ionospherePhaseScreen`. One pair is not enough (see section 1); the method only works on the chain of pairs.
 
-1. Read the unwrapped phase, coherence, connected-components, and ionosphere layers for our window (80 m pixels) from each of the 28 pairs.
+1. Read the unwrapped phase, coherence, connected-components, and ionosphere layers for our window (80 m pixels) from each of the 27 pairs, starting with Nov 11 to Nov 23, 2025. The Oct 30 to Nov 11, 2025 pair is not used (D-13).
 2. Mask pixels with low coherence or no connected component. Water and vegetation will drop out. That is expected.
 3. Check in the spec whether the unwrapped phase already has the ionosphere correction applied. Apply it if not. In the local file the ionosphere layer is large (tens of centimeters when converted), so this step cannot be skipped. Then remove a best-fit tilt across the box from each pair.
 4. Subtract the median phase of a reference area that is known to be stable (a rock outcrop named in the literature, not a guess).
 5. Convert phase to centimeters along the line of sight using the wavelength stored in the file. Confirm the sign convention against the JPL image: the airport area must come out as moving away from the satellite.
-6. Add the 28 pairs in order to get cumulative movement per date. Divide by elapsed years for a rate map.
+6. Add the 27 pairs in order to get cumulative movement per date. Divide by elapsed years for a rate map.
 7. Sanity check (T-32) before anything goes on the map.
 
 What we will say: movement is along the radar's line of sight, relative to our reference area, from provisional data. We do not call it vertical sinking in centimeters unless we convert it and say how.
@@ -240,16 +241,17 @@ Tier 1 unless marked. "Est." is hands-on hours. Blocks refer to section 8.
 | T-25 | Data exploration for the story choice. Run `pipeline/quicklook.py` on the local files (whole valley at 80 m, then 10 m zooms on places that look interesting). Flip through the no-login browse pictures of all 29 GCOV dates on ASF Vertex. For each candidate in the memo, write what is visible, where, and how sure we are. | Diego drives, Monica looks for the story, Eduardo interprets (20 min at 4:15 PM) | A | 1.5 | Half a page of findings with pictures shown at the 4:30 PM standup; team decision recorded in `DECISIONS.md` by 5:30 PM (GS) |
 | T-02 | App scaffold: Vite + React + TypeScript + MapLibre, state store, contract types stub, lint and build scripts | Eduardo | A | 0.75 | `npm run dev` shows a map of Mexico City; `npm run build` passes; merged by 4:00 PM |
 | T-03 | Pipeline skeleton: `fetch_crops.py` from the T-01 probe, region config loader, `pytest` wired | Elias | A | 1.0 | `python pipeline/fetch_crops.py --region mexico_city --product GCOV --date <d>` writes a crop; one test passes |
-| T-04 | Get an Azure subscription, then Azure Static Web Apps deploy from `main`, fallback host, CI (lint, test, build) on PRs. Eduardo adds the deployment token as a repo secret. | Elias (backup Eduardo) | B | 1.25 | Public Azure URL and fallback URL both serve main; both URLs in README; done before 6:00 PM |
-| T-05 | Ask the organizers: does Azure hosting plus Functions qualify for the award, how long is the live pitch and what do judges look at, may we edit after 1:30 PM | Monica | A | 0.25 | Answers given to Eduardo by 3:00 PM and logged in `DECISIONS.md` |
+| T-04 | **Done Sat 6:06 PM (PR #4).** CI on PRs, and deploys to Azure Static Web Apps and Cloudflare Pages from `main`; both deploy jobs passed on the next run. Left over: put both public URLs in the README (Elias, 5 min), then T-55. | Elias (backup Eduardo) | B | 1.25 | Public Azure URL and fallback URL both serve main; both URLs in README |
+| T-05 | **Done.** Organizer answers are in section 13 and D-14: Azure hosting qualifies, the pitch is 4 minutes plus questions, no edits after 1:30 PM for the in-person awards. | Monica | A | 0.25 | Answers logged in `DECISIONS.md` |
 | T-06 | Read NASA "What is SAR" and the JPL Mexico City article; draft a 150-word plain-language explainer of radar, HH, and HV | Monica (Eduardo reviews) | A | 1.0 | Draft in `content/`; every claim has a source ID |
 | T-07 | README skeleton, MIT `LICENSE`, `docs/SOURCES.md`, keep `docs/AI_USAGE.md` current | Zainab | A | 1.0 | A stranger can see what the project is and how it will run; license present |
 | T-08 | Sample dataset in `app/public/data/sample/` written by hand from the contract, then `validate_manifest.py` with tests | Zainab | A | 1.5 | Sample fixture merged by 4:00 PM (unblocks all front-end work); validator passes on it and fails on a broken copy |
 | T-09 | Map screen: basemap, image layers from the manifest, layer and date switching from state, swipe compare, attribution | Eduardo (backup Monica) | A, B | 2.5 | Sample layers sit in the right place; swipe works with mouse and touch; no API key in the code |
-| T-10 | GCOV build: crops to dB, reproject, WebP, composite, `manifest.json` for the two chosen dates | Elias (backup Eduardo) | B, C | 2.5 | One command rebuilds `app/public/data/mexico_city/`; validator passes; folder under 30 MB |
-| T-11 | `pipeline/render.py`: `to_db`, `stretch`, `apply_colormap` against given tests | Diego | B | 1.0 | Tests pass; used by T-10 |
+| T-10 | GCOV build: crops to dB, reproject, WebP, composite, `manifest.json` for the two chosen dates. **Merged Sat 6:17 PM (PR #5) with the dates Oct 30, 2025 and Oct 13, 2026.** The first date is now excluded, see T-10b. | Elias (backup Eduardo) | B, C | 2.5 | One command rebuilds `app/public/data/mexico_city/`; validator passes; folder under 30 MB |
+| T-10b | Rebuild the Mexico City bundle without Oct 30, 2025 (D-13): two dates of release P05023 between Nov 11, 2025 and Oct 13, 2026, one dry-season and one rainy-season. One command: `python pipeline/build_manifest.py --dates <d1> <d2>`. Until this merges, the live site shows the excluded date. | Elias (backup Eduardo) | C | 0.25 | No `2025-10-30` anywhere under `app/public/data/mexico_city/`; validator passes; live before the 7:30 PM talk |
+| ~~T-11~~ | **Cancelled in v0.4 (RB-D02).** `render.py` helpers as an exercise: nobody was assigned to write the starter and tests, and T-10 already renders. | Diego | | | |
 | T-12 | Layer switcher and legend | Diego (backup Zainab) | B, D | 2.0 | Lists layers from the manifest, shows units, range, and the provisional note; usable at 375 px wide |
-| T-13 | Time slider with play and pause (Tier 2 data, built against sample) | Diego | E | 1.5 | Scrubs frames of the active layer; shows the date; hidden when a layer has one frame |
+| T-13 | Time slider with play and pause (Tier 2 data, built against sample). No Oct 30, 2025 frame (D-13). | Diego | E | 1.5 | Scrubs frames of the active layer; shows the date; hidden when a layer has one frame |
 | T-14 | Landmark panel: list, select, fly to, card with "radar shows" and "we infer" kept separate | Zainab (backup Monica) | B, C | 2.0 | Works from `landmarks.json`; selecting on the map and in the list stay in sync |
 | T-15 | Time-series chart per landmark (Tier 2) | Zainab | E | 1.5 | Axis titles with units, gaps for missing dates, provisional note, readable on a phone |
 | T-16 | `pipeline/landmarks.py`: `sample_at_points()` against given tests | Zainab | D | 1.0 | Tests pass; pipeline fills `series` in `landmarks.json` |
@@ -261,10 +263,10 @@ Tier 1 unless marked. "Est." is hands-on hours. Blocks refer to section 8.
 | T-22 | Integration pass for the 9:30 PM checkpoint | Elias, everyone tests | D | 0.75 | Live URL shows real GCOV with swipe, landmarks, and tour; no console errors; works on one phone |
 | T-23 | Explainer cards (polarization; shows vs. infer), provisional badge, mobile pass | Monica | E, F | 1.5 | Badge visible on every data view; live by G2 (Sun 1:00 AM) |
 | T-24 | Sources page in the app, generated from the manifest `sources` and `SOURCES.md` | Zainab | E, F | 0.5 | Every dataset, library, and image is listed with a link; live by G2 (Sun 1:00 AM) |
-| T-30 | Tier 2: fetch the GUNW windows for all 28 pairs | Diego runs, Elias backs up | C (runs during the talk) | 1.0 | 28 crops in `data/interim/`; failures listed in the status file |
+| T-30 | Tier 2: fetch the GUNW windows. All 28 pairs may be fetched, but only the 27 from Nov 11, 2025 on are used (D-13). | Diego runs, Elias backs up | C (runs during the talk) | 1.0 | Crops in `data/interim/`; failures listed in the status file |
 | T-31 | Tier 2: `pipeline/science/displacement.py` per the recipe in section 7 | Eduardo | E | 2.5 | Runs on the 28 crops; Zainab's tests (T-31t, 0.75 h) pass on synthetic data |
 | T-32 | Tier 2: sanity check for G2 | Eduardo | F | 0.5 | Written in `DECISIONS.md`: where the fastest motion is, its rate, how stable the reference area is, how that compares with the JPL article and the literature |
-| T-33 | Tier 2: add ground-motion layer and about monthly GCOV frames to the build | Elias | E, F | 1.0 | Both in the manifest; validator passes; folder under 60 MB |
+| T-33 | Tier 2: add ground-motion layer and about monthly GCOV frames to the build. No Oct 30, 2025 frame (D-13). | Elias | E, F | 1.0 | Both in the manifest; validator passes; folder under 60 MB |
 | T-34 | Tier 2: show the new layers in the app (legend, slider, chart) | Diego, Zainab, Eduardo | G | 1.5 | Live before 8:00 AM Sunday |
 | T-40+ | Tier 3 items, in the order of section 2 | Unassigned | G | | Only with Eduardo's go |
 | T-50 | Demo deck, **7 slides at most** | Monica (backup Zainab) | E, H | 2.5 | Draft with placeholders by Sat 11:30 PM; final by Sun 10:30 AM; public link opens in a private window |
@@ -274,7 +276,7 @@ Tier 1 unless marked. "Est." is hands-on hours. Blocks refer to section 8.
 | T-54 | Make the repo public after a secrets scan (Eduardo has the rights) | Eduardo, Elias runs the scan | H (earlier if agreed) | 0.25 | Repo public; no credentials in history |
 | T-55 | FortiGuard web filter classification request for the live URL | Elias | C | 0.2 | Submitted the evening the URL exists |
 | T-56 | Open every submission link in a private window | Zainab | G5 | 0.25 | Demo, project, repo all open with no login |
-| T-57 | Live pitch script and two rehearsals | Monica leads, all | I | 1.0 | Fits the organizers' time limit with 15 seconds to spare |
+| T-57 | Live pitch script and two rehearsals. The pitch is 4 minutes, then judges' questions. | Monica leads, all | I | 1.0 | Runs 3:45 or less on a timer, twice |
 | T-58 | Fill the form, tick both boxes, Submit for Judging | Eduardo | Sun 12:00 PM | 0.5 | Confirmation banner seen; screenshot saved |
 | T-59 | README final; Diego runs it on a clean clone (T-59t) | Zainab, Diego | H | 1.0 | Clean clone to running app with only the README |
 
@@ -303,7 +305,7 @@ The deck and the app tell the same six-step story, and the in-app tour uses the 
 | 6 | How it works: NISAR data from NASA and ISRO, open pipeline, static app on Azure, open source, provisional-data caveats. |
 | 7 | What comes next: any region through one config entry; future NISAR uses. Links to the app and repo. |
 
-Live pitch (length to be confirmed in T-05; plan for 3 minutes): 20 seconds on the problem, 90 seconds live in the app following the tour, 30 seconds on how it works and what is provisional, 20 seconds on what comes next, then questions. One speaker and one driver. Every member can answer "what does HH vs. HV show?" and "why is this provisional?".
+Live pitch: **4 minutes, then a few minutes of judges' questions** (organizers, D-14). We may present whatever we like: the app, the deck, or both. Plan: 30 seconds on the problem, 2 minutes live in the app following the tour, 45 seconds on how it works and what is provisional, 30 seconds on what comes next, 15 seconds spare. One speaker and one driver. Every member can answer "what does HH vs. HV show?" and "why is this provisional?".
 
 ## 12. Submission checklist
 
@@ -327,10 +329,19 @@ Also answered at 3:05 PM: the plan is approved. The G1 fallback downloads are ap
 
 Changed at 3:55 PM (plan v0.3): one go/no-go at Sun 1:00 AM (G2) instead of gates at 9:30 PM and 11:30 PM, because Tier 1 text (T-19, T-23, T-24) was scheduled after the 9:30 PM gate and an overnight GUNW download could not finish before the 11:30 PM gate. 9:30 PM stays as a progress checkpoint. The 32 GB GUNW fallback runs on Eduardo's laptop in the evening and moves between machines over LocalSend on a direct Ethernet link. The download sizes approved at 3:05 PM are unchanged.
 
+Answered at 6:20 PM (plan v0.4, D-13 to D-15):
+
+- G1 passed. The fallback downloads are cancelled.
+- The Oct 30, 2025 acquisition is dropped from every layer and frame because of measurement errors (RB-D01).
+- T-11 is cancelled. T-04 and T-05 are done.
+- Organizers on Azure: "as long as your team has some usage of Microsoft Azure that you can talk about on their podcast if you win, you're good to go". Hosting on Azure Static Web Apps counts.
+- Organizers on the pitch: 4 minutes at local judging, with a few minutes for judges' questions. We can present the app, the 7-slide deck, or a 30-second video. For global judging the Project Demo field must be the 7-slide deck or the 30-second video, and the page must be submitted by 11:59 PM CT.
+- No edits after 1:30 PM for the in-person awards. What is on the project page at 1:30 PM is final for local judging.
+
 Still open:
 
-1. **Organizer answers** (T-05): does Azure hosting plus Functions qualify for the award, how long is the live pitch, may we edit after 1:30 PM?
-2. **The story** (GS, 5:30 PM).
+1. **The story.** GS passed at 5:30 PM with no decision recorded. Until the team records one, the default from section 3 applies: surface change in GCOV. With Oct 30, 2025 dropped, that means change within Nov 2025 to Oct 2026, not year over year.
+2. **Which two dates T-10b uses.** Elias picks from Diego's 29-date pictures unless the team says otherwise.
 
 Timeline note: kickoff slipped from 2:00 to 3:10 PM. Gate times are unchanged, so block A is 70 minutes instead of two hours. T-02 and T-08 merge by 4:00 PM. If T-01 is not finished at 4:30 PM, G1 moves to 5:00 PM and nothing else moves.
 
@@ -343,7 +354,7 @@ Timeline note: kickoff slipped from 2:00 to 3:10 PM. Gate times are unchanged, s
 Lines to add after the short prompt:
 
 - **Elias:** "I own `pipeline/` (except `science/`, `render.py`, `landmarks.py`, `validate_manifest.py`, `tests/`), `api/`, `.github/`, `app/src/types/`, `app/src/lib/`, and the data contract. My first task is T-01, the remote-read probe that decides gate G1 at 4:30 PM; start from the reading code in `pipeline/quicklook.py`. Then T-03, and T-04 before 6:00 PM. Never put credentials in the repo. If a Python package fails to install, switch to Python 3.12 instead of debugging."
-- **Diego:** "I own `pipeline/render.py`, `app/src/components/layers/`, and `app/src/components/time/`. My first task is T-25: make quick-look pictures with `pipeline/quicklook.py` and collect what is visible for each story candidate in the decision memo. Explain each step to me as we go; I am new to this. Do not start any download over 1 GB without telling me so I can ask Eduardo. After the 4:30 PM standup: T-11, then T-12 against the sample data."
+- **Diego:** "I own `pipeline/render.py`, `app/src/components/layers/`, and `app/src/components/time/`. My first task is T-25: make quick-look pictures with `pipeline/quicklook.py` and collect what is visible for each story candidate in the decision memo. Explain each step to me as we go; I am new to this. Do not start any download over 1 GB without telling me so I can ask Eduardo. After the 4:30 PM standup: T-30, then T-12 against the sample data (T-11 was cancelled in v0.4)."
 - **Zainab:** "I own `docs/` (except `PLAN.md`, `DECISIONS.md`, `DECISION_MEMO.md`, and `docs/submission/`), `pipeline/validate_manifest.py`, `pipeline/landmarks.py`, `pipeline/tests/`, `app/public/data/sample/`, and `app/src/components/landmarks/`, `chart/`, `sources/`. My first task is T-08: the sample dataset from `docs/DATA_CONTRACT.md`, merged by 4:00 PM because the front end is waiting on it. Give me exercises as functions with tests to complete, and have me explain the code back. Then T-07, then T-14."
 - **Monica:** "I own `app/src/story/`, `app/src/styles/`, `content/`, and `docs/submission/`. My first tasks are T-05 (three questions for the organizers) and T-06, then T-25 with Diego to look for the story in the data. Every factual sentence needs a source that is listed in the decision memo table; if one is missing, flag it instead of writing the claim. The demo is at most 7 slides. After the story is chosen: T-17, then T-18 against the sample data."
 - **Eduardo:** T-02 (merge by 4:00 PM) and T-09. Join T-25 at 4:15 PM.
