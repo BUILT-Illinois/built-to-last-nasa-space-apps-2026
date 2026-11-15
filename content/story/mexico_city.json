@@ -1,0 +1,207 @@
+{
+  "schemaVersion": "0.1",
+  "regionId": "mexico_city",
+  "intro": {
+    "title": "Project Lago",
+    "tagline": "See the ground beneath your city move.",
+    "body": [
+      "A six-step tour of a city on the move, and the lake that formed where the ground sank.",
+      "The images are NISAR PROVISIONAL data, calibrated and validated at only a limited set of sites so far."
+    ],
+    "startLabel": "Start the tour",
+    "exploreLabel": "Explore freely",
+    "sourceIds": [
+      "asf-provisional"
+    ]
+  },
+  "steps": [
+    {
+      "id": "valley",
+      "title": "Mexico City is sinking",
+      "body": [
+        "Mexico City is built on an ancient lakebed, and the ground beneath it is slowly moving. Using a year of radar data from NASA and ISRO's NISAR satellite, we mapped where."
+      ],
+      "set": {
+        "layer": "gcov_composite",
+        "date": "2026-10-13"
+      },
+      "camera": {
+        "center": [
+          -99.05,
+          19.36
+        ],
+        "zoom": 10
+      },
+      "sourceIds": [
+        "jpl-2026-mexico-city",
+        "nisar-gcov"
+      ]
+    },
+    {
+      "id": "lakebed",
+      "title": "A city built on a lake",
+      "body": [
+        "For thousands of years, Lake Chalco covered the plain southeast of the city, until it was drained in the early 20th century. As the city pumped groundwater, the clay of the old lakebed compacted and the land sank."
+      ],
+      "set": {
+        "layer": "gcov_composite",
+        "date": "2025-11-11"
+      },
+      "camera": {
+        "center": [
+          -99.05,
+          19.36
+        ],
+        "zoom": 10
+      },
+      "sourceIds": [
+        "unam-2007-chalco",
+        "jpl-2026-mexico-city"
+      ]
+    },
+    {
+      "id": "radar",
+      "title": "How radar sees it",
+      "body": [
+        "NISAR's radar \"sends out a pulse of energy\", so it works \"night or day, regardless of weather conditions\", and its L-band signal is \"unhindered by clouds\". By comparing repeated passes over the same place, we can measure how far the ground moved between them."
+      ],
+      "set": {
+        "layer": "gcov_composite",
+        "date": "2026-10-13"
+      },
+      "camera": {
+        "center": [
+          -99.05,
+          19.36
+        ],
+        "zoom": 10
+      },
+      "sourceIds": [
+        "earthdata-sar",
+        "jpl-2026-mexico-city"
+      ],
+      "pendingClaims": [
+        "NEEDS SOURCE ROW: \"passes every 12 days\" (NISAR repeat cycle). Held until a row exists."
+      ]
+    },
+    {
+      "id": "hotspots",
+      "title": "Where the ground is moving fastest",
+      "body": [
+        "The fastest movement is in the east, around Nezahualcóyotl, the airport, and Tláhuac. In the west, near the Ángel de la Independencia, the ground moves much less. (Provisional data, along the radar's line of sight, relative to a reference area in the western hills.)"
+      ],
+      "set": {
+        "layer": "gcov_composite",
+        "date": "2026-10-13"
+      },
+      "camera": {
+        "center": [
+          -99.03,
+          19.38
+        ],
+        "zoom": 11
+      },
+      "sourceIds": [
+        "nisar-gunw",
+        "iahs-2020"
+      ],
+      "todo": "Switch \"layer\" (and the sourceIds) to the ground-motion layer once T-33 adds it to the manifest; there is no displacement layer yet, so this shows the HH/HV composite."
+    },
+    {
+      "id": "lake",
+      "title": "The lake that came back",
+      "body": [
+        "In Tláhuac, groundwater pumping made the land sink, and a new lake formed in the hollow as a consequence. Water first pooled in 1988, and by 1991 the pools had joined into a small lake. Nearby Tláhuac moved about 16 cm along the radar's line of sight in under a year. My family is from Santa Cecilia, in Tláhuac.",
+        "Drag the slider to compare the dry season (February 15, 2026, left) with the rainy season (September 19, 2026, right)."
+      ],
+      "set": {
+        "layer": "gcov_hv",
+        "date": "2026-02-15",
+        "compareLayer": "gcov_hv",
+        "compareDate": "2026-09-19",
+        "landmark": "new_lake_chalco"
+      },
+      "camera": {
+        "center": [
+          -98.98,
+          19.27
+        ],
+        "zoom": 13
+      },
+      "sourceIds": [
+        "unam-2007-chalco",
+        "nisar-gunw",
+        "nisar-gcov"
+      ],
+      "pendingClaims": [
+        "HELD (memo, \"keep out of visible text\"): \"the ground around the lake is still moving fast\". The lake point is not in landmark_series_los_cm.csv yet.",
+        "HELD (memo): \"the lake changes with the seasons\" (Diego's +1.2 dB HV, not yet reviewed).",
+        "HELD (memo): \"Santa Cecilia, right nearby\" the lake. The source for Santa Cecilia being next to San José has not been read."
+      ]
+    },
+    {
+      "id": "why",
+      "title": "Why it matters",
+      "body": [
+        "In 2024, floodwater stayed in homes in nearby Chalco for over a month.",
+        "Sinking ground is a slow hazard that is hard to see from the street. Tools like NISAR could help cities measure it and plan where to invest in prevention. Now explore the map yourself."
+      ],
+      "set": {
+        "layer": "gcov_composite",
+        "date": "2026-10-13",
+        "landmark": "chalco_2024_flood"
+      },
+      "camera": {
+        "center": [
+          -98.92,
+          19.26
+        ],
+        "zoom": 12
+      },
+      "sourceIds": [
+        "ap-2024-chalco",
+        "nisar-gunw"
+      ],
+      "pendingClaims": [
+        "MEMO RULE (ap-2024-chalco): do not tie the flood to the lake, to sinking, or to our data. The two paragraphs are kept separate for that reason; reread before the freeze."
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "jpl-2026-mexico-city",
+      "title": "NASA/JPL, \"US-Indian Space Mission Maps Extreme Subsidence in Mexico City\", Apr 29, 2026",
+      "url": "https://www.jpl.nasa.gov/news/us-indian-space-mission-maps-extreme-subsidence-in-mexico-city/"
+    },
+    {
+      "id": "earthdata-sar",
+      "title": "NASA Earthdata, \"What is SAR\"",
+      "url": "https://www.earthdata.nasa.gov/learn/earth-observation-data-basics/sar"
+    },
+    {
+      "id": "asf-provisional",
+      "title": "ASF, NISAR PROVISIONAL known issues",
+      "url": "https://nisar-docs.asf.alaska.edu/provisional-known-issues/"
+    },
+    {
+      "id": "unam-2007-chalco",
+      "title": "Ortiz Zamora and Ortega Guerrero (2007), \"Origen y evolución de un nuevo lago en la planicie de Chalco\", Investigaciones Geográficas (UNAM) no. 64",
+      "url": "https://scielo.org.mx/pdf/igeo/n64/n64a3.pdf"
+    },
+    {
+      "id": "iahs-2020",
+      "title": "Fernández-Torres et al. (2020), \"Land Subsidence risk maps and InSAR based angular distortion structural vulnerability assessment: an example in Mexico City\", Proc. IAHS 382",
+      "url": "https://piahs.copernicus.org/articles/382/583/2020/"
+    },
+    {
+      "id": "ap-2024-chalco",
+      "title": "AP, \"Residents of Mexico City suburb are anxious after living over a month in black sewage water\", Sep 13, 2024",
+      "url": "https://apnews.com/article/mexico-flooding-chalco-climate-8ecc2eb4d9fabd5219fe6850de5addf6"
+    },
+    {
+      "id": "nisar-gunw",
+      "title": "Our analysis of 27 NISAR GUNW pairs (PROVISIONAL), track 19 / frame 11, Nov 2025 to Oct 2026",
+      "url": ""
+    }
+  ]
+}

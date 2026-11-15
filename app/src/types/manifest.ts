@@ -1,6 +1,7 @@
 // TypeScript types for the data contract v0.1 (docs/DATA_CONTRACT.md).
 // Owner: Elias (app/src/types/). Stub written in T-02 by Eduardo's session; Elias may reshape it.
 // Shared with api/. Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
+// Sinking rate fields drafted with AI assistance (Codex).
 
 /** [west, south, east, north] in degrees, WGS84. */
 export type BBox = [number, number, number, number];
@@ -35,7 +36,7 @@ export interface Colormap {
 export interface Frame {
   /** For displacement layers this is the end date. */
   date: IsoDate;
-  /** Displacement layers only: start date of the cumulative movement. */
+  /** Displacement layers only: start date of the measurement period. */
   since?: IsoDate;
   /** Relative to the folder holding manifest.json. */
   image: string;
@@ -58,6 +59,10 @@ export interface Layer {
   colormap: Colormap;
   description: string;
   caveats: string[];
+  /** Rate layer metadata, present for sinking. */
+  losLabel?: 'Radar line-of-sight rate';
+  referenceArea?: string;
+  awaySign?: 'positive';
   frames: Frame[];
 }
 
@@ -83,6 +88,7 @@ export interface Manifest {
   region: Region;
   /** e.g. "PROVISIONAL". */
   dataMaturity: string;
+  synthetic?: boolean;
   layers: Layer[];
   vectors: VectorLayer[];
   sources: Source[];

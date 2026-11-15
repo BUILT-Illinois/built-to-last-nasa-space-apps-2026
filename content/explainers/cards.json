@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "0.1",
+  "title": "How to read this map",
+  "badge": {
+    "detail": "PROVISIONAL products are calibrated and validated at only a limited set of sites so far.",
+    "sourceIds": ["asf-provisional"]
+  },
+  "cards": [
+    {
+      "id": "polarization",
+      "title": "Radar brightness: HH and HV",
+      "body": [
+        "NISAR's radar \"sends out a pulse of energy\" and \"records the amount of that energy reflected back after it interacts with Earth\". In the HH and HV images, brighter means more energy came back.",
+        "H is horizontal and V is vertical. A signal \"emitted in horizontal (H) and received in horizontal (H) would be indicated HH\". HV is the cross-polarized channel.",
+        "HH is most sensitive to double bounce, from buildings, tree trunks, or inundated vegetation. HV is most sensitive to volume scattering, from leaves and branches in a forest canopy."
+      ],
+      "weInfer": "HH helps pick out the city's buildings, and HV helps pick out vegetation.",
+      "sourceIds": ["earthdata-sar"]
+    },
+    {
+      "id": "shows-vs-infer",
+      "title": "Radar shows vs. we infer",
+      "body": [
+        "Every place card splits its text in two. \"Radar shows\" is only what the measurement says: how bright the radar return was, or how far the ground moved along the radar's line of sight. \"We infer\" is our reading of why, worded as a hypothesis. We keep them apart so you can see where the data ends and our interpretation begins."
+      ],
+      "sourceIds": []
+    },
+    {
+      "id": "provisional",
+      "title": "Provisional data",
+      "body": [
+        "These images use NISAR PROVISIONAL products, which are calibrated and validated at only a limited set of sites so far.",
+        "Ground motion is measured along the radar's line of sight, relative to a reference area in the western hills, not straight down."
+      ],
+      "sourceIds": ["asf-provisional", "nisar-gunw"]
+    }
+  ],
+  "sources": [
+    {
+      "id": "earthdata-sar",
+      "title": "NASA Earthdata, \"What is SAR\"",
+      "url": "https://www.earthdata.nasa.gov/learn/earth-observation-data-basics/sar"
+    },
+    {
+      "id": "asf-provisional",
+      "title": "ASF, NISAR PROVISIONAL known issues",
+      "url": "https://nisar-docs.asf.alaska.edu/provisional-known-issues/"
+    },
+    {
+      "id": "nisar-gunw",
+      "title": "Our analysis of 27 NISAR GUNW pairs (PROVISIONAL), track 19 / frame 11, Nov 2025 to Oct 2026",
+      "url": ""
+    }
+  ]
+}
