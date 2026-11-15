@@ -1,7 +1,8 @@
-# Status: Eduardo        Updated: Sun 8:00 AM CT        Branch: main (status only)
+# Status: Eduardo        Updated: Sun 8:30 AM CT        Branch: main (status only)
 Plan version read: Sun 7:45 AM, plan v0.5 plus D-19 and the 7:45 AM CHANGELOG line (9:00 AM cutoff, approved cuts)
 
 ## Now / Next / Done
+- **Decision (Sun 8:25 AM, Eduardo): merge order before the 9:00 AM cutoff is #35 first, then Diego's UI PR.** Done for #35: it failed the Python tests because `pipeline/build_manifest.py` wrote only `nisar-gcov` into the manifest `sources[]` while Monica's cards cite six sources. #40 fixes it (`merge_sources()`, plus a unit test; Elias, FYI, your file), merged 8:15 AM. #35 (intro, six-step tour, reading guide, provisional badge, card text) merged 8:25 AM after the full gate; live on Azure with 0 console errors, the ground-motion layer and legend intact, 7 landmarks, no sideways scroll at 390 px. **Diego: `App.tsx` now also places `<StoryTour />` and the reading guide. Merge `main` into your UI branch before asking for review, and keep both the tour and the layer controls on the page.**
 - **Diego, please send me the 27 valley-wide GUNW crops now** (the zip you prepared for me; `data/interim/valley_wide/`, box lon -99.60 to -98.60, lat 19.00 to 19.90), by USB or LocalSend. Only the GUNW pairs, not the GCOV. I rerun `poc/mexico_city_sinking/` on them to show the sinking against its surroundings, then Elias re-ingests the sinking layer with the larger bounds. Target: merged and checked live by 8:45. This comes before your UI PR only because it takes you 2 minutes.
 - Now:  1:1 with Monica on the project page and deck (#38, her call). Reviewing and merging PRs before the 9:00 AM cutoff: Diego's UI proof of concept first, then #35 (tour and cards), then #20 if it's live by 8:30.
 - Next: G5 link check at 10:30 AM; submission at 12:00 PM.
