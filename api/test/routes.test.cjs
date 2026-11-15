@@ -4,7 +4,7 @@ const { readFileSync, readdirSync, existsSync } = require('node:fs');
 const { join } = require('node:path');
 const { test } = require('node:test');
 const { HttpRequest } = require('@azure/functions');
-const { health, regions, manifest, defaultManifest, landmarks } = require('../dist/api/src/index.js');
+const { health, regions, manifest, landmarks } = require('../dist/api/src/index.js');
 
 const dataRoot = join(__dirname, '../../app/public/data');
 const readJson = (path) => JSON.parse(readFileSync(path, 'utf8'));
@@ -56,8 +56,4 @@ test('unknown IDs return the contract 404 for both region file routes', () => {
       });
     }
   }
-});
-
-test('the default manifest route serves Mexico City', () => {
-  assert.deepEqual(defaultManifest(), manifest(request('mexico_city', 'manifest')));
 });
