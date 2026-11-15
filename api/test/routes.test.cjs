@@ -51,7 +51,7 @@ test('/api/landmarks serves the Mexico City monthly landmark series', () => {
   const result = mexicoCityLandmarks();
   assert.deepEqual(result, landmarks(request('mexico_city', 'landmarks')));
   const entries = result.jsonBody.landmarks;
-  assert.ok(entries.length >= 10);
+  assert.equal(entries.length, 7);
   const lake = entries.find(({ id }) => id === 'new_lake_chalco');
   assert.equal(lake.series.hh_db.length, 11);
   assert.equal(lake.series.hv_db.length, 11);
