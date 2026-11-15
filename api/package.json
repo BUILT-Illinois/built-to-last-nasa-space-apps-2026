@@ -1,0 +1,19 @@
+{
+  "name": "built-to-last-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "T-20 managed HTTP API. Drafted with AI assistance (Codex); see docs/AI_USAGE.md.",
+  "main": "dist/api/src/index.js",
+  "engines": { "node": "22.x" },
+  "scripts": {
+    "build": "tsc && node scripts/bundle-data.cjs",
+    "test": "node --test test/*.test.cjs"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "~5.9.3"
+  }
+}
