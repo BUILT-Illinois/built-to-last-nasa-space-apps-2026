@@ -41,6 +41,36 @@ Question (Eduardo): can NISAR show a difference in crop activity between chinamp
 3. Use many boxes per class and show the spread, not one median per box.
 4. Cite a source for chinampa rotations and the local growing season.
 
+## Update, Sun Nov 15, about 10:40 AM: full resolution (10 m)
+
+Downloaded by windowed remote reads: NISAR GCOV **frequency A at 10 m** (HH, HV) for the same 26 dates and the same granules, over lon -99.23 to -98.87, lat 19.06 to 19.40. 26 crops, 3763 x 3788 pixels each, 2.0 GB, in `data/Mexico_City/gcov_freqA_chinampas/` (git-ignored). Scripts: `fetch_full_res_crops.py`, `chinampas_full_res.py`. Pixels are averaged 4 x 4 (40 m, 16 looks) for per-pixel statistics; water and buildings are masked with rough radar thresholds.
+
+![10 m, dry vs wet](fig_full_res_tlahuac_dry_vs_wet.png)
+
+**What 10 m adds:** the chinampa plots and canals are visible individually (above: Tlahuac to Mixquic, Feb 27 against Aug 26, 2026). Single plots brighten in HV in the rainy season. At 80 m this was a blur.
+
+![Time series, 10 m](fig_full_res_series.png)
+
+**Growth cycles per pixel** (an HV rise and fall of at least 3 dB, about 3 times the noise at 16 looks), share of vegetated 40 m pixels with 2 or more cycles in the year:
+
+| Box | All 26 dates | Without Aug 14 and Sep 19, 2026 |
+|---|---|---|
+| Chinampas, Xochimilco | 14.7% | 0.3% |
+| Chinampas, Tlahuac to Mixquic | 20.1% | 6.3% |
+| Farmland SE | 5.7% | 3.6% |
+| Farmland SW | 1.9% | 1.3% |
+| Control: forest, southern hills (noise floor) | 1.9% | 1.6% |
+
+![Cycles](fig_full_res_cycles.png)
+
+**Honest reading:**
+- With all dates, chinampas look like they have more cycles than farmland. **That difference comes almost entirely from two dates, Aug 14 and Sep 19, 2026**, when HV minus HH jumps by 2 to 3 dB in both chinampa boxes for one acquisition and falls back. Without those two dates, Xochimilco shows no multi-cycle signal at all (0.3%, below the forest noise floor) and Tlahuac only a small excess (6.3% against 3.6% for farmland and 1.6% for forest).
+- The two spikes are strongest in the wet, canal-laced chinampa zones and weaker elsewhere. Rain or flooding on those days, or a short-lived surface effect, would explain them better than harvests. We have not checked weather records, so this is not settled either way.
+- So: **no robust evidence of more crop rotations in chinampas** from this data. The earlier 80 m finding (chinampas vary less through the year than the south-east farmland) still holds at 10 m for Xochimilco, but not clearly for Tlahuac.
+- Everything in "What this does and does not support" above still applies. Resolution fixed the mixing problem; it did not fix the fact that HV responds to water as much as to crops. The next step is still an optical NDVI check on the same dates and verified plot polygons.
+
+Not for the app, deck or project page.
+
 ## Run
 
 ```text

@@ -52,6 +52,9 @@ app.http('mexicoCityLandmarks', {
 
 app.http('health', { route: 'health', methods: ['GET'], authLevel: 'anonymous', handler: health });
 app.http('regions', { route: 'regions', methods: ['GET'], authLevel: 'anonymous', handler: regions });
+app.http('regionManifest', {
+  route: 'regions/{id}', methods: ['GET'], authLevel: 'anonymous', handler: manifest,
+});
 app.http('manifest', {
   route: 'regions/{id}/manifest', methods: ['GET'], authLevel: 'anonymous', handler: manifest,
 });
