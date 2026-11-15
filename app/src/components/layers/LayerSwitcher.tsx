@@ -39,7 +39,13 @@ export default function LayerSwitcher() {
     }
     return null;
   }
-  if (manifest.layers.length === 0) return null;
+  if (manifest.layers.length === 0) {
+    return (
+      <p className="layer-switcher__loading" role="status">
+        No radar layers available for this region.
+      </p>
+    );
+  }
 
   // Native radio buttons: Tab moves into the group, arrow keys move between layers,
   // and screen readers announce "1 of N" without any extra code.

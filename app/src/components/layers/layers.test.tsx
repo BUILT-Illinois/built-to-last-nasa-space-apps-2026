@@ -98,6 +98,14 @@ describe('LayerSwitcher', () => {
     expect(radios()).toHaveLength(sample.layers.length);
   });
 
+  it('says a region has no radar layers, instead of an empty panel', () => {
+    load({ ...sample, layers: [] });
+    render(<LayerSwitcher />);
+    const status = container.querySelector('[role="status"]');
+    expect(status?.textContent).toBe('No radar layers available for this region.');
+    expect(radios()).toHaveLength(0);
+  });
+
   it('lists every layer in the manifest by title and marks the active one', () => {
     load(sample);
     render(<LayerSwitcher />);
