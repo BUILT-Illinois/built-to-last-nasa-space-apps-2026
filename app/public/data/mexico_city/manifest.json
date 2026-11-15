@@ -1,6 +1,6 @@
 {
   "schemaVersion": "0.1",
-  "generatedAt": "2026-11-15T07:11:03Z",
+  "generatedAt": "2026-11-15T08:04:20Z",
   "generatedBy": "pipeline/ingest_sinking.py (AI-assisted code, see docs/AI_USAGE.md)",
   "region": {
     "id": "mexico_city",
@@ -479,13 +479,14 @@
       "caveats": [
         "Positive means away from the satellite.",
         "No conversion to vertical motion.",
-        "Provisional NISAR data."
+        "Provisional NISAR data.",
+        "Pixels with absolute rates above 50 cm/yr are masked as likely phase-unwrapping artifacts."
       ],
       "frames": [
         {
           "date": "2026-10-13",
           "since": "2025-11-11",
-          "image": "layers/sinking/2026-10-13-25a76e40b4b4a361.png",
+          "image": "layers/sinking/2026-10-13-9cdc4b36bdae14a3.png",
           "granules": [
             "NISAR_L2_PR_GUNW_005_019_A_011_006_4000_SH_20251111T120539_20251111T120614_20251123T120540_20251123T120614_P05023_N_F_J_001",
             "NISAR_L2_PR_GUNW_006_019_A_011_007_4000_SH_20251123T120540_20251123T120614_20251205T120540_20251205T120615_P05023_N_F_J_001",

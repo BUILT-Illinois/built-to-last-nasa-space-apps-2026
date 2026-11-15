@@ -40,7 +40,7 @@ def test_synthetic_rate_clips_converts_and_masks(tmp_path, units, sign, factor):
         raster.write(np.array([
             [99, -40 * factor, 40 * factor],
             [99, -15 * factor, 0],
-            [99, -9999, np.nan],
+            [99, -51 * factor, np.nan],
         ], dtype=np.float32), 1)
         raster.update_tags(status="SYNTHETIC", synthetic="true", granules="[]")
 
