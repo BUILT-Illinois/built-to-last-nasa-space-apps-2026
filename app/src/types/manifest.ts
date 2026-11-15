@@ -129,6 +129,7 @@ export interface HotspotArea {
   waterMonths: number;
   score: number;
   validFraction: number;
+  sinkingRank: number;
 }
 
 export interface HotspotPoint {
@@ -140,6 +141,7 @@ export interface HotspotPoint {
   waterMonths: number | null;
   score: number | null;
   cellRank: number | null;
+  sinkingRank: number | null;
 }
 
 export interface HotspotsFile {
@@ -165,5 +167,5 @@ export interface HotspotsFile {
   areas: HotspotArea[];
   landmarks: (HotspotPoint & { id: string })[];
   checks: (HotspotPoint & { id: string; source?: string; location?: string })[];
-  lakeCheck: HotspotPoint;
+  lakeCheck: HotspotPoint & { id: string };
 }

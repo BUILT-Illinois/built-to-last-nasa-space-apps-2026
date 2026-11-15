@@ -126,8 +126,9 @@ flood-prevention investments and does not predict flooding.
 
 `hotspots.json` includes the exact dates, thresholds, units, and LOS source, sign, granules and
 reference area. `areas` contains the ten highest-scoring 500 m cells and their ranks.
-`landmarks`, `checks`, and `lakeCheck` report pixel values and the containing cell's rank, with
-JSON null for unavailable values. See [the T-34 build and checks](FLOOD_PRIORITY.md).
+`landmarks`, `checks`, and `lakeCheck` report pixel values and the containing cell's
+combined priority rank (`cellRank`) and sinking-only rank (`sinkingRank`), with JSON null
+for unavailable values. See [the T-34 build and checks](FLOOD_PRIORITY.md).
 
 ## API (same data, typed)
 

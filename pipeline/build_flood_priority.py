@@ -20,6 +20,7 @@ from quicklook import stretch
 
 REGION = "mexico_city"
 CONFIG = Path(__file__).with_name("config") / "flood_priority.json"
+SCORING_POINTS = CONFIG.with_name("flood_priority_points.json")
 CELL_METERS = 500
 TO_UTM = Transformer.from_crs(WEB_CRS, "EPSG:32614", always_xy=True)
 TO_WEB = Transformer.from_crs("EPSG:4326", WEB_CRS, always_xy=True)
@@ -102,7 +103,7 @@ def score_pixels(rate, water, valid, positive_direction):
     return score, reference
 
 
-def ranked_cells(grid, valid, rate, water, score):
+def ranked_cells(grid, valid, rate, water, score, positive_direction):
     rows, cols = np.indices(valid.shape)
     x, y = TO_UTM.transform(*xy(grid, rows.ravel(), cols.ravel()))
     cells = np.floor(np.column_stack((x, y)) / CELL_METERS).astype(int)
@@ -117,6 +118,9 @@ def ranked_cells(grid, valid, rate, water, score):
         np.bincount(selected, weights=band[valid], minlength=len(keys))[qualified] / n[qualified]
         for band in (rate, water, score)
     ]
+    away_rates = averages[0] if positive_direction == "away" else -averages[0]
+    # Competition rank among the same eligible cells, using unclipped mean LOS rates.
+    sinking_ranks = 1 + len(away_rates) - np.searchsorted(np.sort(away_rates), away_rates, side="right")
     results = {}
     previous_score = None
     for position, index in enumerate(np.argsort(-averages[2], kind="stable"), 1):
@@ -129,7 +133,7 @@ def ranked_cells(grid, valid, rate, water, score):
         results[(easting // CELL_METERS, northing // CELL_METERS)] = {
             "rank": rank, "cellId": f"{easting}-{northing}", "lon": lon, "lat": lat,
             "losRate": los, "waterMonths": months, "score": cell_score,
-            "validFraction": float(n[key] / total[key]),
+            "validFraction": float(n[key] / total[key]), "sinkingRank": int(sinking_ranks[index]),
         }
         previous_score = cell_score
     return results
@@ -147,6 +151,7 @@ def point_result(point, grid, coverage, valid, rate, water, score, cells):
         "waterMonths": int(water[row, col]) if has_water else None,
         "score": float(score[row, col]) if has_score else None,
         "cellRank": containing["rank"] if containing else None,
+        "sinkingRank": containing["sinkingRank"] if containing else None,
     }
 
 
@@ -157,12 +162,13 @@ def build(crop_dir, output, los_path=None, metadata_path=None, *, water_output=N
         raise ValueError("Expected a Mexico City v0.1 manifest")
     bbox = manifest["region"]["bbox"]
     dates, grid, gcov_granules, water, coverage = water_persistence(crop_dir, bbox, config)
-    lake_row, lake_col = pixel(grid, config["lake"])
+    checks = read_json(SCORING_POINTS)
+    lake = next(point for point in checks if point["id"] == "new-lake-chalco")
+    lake_row, lake_col = pixel(grid, lake)
     if not valid_pixel(coverage, lake_row, lake_col):
         raise ValueError("New Lake Chalco has incomplete GCOV coverage")
     print(f"Water thresholds: HH <= {config['hh_db']} dB; HV <= {config['hv_db']} dB")
-    print(f"New Lake Chalco: {water[lake_row, lake_col]} of {len(dates)} months")
-    for point in config["checks"]:
+    for point in checks:
         row, col = pixel(grid, point)
         months = int(water[row, col]) if valid_pixel(coverage, row, col) else None
         print(f"{point['name']}: {months if months is not None else 'incomplete GCOV coverage'}"
@@ -183,7 +189,7 @@ def build(crop_dir, output, los_path=None, metadata_path=None, *, water_output=N
     rate = read_los(los_path, metadata, water.shape, grid)
     valid = coverage & np.isfinite(rate)
     score, reference = score_pixels(rate, water, valid, metadata["positiveDirection"])
-    cells = ranked_cells(grid, valid, rate, water, score)
+    cells = ranked_cells(grid, valid, rate, water, score, metadata["positiveDirection"])
     landmarks = read_json(output / "landmarks.json")["landmarks"]
     points = [{key: entry[key] for key in ("id", "name", "lon", "lat")} for entry in landmarks]
 
@@ -197,7 +203,8 @@ def build(crop_dir, output, los_path=None, metadata_path=None, *, water_output=N
         "waterThresholdDb": {"HH": config["hh_db"], "HV": config["hv_db"]},
         "cellSizeMeters": CELL_METERS, "rankedCellCount": len(cells),
         "areas": list(cells.values())[:10], "landmarks": [sample(point) for point in points],
-        "checks": [sample(point) for point in config["checks"]], "lakeCheck": sample(config["lake"]),
+        "checks": [sample(point) for point in checks if point["id"] != lake["id"]],
+        "lakeCheck": sample(lake),
     }
     image = Path("layers") / "flood_priority" / f"{dates[-1]}.webp"
     layer = {

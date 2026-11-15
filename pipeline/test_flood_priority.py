@@ -35,6 +35,12 @@ def test_priority_build(tmp_path, monkeypatch):
     x, y = transform("EPSG:4326", "EPSG:3857", [-98.97], [19.27])
     row, col = rowcol(grid, x[0], y[0])
     rate[row, col] = -9999
+    flood_check = next(point for point in priority.read_json(priority.SCORING_POINTS)
+                       if point["id"] == "culturas-de-mexico")
+    flood_row, flood_col = priority.pixel(grid, flood_check)
+    patch = (slice(flood_row - 7, flood_row + 8), slice(flood_col - 7, flood_col + 8))
+    rate[patch] = -40
+    water[patch] = 0
     los_path = tmp_path / "los.tif"
     with rasterio.open(los_path, "w", driver="GTiff", height=shape[0], width=shape[1], count=1,
                        dtype="float32", crs=priority.WEB_CRS, transform=grid, nodata=-9999) as raster:
@@ -62,4 +68,10 @@ def test_priority_build(tmp_path, monkeypatch):
     assert hotspots["landmarks"][0]["waterMonths"] == 6
     assert hotspots["landmarks"][0]["score"] is None
     assert hotspots["landmarks"][0]["cellRank"] == 1
+    assert len(hotspots["checks"]) == 10
+    assert hotspots["lakeCheck"]["id"] == "new-lake-chalco"
+    culturas = next(point for point in hotspots["checks"] if point["id"] == "culturas-de-mexico")
+    assert culturas["waterMonths"] == 0
+    assert culturas["sinkingRank"] == 1
+    assert culturas["cellRank"] > culturas["sinkingRank"]
     assert landmark_path.read_bytes() == original_landmarks

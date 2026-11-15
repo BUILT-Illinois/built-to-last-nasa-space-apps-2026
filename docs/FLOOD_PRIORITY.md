@@ -17,13 +17,16 @@ HV ≤ −20 dB together. It requires both channels to be valid in all 12 months
 At the supplied New Lake Chalco point (19.27, −98.97), the thresholds flag 7 of 12 months.
 The median in the surrounding 5×5 pixels is 6 months. Cutoffs of −14/−22 dB flag 2 months
 at the point and a median of 0 in the window. At the adopted thresholds, 0.13% of the
-GCOV study grid is flagged in all 12 months. This is a single-site check, so the cutoffs
-are provisional. [Lake context from the team's data exploration](../coordination/claude_status_monica.md)
+GCOV study grid is flagged in all 12 months. The cutoffs are provisional.
+[Lake context from the team's data exploration](../coordination/claude_status_monica.md)
 
-Representative points in Nezahualcóyotl, Centro (Zócalo), the Angel of Independence,
-Benito Juárez International Airport, Tláhuac, and Chalco have both GCOV channels in all
-12 months. The two historical flood checks also have both channels for all 12 months and
-each flags 0 open-water months at the point.
+At Centro (Zócalo), Nezahualcóyotl, and the Angel of Independence, all 25 pixels in each
+5×5 window registered zero open-water months. The airport point registered zero, with a
+window median of zero and a maximum of two. We kept the cutoffs after these checks.
+All 11 temporary points have both GCOV channels in all 12 months. New Lake Chalco is
+the only point that flagged open water. Bosque de Tláhuac lake registered zero in its
+entire 5×5 window, so some known water is missed at these cutoffs. The two 2024 flood
+checks are street locations and each registered zero in the later GCOV series.
 
 | 2024 flood check | Latitude | Longitude | Geocode |
 | --- | ---: | ---: | --- |
@@ -44,9 +47,15 @@ Group jointly valid pixels by center in 500 m × 500 m UTM zone 14N cells. Rank 
 the mean pixel score, highest first. A cell needs at least half of its in-region pixels
 to have both inputs. The output reports the mean signed LOS rate and mean water months
 for the same pixels. Exact ties share a rank, with UTM coordinates ordering rows in a
-tie. The top ten cell rows are bundled with the point results. Landmark scores sample
-the original points and cite the rank of their containing cell. The landmark file is read
-as part of the build.
+tie. The top ten cell rows are bundled with the point results. Sinking-only rank orders
+the same eligible cells by mean LOS motion away from the sensor, highest first, using
+the unclipped rate and the same jointly valid pixels. Both ranks are reported for the
+cells containing the two 2024 flood-zone points.
+
+The temporary file [flood_priority_points.json](../pipeline/config/flood_priority_points.json)
+supplies the 11 scoring points while the landmark content is pending. The build samples
+their pixel values and attaches the ranks of their containing cells. It reads the published
+landmark file independently and also scores any entries it contains.
 
 ## Build
 

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "new-lake-chalco",
+    "name": "New Lake Chalco",
+    "lon": -98.97,
+    "lat": 19.27
+  },
+  {
+    "id": "bosque-de-tlahuac-lake",
+    "name": "Bosque de Tláhuac lake",
+    "lat": 19.2922,
+    "lon": -99.0494
+  },
+  {
+    "id": "santa-cecilia",
+    "name": "Santa Cecilia, Tláhuac",
+    "lat": 19.277,
+    "lon": -99.0028
+  },
+  {
+    "id": "valle-de-chalco",
+    "name": "Valle de Chalco Solidaridad",
+    "lat": 19.3,
+    "lon": -98.94
+  },
+  {
+    "id": "chalco",
+    "name": "Chalco de Díaz Covarrubias",
+    "lon": -98.9,
+    "lat": 19.26
+  },
+  {
+    "id": "airport",
+    "name": "Benito Juárez International Airport",
+    "lon": -99.07,
+    "lat": 19.44
+  },
+  {
+    "id": "nezahualcoyotl",
+    "name": "Nezahualcóyotl",
+    "lon": -99.015,
+    "lat": 19.405
+  },
+  {
+    "id": "centro",
+    "name": "Centro (Zócalo)",
+    "lon": -99.1332,
+    "lat": 19.4326
+  },
+  {
+    "id": "angel",
+    "name": "Angel of Independence",
+    "lon": -99.1677,
+    "lat": 19.427
+  },
+  {
+    "id": "culturas-de-mexico",
+    "name": "Culturas de México",
+    "lon": -98.90459718,
+    "lat": 19.2651324,
+    "source": "https://datosabiertos.chalco.gob.mx/repositorio/reportes-de-bacheo/",
+    "location": "Municipal service point BACH-20, not the neighborhood centroid."
+  },
+  {
+    "id": "san-miguel-jacalones-ii",
+    "name": "San Miguel Jacalones II",
+    "lon": -98.8977778,
+    "lat": 19.2708333,
+    "source": "https://www.scribd.com/document/682368048/Atlas-Chalco-2019-009",
+    "location": "Chalco Atlas Municipal de Riesgos locality point, nomenclátor code 027."
+  }
+]
