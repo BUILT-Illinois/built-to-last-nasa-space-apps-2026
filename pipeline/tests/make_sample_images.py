@@ -15,12 +15,11 @@ from PIL import Image
 
 OUT = Path("app/public/data/sample/layers")
 SIZE = 256                              # pixels per side, keeps files tiny
-DATES = ["2026-04-16", "2026-10-13"]    # dry season, end of rainy season
+DATE_SEEDS = {"2026-10-13": 1}
 
 
 # makes a grid of x/y positions from 0 to 1, runs them through sines and cosine to get the smooth waves
-# the rescales the results to the range 0 to 1. Changing the seed shifts the waves, do the two dates look diferent 
-# and the swipe shows a change.
+# then rescales the results to the range 0 to 1. Changing the seed shifts the waves.
 def pattern(seed):
     #A smooth pattern of values from 0 to 1. A different seed gives a different picture.
     y, x = np.mgrid[0:SIZE, 0:SIZE] / SIZE
@@ -42,7 +41,7 @@ def save(rgb, path):
 
 # for each date, a grey HH image (the same values in R, G, B), a gray HV image and a colour
 # cmposite, using the same colour scheme the plan uses for real data.
-for i, date in enumerate(DATES):
+for date, i in DATE_SEEDS.items():
     hh = pattern(seed=i)
     hv = pattern(seed=i + 2)
     save(np.dstack([hh, hh, hh]) * 255, OUT / "gcov_hh" / f"{date}.webp")
