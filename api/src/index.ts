@@ -37,12 +37,20 @@ export function manifest(request: HttpRequest): HttpResponseInit {
   return regionFile(request, 'manifest');
 }
 
+export function defaultManifest(): HttpResponseInit {
+  const dataset = datasets.get('mexico_city');
+  return dataset ? ok(dataset.manifest) : notFound();
+}
+
 export function landmarks(request: HttpRequest): HttpResponseInit {
   return regionFile(request, 'landmarks');
 }
 
 app.http('health', { route: 'health', methods: ['GET'], authLevel: 'anonymous', handler: health });
 app.http('regions', { route: 'regions', methods: ['GET'], authLevel: 'anonymous', handler: regions });
+app.http('defaultManifest', {
+  route: 'manifest', methods: ['GET'], authLevel: 'anonymous', handler: defaultManifest,
+});
 app.http('manifest', {
   route: 'regions/{id}/manifest', methods: ['GET'], authLevel: 'anonymous', handler: manifest,
 });
