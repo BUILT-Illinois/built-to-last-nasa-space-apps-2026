@@ -2,8 +2,8 @@
   "_comment": "Written by poc/mexico_city_sinking/sinking_poc.py (AI-assisted code, see docs/AI_USAGE.md). PROVISIONAL data. Line of sight, not vertical.",
   "units": "cm/year",
   "positiveDirection": "away",
-  "signConvention": "positive = range increase = moving away from the satellite (sinking shows as positive). INFERRED from where the known sinking zones are, NOT confirmed against the GUNW specification (JPL D-102272); T-35 confirms it.",
-  "signStatus": "INFERRED, not confirmed (T-35)",
+  "signConvention": "Positive line-of-sight motion means range increased, so the ground moved away from the satellite.",
+  "signStatus": "Confirmed by the T-35 sign check and accepted in D-19.",
   "referenceArea": "Western hills near Santa Fe, assumed stable (not yet a literature-named outcrop); its median is zero on every date",
   "referenceBoxLonLat": [
     -99.27,

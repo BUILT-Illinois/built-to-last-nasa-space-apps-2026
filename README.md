@@ -7,7 +7,7 @@ Main repo for B[U]ILT Team 2 @ NASA Space Apps 2026's Chicago local event.
 ## Project overview
 
 - **Challenge:** [Dancing with the SARs](https://www.spaceappschallenge.org/2026/challenges/dancing-with-the-sars/). Use NISAR radar data to track and visualize surface change at a place we choose.
-- **Goal:** an interactive, open-source web map of a place we choose that shows what NISAR radar sees, which polarizations (HH, HV) reveal the changes, and what might cause them. The story: surface change seen by radar, between seasons and one year apart.
+- **Goal:** an interactive, open-source web map of a place we choose that shows what NISAR radar sees, which polarizations (HH, HV) reveal the changes, and what might cause them. The map shows surface change across 11 NISAR acquisition months from November 2025 to October 2026, with 11 frames per radar layer and no April 2026 frame.
 - **App:** a web map with radar layers, a swipe to compare two dates, and landmark cards that keep "what the radar shows" separate from "what we infer". See [Live app](#live-app).
 - **Front end:** `app/`, Vite + React + TypeScript + MapLibre GL JS. The site only loads static files from `app/public/data/`, so it works with no login and without the API.
 - **Back end:** `pipeline/` (Python) turns NISAR files into small images plus `manifest.json` and `landmarks.json`. Azure also runs a separate API (`api/`) that serves the same data to other clients; the site does not need it. The file format is [docs/DATA_CONTRACT.md](docs/DATA_CONTRACT.md).
