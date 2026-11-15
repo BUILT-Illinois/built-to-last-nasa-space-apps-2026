@@ -200,7 +200,8 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
                 })
             manifest["layers"].append(layer)
 
-        content_path = ROOT / "content" / "landmarks" / f"{region_id}.json"
+        content_region = region.get("landmark_content_region", region_id)
+        content_path = ROOT / "content" / "landmarks" / f"{content_region}.json"
         landmarks = {"schemaVersion": "0.1", "regionId": region_id, "landmarks": []}
         if content_path.is_file():
             content = json.loads(content_path.read_text(encoding="utf-8"))
