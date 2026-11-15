@@ -1,5 +1,5 @@
 {
-  "_comment": "One entry per study region. bbox is [west, south, east, north] in decimal degrees (WGS84). Adding a region here is the only change needed to search or process a new place. File drafted with AI assistance (Claude Code); reviewed by the team.",
+  "_comment": "One entry per study region. bbox is [west, south, east, north] in WGS84 degrees. For monthly GCOV in a new region, add a gcov object containing track (integer), frame (integer), direction (ASCENDING or DESCENDING), release (one provisional CRID), and dates (YYYY-MM-DD strings). Mexico City retains its built-in selection. File drafted with AI assistance (Claude Code and Codex).",
   "default_region": "mexico_city",
   "regions": {
     "mexico_city": {
