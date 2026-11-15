@@ -33,7 +33,7 @@ LAYER_FIELDS = ["id", "title", "kind", "product", "polarization", "units", "boun
 FRAME_FIELDS = ["date", "image", "granules", "track", "frame", "direction"]
 VECTOR_FIELDS = ["id", "title", "file", "source"]
 LANDMARK_FIELDS = ["id", "name", "lon", "lat", "summary", "radarShows", "weInfer", "drivers",
-                   "sourceIds", "series"]
+                   "sourceIds"]
 
 
 # --------------------------------------------------------------------------
@@ -124,6 +124,17 @@ def check_series(series, where: str) -> list[str]:
         return [f"{where}: expected an object of named series"]
     problems = []
     for name, points in series.items():
+        if name == "water_months":
+            if not (
+                isinstance(points, dict)
+                and type(points.get("count")) is int
+                and type(points.get("valid_months")) is int
+                and 0 <= points["count"] <= points["valid_months"] <= 12
+                and points["valid_months"] > 0
+                and points.get("provisional") is True
+            ):
+                problems.append(f"{where}.{name}: expected a provisional count within valid months")
+            continue
         if not isinstance(points, list):
             problems.append(f"{where}.{name}: must be a list")
             continue
@@ -319,7 +330,8 @@ def check_landmarks(landmarks, region_id, source_ids: set) -> list[str]:
                 if sid not in source_ids:
                     problems.append(f"{at}.sourceIds: '{sid}' is not an id in manifest sources[]")
 
-        problems += check_series(landmark["series"], f"{at}.series")
+        if "series" in landmark:
+            problems += check_series(landmark["series"], f"{at}.series")
     return problems
 
 

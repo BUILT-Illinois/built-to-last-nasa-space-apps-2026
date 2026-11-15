@@ -4,7 +4,7 @@ const { readFileSync, readdirSync, existsSync } = require('node:fs');
 const { join } = require('node:path');
 const { test } = require('node:test');
 const { HttpRequest } = require('@azure/functions');
-const { health, regions, manifest, landmarks } = require('../dist/api/src/index.js');
+const { health, regions, manifest, landmarks, mexicoCityLandmarks } = require('../dist/api/src/index.js');
 
 const dataRoot = join(__dirname, '../../app/public/data');
 const readJson = (path) => JSON.parse(readFileSync(path, 'utf8'));
@@ -45,6 +45,20 @@ test('manifest and landmarks return the same JSON as the static site', () => {
       });
     }
   }
+});
+
+test('/api/landmarks serves the Mexico City monthly landmark series', () => {
+  const result = mexicoCityLandmarks();
+  assert.deepEqual(result, landmarks(request('mexico_city', 'landmarks')));
+  const entries = result.jsonBody.landmarks;
+  assert.ok(entries.length >= 10);
+  const lake = entries.find(({ id }) => id === 'new_lake_chalco');
+  assert.equal(lake.series.hh_db.length, 12);
+  assert.equal(lake.series.hv_db.length, 12);
+  assert.deepEqual(lake.series.hh_db.find(({ date }) => date === '2026-04-16'),
+    { date: '2026-04-16', value: null });
+  assert.equal(lake.series.water_months.provisional, true);
+  assert.equal(lake.series.water_months.valid_months, 11);
 });
 
 test('unknown IDs return the contract 404 for both region file routes', () => {

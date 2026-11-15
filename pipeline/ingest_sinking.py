@@ -24,6 +24,7 @@ CONFIG = ROOT / "pipeline" / "config" / "regions.json"
 LIVE_DATA = ROOT / "app" / "public" / "data"
 WEB_CRS = "EPSG:3857"
 PIXEL_METERS = 80
+MAX_ABS_LOS_RATE_CM_PER_YEAR = 50
 SCALE = {"name": "los-blue-white-red", "min": -30, "max": 30}
 LOS_LABEL = "Radar line-of-sight rate"
 SOURCE = {
@@ -46,16 +47,16 @@ def render(path, bbox, units, sign):
             raise ValueError("Input band must contain real numeric rates")
         band = source.read(1, masked=True, out_dtype="float64").filled(np.nan)
         band = band * source.scales[0] + source.offsets[0]
-        band[~np.isfinite(band)] = np.nan
+        if units == "mm/yr":
+            band /= 10
+        if sign == "negative-away":
+            band *= -1
+        band[~np.isfinite(band) | (np.abs(band) > MAX_ABS_LOS_RATE_CM_PER_YEAR)] = np.nan
         rates = np.full((height, width), np.nan)
         reproject(
             band, rates, src_transform=source.transform, src_crs=source.crs, src_nodata=np.nan,
             dst_transform=target, dst_crs=WEB_CRS, dst_nodata=np.nan, resampling=Resampling.nearest,
         )
-    if units == "mm/yr":
-        rates /= 10
-    if sign == "negative-away":
-        rates *= -1
     valid = np.isfinite(rates)
     if not valid.any():
         raise ValueError("No valid rate pixels inside the Mexico City bounds")
@@ -130,7 +131,9 @@ def ingest(args):
         "description": ("Generated test pattern. " if args.synthetic else "") +
                        "Annual rate of motion along the radar line of sight, relative to the reference area.",
         "caveats": ["Positive means away from the satellite.", "No conversion to vertical motion.",
-                    "Synthetic test data." if args.synthetic else "Provisional NISAR data."],
+                    "Synthetic test data." if args.synthetic else "Provisional NISAR data.",
+                    f"Pixels with absolute rates above {MAX_ABS_LOS_RATE_CM_PER_YEAR} cm/yr "
+                    "are masked as likely phase-unwrapping artifacts."],
         "frames": [{
             "date": args.date, "since": args.since, "image": relative.as_posix(),
             "granules": args.granules,

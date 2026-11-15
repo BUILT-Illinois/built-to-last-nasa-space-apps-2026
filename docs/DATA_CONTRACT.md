@@ -137,9 +137,13 @@ Text is hand-written in `content/landmarks/<region_id>.json` (Monica writes, Edu
 
 Rules:
 
-- A series a landmark does not have is left out. The app hides the matching chart.
+- `series` is optional. A point without data can have an empty object. A named series a landmark does not have is left out. The app hides the matching chart.
 - `value` may be `null` for a date with no valid data. The chart shows a gap, not a zero.
 - `los_displacement_cm` is cumulative movement along the radar's line of sight since the first date, relative to our reference area. Negative means away from the satellite. It is not vertical sinking unless we say how we converted it.
+- Mexico City `hh_db` and `hv_db` use the median of finite dB pixels in a centered 5×5 window on the native 80 m frequency-B grid of the monthly GCOV frames. Windows that do not fit in the crop are missing. The 12 monthly slots run from November 2025 to October 2026. April 16, 2026 is a null gap per D-17; the alternate December 5 acquisition is also excluded.
+- `series.water_months` is optional and has the shape `{ "count": 0, "valid_months": 11, "provisional": true }`. A month counts when its HH median is ≤ −12 dB and its HV median is ≤ −20 dB. Only months with both medians contribute to `valid_months`. This is a provisional radar proxy, not confirmed water or a flood history.
+- To refresh the checked-in Mexico City series without rendering map images, run `python pipeline/landmark_series.py --crop-dir <monthly-NPZ-directory>`. The script validates the source granule IDs against the existing manifest.
+
 - Coordinates in the example above are placeholders. Take real ones from a named source.
 
 ## API (same data, typed)
@@ -150,6 +154,7 @@ Rules:
 | `GET /api/regions` | list of `{ id, name, bbox }` |
 | `GET /api/regions/{id}/manifest` | the manifest |
 | `GET /api/regions/{id}/landmarks` | the landmarks file |
+| `GET /api/landmarks` | the Mexico City landmarks file |
 
 Errors use `{ "success": false, "message": "..." }` with a matching HTTP status. The TypeScript types live in `app/src/types/manifest.ts` and are shared with `api/`.
 
