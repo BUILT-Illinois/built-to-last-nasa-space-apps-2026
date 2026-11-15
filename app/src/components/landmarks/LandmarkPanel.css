@@ -1,0 +1,52 @@
+/* T-14 landmark panel styles. Owner: Zainab. Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md. */
+.landmark-panel {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  width: 320px;
+  max-width: calc(100% - 24px);
+  max-height: calc(100% - 24px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.landmark-panel h2 { margin: 0 0 8px; font-size: 1.1rem; }
+.landmark-panel h3 { margin: 12px 0 4px; font-size: 1rem; }
+.landmark-panel h4 { margin: 10px 0 2px; font-size: 0.9rem; }
+.landmark-panel p { margin: 4px 0; font-size: 0.9rem; }
+
+.landmark-list { list-style: none; margin: 0; padding: 0; }
+.landmark-list button {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 4px;
+  text-align: left;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+.landmark-list button[aria-pressed='true'] { border-color: #1f6feb; background: #e8f0fe; }
+
+/* Keep "radar shows" and "we infer" visibly separate. */
+.landmark-radar { border-left: 4px solid #1f6feb; padding-left: 8px; }
+.landmark-infer { border-left: 4px solid #d29922; padding-left: 8px; }
+
+.landmark-empty { color: #555; }
+
+/* Phone width: panel sits at the bottom, half the screen at most. */
+@media (max-width: 600px) {
+  .landmark-panel {
+    top: auto;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-height: 50%;
+  }
+}
