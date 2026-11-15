@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "0.1",
+  "generatedAt": "2026-11-15T00:04:49Z",
+  "generatedBy": "pipeline/build_manifest.py (AI-assisted code, see docs/AI_USAGE.md)",
+  "region": {
+    "id": "mexico_city",
+    "name": "Mexico City (Valley of Mexico)",
+    "bbox": [
+      -99.4,
+      19.1,
+      -98.85,
+      19.65
+    ],
+    "center": [
+      -99.125,
+      19.375
+    ],
+    "zoom": 10
+  },
+  "dataMaturity": "PROVISIONAL",
+  "layers": [
+    {
+      "id": "gcov_hh",
+      "title": "Radar brightness, HH",
+      "kind": "backscatter",
+      "product": "GCOV",
+      "polarization": "HH",
+      "units": "dB",
+      "bounds": [
+        -99.4,
+        19.1,
+        -98.85,
+        19.65
+      ],
+      "colormap": {
+        "name": "gray",
+        "min": -11.210650386810302,
+        "max": 4.314068441390995
+      },
+      "description": "Radar brightness when the signal is transmitted and received horizontally.",
+      "caveats": [
+        "Provisional NISAR data. Interpret with caution."
+      ],
+      "frames": [
+        {
+          "date": "2025-10-30",
+          "image": "layers/gcov_hh/2025-10-30.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_004_019_A_011_4005_DHDH_A_20251030T120539_20251030T120613_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-10-13",
+          "image": "layers/gcov_hh/2026-10-13.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_033_019_A_011_4005_DHDH_A_20261013T120538_20261013T120612_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "id": "gcov_hv",
+      "title": "Radar brightness, HV",
+      "kind": "backscatter",
+      "product": "GCOV",
+      "polarization": "HV",
+      "units": "dB",
+      "bounds": [
+        -99.4,
+        19.1,
+        -98.85,
+        19.65
+      ],
+      "colormap": {
+        "name": "gray",
+        "min": -17.91940872192383,
+        "max": -5.839170942306517
+      },
+      "description": "Radar brightness when the signal is transmitted horizontally and received vertically.",
+      "caveats": [
+        "Provisional NISAR data. Interpret with caution."
+      ],
+      "frames": [
+        {
+          "date": "2025-10-30",
+          "image": "layers/gcov_hv/2025-10-30.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_004_019_A_011_4005_DHDH_A_20251030T120539_20251030T120613_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-10-13",
+          "image": "layers/gcov_hv/2026-10-13.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_033_019_A_011_4005_DHDH_A_20261013T120538_20261013T120612_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "id": "gcov_composite",
+      "title": "HH/HV color composite",
+      "kind": "composite",
+      "product": "GCOV",
+      "polarization": "HH+HV",
+      "units": "normalized",
+      "bounds": [
+        -99.4,
+        19.1,
+        -98.85,
+        19.65
+      ],
+      "colormap": {
+        "name": "rgb",
+        "min": 0,
+        "max": 1
+      },
+      "description": "Red shows HH, green shows HV, and blue shows HH minus HV in dB. Each channel is scaled independently using the same limits for both dates.",
+      "caveats": [
+        "Provisional NISAR data. Interpret with caution."
+      ],
+      "frames": [
+        {
+          "date": "2025-10-30",
+          "image": "layers/gcov_composite/2025-10-30.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_004_019_A_011_4005_DHDH_A_20251030T120539_20251030T120613_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        },
+        {
+          "date": "2026-10-13",
+          "image": "layers/gcov_composite/2026-10-13.webp",
+          "granules": [
+            "NISAR_L2_PR_GCOV_033_019_A_011_4005_DHDH_A_20261013T120538_20261013T120612_P05023_N_F_J_001"
+          ],
+          "track": 19,
+          "frame": 11,
+          "direction": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "vectors": [],
+  "sources": [
+    {
+      "id": "nisar-gcov",
+      "title": "NISAR L2 GCOV PROVISIONAL V1 (NASA/ISRO, ASF DAAC)",
+      "url": "https://nisar-docs.asf.alaska.edu/earthdata-search/",
+      "license": "NASA Earthdata open data (see Earthdata Data Use Guidance)"
+    }
+  ]
+}

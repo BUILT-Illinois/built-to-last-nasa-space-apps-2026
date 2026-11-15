@@ -11,4 +11,5 @@ pillow>=10.0
 earthaccess
 pytest
 
-# Added when the build pipeline is written (T-10): rasterio
+# Web Mercator reprojection for the GCOV build (T-10)
+rasterio
