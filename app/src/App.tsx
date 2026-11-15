@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import LayerSwitcher from './components/layers/LayerSwitcher';
 import Legend from './components/layers/Legend';
+import ViewOptions from './components/layers/ViewOptions';
 import MapView from './map/MapView';
 import { DEFAULT_REGION_ID, useAppStore } from './state/store';
 
@@ -25,7 +26,12 @@ export default function App() {
     <div className="app">
       <MapView />
       <aside className="layer-controls">
+        <header className="panel__header">
+          <h1 className="panel__title">NISAR over Mexico City</h1>
+          <p className="panel__byline">Team B[U]ILT to Last, NASA Space Apps 2026</p>
+        </header>
         <LayerSwitcher />
+        <ViewOptions />
         <Legend />
       </aside>
       {/* Slots for later tasks: story (Monica), layers and time (Diego), landmarks, chart, sources (Zainab). */}

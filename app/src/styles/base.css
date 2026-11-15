@@ -1,5 +1,22 @@
-/* Minimal base styles so the map fills the window. Owner: Monica (app/src/styles/).
-   Placeholder from the T-02 scaffold, drafted with AI assistance (Claude Code). */
+/* Base styles and the look of the page chrome. Owner: Monica (app/src/styles/).
+   Control panel look by Diego (UI proof of concept, chosen by the team Sun Nov 15, 7:45 AM).
+   Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
+
+   The idea: the radar pictures are gray and the ground-motion map is red, white and blue, so the
+   page around them stays out of that color space. Panels are the dark blue-green of deep lake
+   water (the city sits on an old lakebed), text is bone white, and the one accent is marigold. */
+:root {
+  --ink: #0e2a30; /* panel background */
+  --water: #16404a; /* raised or selected surface */
+  --bone: #f3efe6; /* text */
+  --mist: #9db5b8; /* secondary text */
+  --marigold: #f4b63f; /* the one accent: selection, focus, the provisional badge */
+  --rule: rgba(243, 239, 230, 0.16);
+  --panel-width: 20rem;
+  /* The device's own font: no request to an outside font service (the venue may filter them). */
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
 html,
 body,
 #root {
@@ -8,7 +25,8 @@ body,
 }
 
 body {
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font);
+  background: var(--ink);
 }
 
 .app {
@@ -19,4 +37,107 @@ body {
 .map {
   position: absolute;
   inset: 0;
+}
+
+/* ---------- The control panel: the <aside className="layer-controls"> in App.tsx ---------- */
+
+.layer-controls {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 4;
+  box-sizing: border-box;
+  width: var(--panel-width);
+  overflow-y: auto;
+  padding: 1.25rem 1.1rem 1.5rem;
+  background: var(--ink);
+  color: var(--bone);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  box-shadow: 1px 0 0 rgba(0, 0, 0, 0.4);
+  /* On a short window the panel scrolls; keep its scrollbar thin and dark like the panel. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--water) var(--ink);
+}
+
+.panel__header {
+  margin-bottom: 1.25rem;
+}
+
+.panel__title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.panel__byline {
+  margin: 0.5rem 0 0;
+  color: var(--mist);
+  font-size: 0.8125rem;
+}
+
+/* Keep the map (and everything Eduardo's map screen draws on it) clear of the panel. */
+.app .map-screen {
+  left: var(--panel-width);
+}
+
+/* ---------- Map furniture, restyled to match (overrides MapLibre and map.css) ---------- */
+
+.app .swipe-label {
+  border-radius: 2px;
+  background: var(--ink);
+  color: var(--bone);
+  box-shadow: none;
+}
+
+.app .maplibregl-ctrl-group {
+  border-radius: 2px;
+  background: var(--ink);
+  box-shadow: none;
+}
+
+.app .maplibregl-ctrl-group button + button {
+  border-top-color: var(--rule);
+}
+
+.app .maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+  filter: invert(1) brightness(0.92) sepia(0.15);
+}
+
+.app .maplibregl-ctrl-scale {
+  border-color: var(--bone);
+  background: rgba(14, 42, 48, 0.8);
+  color: var(--bone);
+}
+
+/* ---------- Phones: the panel becomes a sheet along the bottom ---------- */
+
+@media (max-width: 640px) {
+  .layer-controls {
+    top: auto;
+    width: 100%;
+    max-height: 46%;
+    padding: 0.9rem 1rem 1.1rem;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+  }
+
+  .panel__header {
+    margin-bottom: 0.8rem;
+  }
+
+  .panel__title {
+    font-size: 1.25rem;
+  }
+
+  .panel__byline {
+    display: none;
+  }
+
+  .app .map-screen {
+    left: 0;
+    bottom: 46%;
+  }
 }
