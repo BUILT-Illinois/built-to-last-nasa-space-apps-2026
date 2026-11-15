@@ -11,7 +11,7 @@ export type LngLat = [number, number];
 /** YYYY-MM-DD, UTC. */
 export type IsoDate = string;
 
-export type LayerKind = 'backscatter' | 'composite' | 'change' | 'displacement' | 'soil_moisture';
+export type LayerKind = 'backscatter' | 'composite' | 'change' | 'displacement' | 'soil_moisture' | 'priority';
 
 export type Polarization = 'HH' | 'HV' | 'HH+HV' | null;
 
@@ -118,4 +118,54 @@ export interface LandmarksFile {
   schemaVersion: string;
   regionId: string;
   landmarks: Landmark[];
+}
+
+export interface HotspotArea {
+  rank: number;
+  cellId: string;
+  lon: number;
+  lat: number;
+  losRate: number;
+  waterMonths: number;
+  score: number;
+  validFraction: number;
+  sinkingRank: number;
+}
+
+export interface HotspotPoint {
+  name: string;
+  lon: number;
+  lat: number;
+  gcovCoverage: boolean;
+  losRate: number | null;
+  waterMonths: number | null;
+  score: number | null;
+  cellRank: number | null;
+  sinkingRank: number | null;
+}
+
+export interface HotspotsFile {
+  schemaVersion: '0.1';
+  regionId: string;
+  units: { losRate: 'mm/year' | 'cm/year' | 'm/year'; waterMonths: 'months'; score: 'index (0–1)' };
+  method: string;
+  los: {
+    units: HotspotsFile['units']['losRate'];
+    source: string;
+    referenceArea: string;
+    positiveDirection: 'toward' | 'away';
+    granules: string[];
+    track: number;
+    frame: number;
+    direction: Direction;
+  };
+  awayRateP95: number;
+  dates: IsoDate[];
+  waterThresholdDb: { HH: number; HV: number };
+  cellSizeMeters: number;
+  rankedCellCount: number;
+  areas: HotspotArea[];
+  landmarks: (HotspotPoint & { id: string })[];
+  checks: (HotspotPoint & { id: string; source?: string; location?: string })[];
+  lakeCheck: HotspotPoint & { id: string };
 }
