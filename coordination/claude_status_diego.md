@@ -1,8 +1,8 @@
-# Status: Diego        Updated: Sat 6:35 PM CT        Branch: main (status only)
+# Status: Diego        Updated: Sat 7:05 PM CT        Branch: main (status only)
 Plan version read: Sat 6:25 PM | Plan v0.4: G1 passed, GS default (surface change), Oct 30, 2025 dropped (D-13), T-11 cancelled (D-15).
 
 ## Now / Next / Done
-- Now:  T-30 GUNW window fetch, to start before the 7:30 PM talk on this laptop (NVIDIA laptop 1). All 28 track 19 pairs; only the 27 from Nov 11, 2025 on are used (D-13). Waiting on: (1) my Earthdata login on this laptop (`earthaccess` installed, `.netrc` not yet created); (2) Elias: asked by DM at about 6:30 PM to add `coherenceMagnitude`, `connectedComponents` and `ionospherePhaseScreen` to GUNW in `pipeline/fetch_crops.py` (PLAN section 7, GUNW step 1) and to skip files that already exist. If that is not in by 7:15 PM I run a local, uncommitted copy that fetches the four layers into `data/interim/` in the same format, and leave his file alone. Size: about 10 MB per layer per pair, so about 1 GB in total (about 0.3 GB with phase only).
+- Now:  T-30 running unattended on my second laptop (`C:\Users\dsola\...`, Python 3.12 venv, my own Earthdata login), started 7:03 PM (that laptop's clock), expected done about 7:30 PM. It uses Elias's `pipeline/fetch_crops.py` from main (PR #9, bf3b65d: 4 GUNW layers, skips existing files) through a local, uncommitted wrapper that adds 3 tries per pair and a log (`data/interim/t30_log.txt`). At 7:06 PM: 4 of 28 pairs done (2025-10-30 to 2025-12-05), 45 to 56 s each, all 761 x 723, phase 100% finite, median coherence 0.67 to 0.73, about 5.5 MB each on disk; no failures. Pair 2025-10-30 is fetched but not used (D-13). Final count and failures after the talk.
 - Next: T-12 layer switcher and legend once Zainab's sample data (PR #6) is on main; then T-13 time slider (no Oct 30, 2025 frame).
 - Done: T-25 findings (section at the bottom); RB-D01 accepted as D-13. T-11 cancelled (D-15).
 - Done: Python 3.13 venv with `pipeline/requirements.txt` plus `earthaccess` and `scipy` (no 3.12 on this laptop; all packages installed cleanly).
@@ -51,6 +51,7 @@ All in `C:\Users\diego\Downloads\nasa data\` (outside the repo). Same files as E
 | NISAR_L2_PR_GUNW_032_113_D_079_033_4000_SH_20261008T011329_20261008T011403_20261020T011329_20261020T011403_P05023_N_F_J_001.h5 | GUNW | NISAR_L2_GUNW_PROVISIONAL_V1 | 2026-10-08 to 2026-10-20 | 113 / 79 desc | 2.35 | d020136a804f5888dc8af99152584820 | `data/quicklooks/` |
 | 58 ASF browse PNGs, `*_NATIVE_B_HHHH.png` and `*_NATIVE_B_HVHV.png`, all 29 dates | GCOV browse | NISAR_L2_GCOV_PROVISIONAL_V1 (P05023) | 2025-10-30 to 2026-10-13 | 19 / 11 asc | 0.05 | n/a (no login, public) | `data/browse/`, `data/quicklooks/browse29_*.png` |
 | 12 ASF browse PNGs (native HH/HV) + 2 BETA color browse PNGs | GCOV browse | PROVISIONAL P05023 and BETA X05009 | 2025-10-25 to 2026-01-05 (6 dates) | 113 / 79 desc | 0.01 | n/a (no login, public) | `data/browse_t113/`, `data/quicklooks/t113_northeast_HV_oct25_to_jan05.png` |
+| `mexico_city_gunw_<reference date>.npz` x 28 (T-30, in progress), on my second laptop in `data/interim/` | GUNW window crops (unwrappedPhase, coherenceMagnitude, connectedComponents, ionospherePhaseScreen) | NISAR_L2_GUNW_PROVISIONAL_V1 (P05023) | 2025-10-30 to 2026-10-01 (reference dates) | 19 / 11 asc | about 0.15 on disk (about 1 GB transferred) | n/a | for T-31 (Eduardo); move by USB or local share when he needs them |
 
 ## T-25 findings (Sat 5:45 PM CT, corrected 6:10 PM)
 
