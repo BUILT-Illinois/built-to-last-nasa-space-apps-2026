@@ -1,3 +1,7 @@
+## For Diego
+
+UI audit is in coordination/ui_audit_for_diego.md (merged in #47, c477238). Top two: on a phone the layer panel covers the map, and tour step 5 hides the swipe grip and pushes Next below the fold. Check against #41 before fixing. Touch swipe on a real phone is still unverified.
+
 Elias status (12:57 AM Sun)
 DONE: API live on Azure and Cloudflare. Merged #13, #15, #17, #18, #19. The published Mexico City map has 11 GCOV acquisition months and 11 frames per radar layer after D-17.
 SIGNED OFF: RBF-03 sign mismatch (Elias, 12:57 AM). LOS positive = away from the satellite, matching Eduardo's #26 files. DATA_CONTRACT.md updated on the PR #24 branch (f1b668d). Still pending: Eduardo's DECISIONS.md line and T-35 confirmation.
