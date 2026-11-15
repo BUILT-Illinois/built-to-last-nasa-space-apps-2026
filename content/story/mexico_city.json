@@ -91,7 +91,7 @@
         "The fastest movement is in the east, around Nezahualcóyotl, the airport, and Tláhuac. In the west, near the Ángel de la Independencia, the ground moves much less. (Provisional data, along the radar's line of sight, relative to a reference area in the western hills.)"
       ],
       "set": {
-        "layer": "gcov_composite",
+        "layer": "sinking",
         "date": "2026-10-13"
       },
       "camera": {
@@ -104,14 +104,13 @@
       "sourceIds": [
         "nisar-gunw",
         "iahs-2020"
-      ],
-      "todo": "Switch \"layer\" (and the sourceIds) to the ground-motion layer once T-33 adds it to the manifest; there is no displacement layer yet, so this shows the HH/HV composite."
+      ]
     },
     {
       "id": "lake",
       "title": "The lake that came back",
       "body": [
-        "In Tláhuac, groundwater pumping made the land sink, and a new lake formed in the hollow as a consequence. Water first pooled in 1988, and by 1991 the pools had joined into a small lake. Nearby Tláhuac moved about 16 cm along the radar's line of sight in under a year. My family is from Santa Cecilia, in Tláhuac.",
+        "In Tláhuac, groundwater pumping made the land sink, and a new lake formed in the hollow as a consequence. Water first pooled in 1988, and by 1991 the pools had joined into a small lake. Nearby Tláhuac moved about 16.4 cm along the radar's line of sight in under a year. My family is from Santa Cecilia, in Tláhuac.",
         "Drag the slider to compare the dry season (February 15, 2026, left) with the rainy season (September 19, 2026, right)."
       ],
       "set": {

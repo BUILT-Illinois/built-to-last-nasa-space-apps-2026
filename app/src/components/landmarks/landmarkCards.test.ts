@@ -2,7 +2,7 @@
 // Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
 import { expect, it } from 'vitest';
 import type { Landmark } from '../../types/manifest';
-import { withCardText } from './landmarkCards';
+import { cardsFor, withCardText } from './landmarkCards';
 
 const published: Landmark = {
   id: 'a', name: 'Published', lon: 1, lat: 2, summary: 'p', radarShows: 'p', weInfer: 'p',
@@ -26,4 +26,11 @@ it('a field the card leaves out keeps the published value', () => {
 
 it('no card file leaves the landmarks unchanged', () => {
   expect(withCardText([published], undefined)).toEqual([published]);
+});
+
+it('the valley map uses the Mexico City card text', () => {
+  const city = cardsFor('mexico_city');
+  expect(city).toBeDefined();
+  expect(cardsFor('mexico_city_valley')).toBe(city);
+  expect(cardsFor('no_such_region')).toBeUndefined();
 });
