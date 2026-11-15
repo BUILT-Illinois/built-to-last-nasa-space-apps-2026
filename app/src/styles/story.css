@@ -158,12 +158,85 @@
   outline-offset: 2px;
 }
 
-.story-restart {
+/* T-23: badge, "How to read this map" and "Take the tour", bottom right over the map
+   (the scale bar is bottom left, the credits sit under this bar). */
+.reading-guide {
   position: absolute;
-  z-index: 5;
-  top: 12px;
-  left: 12px;
+  z-index: 4;
+  right: 10px;
+  bottom: 34px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100% - 20px);
+}
+
+.reading-guide__btn {
   box-shadow: var(--story-shadow);
+}
+
+.data-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1px solid #8a5a00;
+  border-radius: 999px;
+  background: #fff4d6;
+  color: #5c3d00;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.data-badge--button {
+  min-height: 32px;
+  cursor: pointer;
+  box-shadow: var(--story-shadow);
+}
+
+.data-badge--button:focus-visible {
+  outline: 3px solid var(--story-accent);
+  outline-offset: 2px;
+}
+
+.story-card-head .data-badge {
+  margin-right: auto;
+}
+
+.explainer {
+  width: min(560px, 100%);
+}
+
+.explainer h1 {
+  font-size: 1.4rem;
+}
+
+.explainer h1:focus {
+  outline: none;
+}
+
+.explainer-card {
+  padding-top: 12px;
+  border-top: 1px solid var(--story-border);
+  margin-top: 12px;
+}
+
+.explainer-card h2 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 /* Phones: the card becomes a bottom sheet so the map stays visible above it. */
@@ -184,5 +257,22 @@
 
   .story-actions .story-btn {
     flex: 1;
+  }
+
+  .reading-guide__btn {
+    min-height: 40px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  /* MapLibre shows the credits expanded on phones until the map is moved; stay above them. */
+  .reading-guide {
+    bottom: 92px;
+  }
+
+  /* While the tour card is open, the tour sets the layer itself. On a phone the layer panel would
+     cover the rest of the map, so it steps aside until the tour ends. */
+  .app:has(.story-card) .layer-controls {
+    display: none;
   }
 }

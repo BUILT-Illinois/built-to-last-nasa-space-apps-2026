@@ -3,6 +3,7 @@
 // Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
 import { useEffect, useRef, useState } from 'react';
 import { useAppStore } from '../state/store';
+import ProvisionalBadge from './ProvisionalBadge';
 import { findSources, getStory, resolveStep, type StorySource } from './story';
 import '../styles/story.css';
 
@@ -103,13 +104,8 @@ export default function StoryTour() {
     );
   }
 
-  if (!step || storyStep === null) {
-    return (
-      <button type="button" className="story-btn story-restart" onClick={() => goTo(0)}>
-        Take the tour
-      </button>
-    );
-  }
+  // Outside the tour, ReadingGuide shows the "Take the tour" button.
+  if (!step || storyStep === null) return null;
 
   const isLast = storyStep === story.steps.length - 1;
   return (
@@ -118,6 +114,8 @@ export default function StoryTour() {
         <p className="story-count" aria-live="polite">
           Step {storyStep + 1} of {story.steps.length}
         </p>
+        {/* On phones this card covers the map's badge, so it carries its own. */}
+        <ProvisionalBadge />
         <button type="button" className="story-exit" onClick={exploreFreely}>
           Exit tour
         </button>

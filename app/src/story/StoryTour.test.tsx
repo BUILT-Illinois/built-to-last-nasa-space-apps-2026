@@ -85,7 +85,6 @@ it('the last step ends in free exploration', () => {
   click(story.intro.exploreLabel);
   expect(useAppStore.getState().storyStep).toBeNull();
   expect(container.querySelector('.story-card')).toBeNull();
-  expect(button('Take the tour')).toBeTruthy();
 });
 
 it('"explore freely" on the intro skips the tour and leaves the view alone', () => {
@@ -95,13 +94,18 @@ it('"explore freely" on the intro skips the tour and leaves the view alone', () 
   expect(container.querySelector('.story-intro')).toBeNull();
 });
 
-it('Escape exits the tour, and "Take the tour" starts again at step 1', () => {
+it('Escape exits the tour, and restarting from the store opens step 1', () => {
   click(story.intro.startLabel);
   click('Next');
   act(() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' })));
   expect(useAppStore.getState().storyStep).toBeNull();
-  click('Take the tour');
-  expect(useAppStore.getState().storyStep).toBe(0);
+  act(() => useAppStore.getState().setStoryStep(0)); // what ReadingGuide's "Take the tour" does
+  expect(heading()).toBe(story.steps[0]!.title);
+});
+
+it('the tour card carries the data badge (on phones it covers the map badge)', () => {
+  click(story.intro.startLabel);
+  expect(container.querySelector('.story-card .data-badge')?.textContent).toBe('Provisional data');
 });
 
 it('renders nothing for a region without a tour', () => {
