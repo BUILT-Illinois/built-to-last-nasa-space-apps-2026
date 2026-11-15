@@ -41,6 +41,15 @@ export function landmarks(request: HttpRequest): HttpResponseInit {
   return regionFile(request, 'landmarks');
 }
 
+export function mexicoCityLandmarks(): HttpResponseInit {
+  const dataset = datasets.get('mexico_city');
+  return dataset ? ok(dataset.landmarks) : notFound();
+}
+
+app.http('mexicoCityLandmarks', {
+  route: 'landmarks', methods: ['GET'], authLevel: 'anonymous', handler: mexicoCityLandmarks,
+});
+
 app.http('health', { route: 'health', methods: ['GET'], authLevel: 'anonymous', handler: health });
 app.http('regions', { route: 'regions', methods: ['GET'], authLevel: 'anonymous', handler: regions });
 app.http('manifest', {

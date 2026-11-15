@@ -15,6 +15,7 @@ from rasterio.transform import from_bounds
 from rasterio.warp import Resampling, reproject, transform_bounds
 
 from fetch_crops import OUTPUT_DIR, fetch_crop, find_granule, monthly_dates, output_path
+from landmark_series import EXCLUDED, enrich, include_points
 from quicklook import CONFIG_PATH, stretch, to_db
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -116,6 +117,7 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
     # Resolve every date before fetching anything.
     catalog = {day: find_granule(region_id, "GCOV", day) for day in dates}
     scenes = {}
+    crop_inputs = {}
     for day, row in catalog.items():
         path = crop_dir / output_path(region_id, "GCOV", day).name
         if not path.is_file():
@@ -131,6 +133,7 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
                     f"GCOV window fetch failed for {day}. Check Earthdata login and connectivity."
                 ) from None
         scenes[day] = read_scene(path, row["scene_name"], shape, target)
+        crop_inputs[day] = path, row["scene_name"]
 
     # Pool each channel across all dates so the swipe and time slider use a consistent scale.
     limits = [percentile_limits(bands) for bands in zip(*scenes.values())]
@@ -184,6 +187,12 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
             landmarks["landmarks"] = [{"series": {}, **entry} for entry in entries]
         elif (output / "landmarks.json").is_file():
             landmarks = json.loads((output / "landmarks.json").read_text(encoding="utf-8"))
+        if region_id == "mexico_city":
+            months = monthly_dates(region_id)
+            if set(months) - EXCLUDED <= crop_inputs.keys():
+                landmarks["landmarks"] = enrich(
+                    include_points(landmarks["landmarks"]), months, crop_inputs
+                )
         write_json(stage / "landmarks.json", landmarks)
         write_json(stage / "manifest.json", manifest)
 
