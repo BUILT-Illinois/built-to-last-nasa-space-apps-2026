@@ -48,3 +48,6 @@ Thumbs.db
 .dodsrc
 .urs_cookies
 .playwright-mcp/
+
+# TypeScript incremental build cache
+*.tsbuildinfo
