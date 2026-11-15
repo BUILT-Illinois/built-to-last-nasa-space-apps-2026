@@ -1,0 +1,65 @@
+/* Scoped to map landmarks. Drafted with AI assistance (Codex), see docs/AI_USAGE.md. */
+.map-landmark-pin {
+  z-index: 1;
+  width: 28px;
+  height: 28px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: #763d1c;
+  box-shadow: 0 1px 4px #0008;
+  cursor: pointer;
+}
+
+.map-landmark-pin[aria-expanded='true'] {
+  background: #51210d;
+  outline: 2px solid white;
+}
+
+.map-landmark-pin:focus-visible,
+.map-landmark-card button:focus-visible {
+  outline: 3px solid #1a73e8;
+  outline-offset: 2px;
+}
+
+.map-landmark-card {
+  position: absolute;
+  top: 54px;
+  right: 52px;
+  z-index: 4;
+  box-sizing: border-box;
+  width: min(340px, calc(100% - 64px));
+  max-height: calc(100% - 110px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #fff;
+  color: #241b17;
+  box-shadow: 0 2px 8px #0005;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.map-landmark-card header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.map-landmark-card h2 { margin: 0; font-size: 1.05rem; }
+.map-landmark-card h3 { margin: 12px 0 2px; font-size: 0.9rem; }
+.map-landmark-card p, .map-landmark-card ul { margin: 4px 0; }
+.map-landmark-card ul { padding-left: 20px; }
+
+.map-landmark-card button {
+  flex: none;
+  min-width: 32px;
+  min-height: 32px;
+  border: 1px solid #926f60;
+  border-radius: 4px;
+  background: #fff;
+  color: inherit;
+  font-size: 1.25rem;
+  cursor: pointer;
+}

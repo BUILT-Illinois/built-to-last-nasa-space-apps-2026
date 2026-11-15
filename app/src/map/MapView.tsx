@@ -17,6 +17,8 @@ import { regionBaseUrl } from '../lib/data';
 import type { Frame, Layer, LngLat } from '../types/manifest';
 import { BASEMAP_STYLE, NISAR_ATTRIBUTION, addOpticalLayer, setBasemap, setNisarImage } from './layers';
 import { syncMaps } from './syncMaps';
+import { cardsFor, withCardText } from '../components/landmarks/landmarkCards';
+import LandmarkCard from './LandmarkCard';
 import SwipeHandle from './SwipeHandle';
 import './map.css';
 
@@ -52,11 +54,16 @@ export default function MapView() {
   const baseRef = useRef<HTMLDivElement>(null);
   const compareRef = useRef<HTMLDivElement>(null);
   const mapsRef = useRef<Maps | null>(null);
+  const landmarkPins = useRef<{ button: HTMLButtonElement; id: string }[]>([]);
   const [ready, setReady] = useState({ base: false, compare: false });
   const [swipe, setSwipe] = useState(0.5);
 
   const region = useAppStore((s) => s.manifest?.region);
   const regionId = useAppStore((s) => s.regionId);
+  const landmarks = useAppStore((s) => s.landmarks);
+  const selectedLandmarkId = useAppStore((s) => s.selectedLandmarkId);
+  const selectLandmark = useAppStore((s) => s.selectLandmark);
+  const storyStep = useAppStore((s) => s.storyStep);
   const basemap = useAppStore((s) => s.basemap);
   const opacity = useAppStore((s) => s.layerOpacity);
   const cameraRequest = useAppStore((s) => s.cameraRequest);
@@ -135,6 +142,38 @@ export default function MapView() {
     }
   }, [compareLayer, compareFrame, regionId, opacity, ready.compare]);
 
+  useEffect(() => {
+    const map = mapsRef.current?.base;
+    if (!map || !ready.base || storyStep !== null) return;
+    const pins = withCardText(landmarks, cardsFor(regionId)).map((landmark) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'map-landmark-pin';
+      button.setAttribute('aria-label', landmark.name);
+      const marker = new maplibregl.Marker({ element: button })
+        .setLngLat([landmark.lon, landmark.lat])
+        .addTo(map);
+      button.onclick = () => selectLandmark(landmark.id);
+      return { marker, button, id: landmark.id };
+    });
+    landmarkPins.current = pins;
+    return () => {
+      pins.forEach(({ marker }) => marker.remove());
+      landmarkPins.current = [];
+    };
+  }, [landmarks, ready.base, regionId, selectLandmark, storyStep]);
+
+  useEffect(() => {
+    landmarkPins.current.forEach(({ button, id }) => {
+      button.setAttribute('aria-expanded', String(id === selectedLandmarkId));
+    });
+  }, [landmarks, ready.base, regionId, selectedLandmarkId, storyStep]);
+
+  function closeLandmark() {
+    selectLandmark(null);
+    landmarkPins.current.find(({ id }) => id === selectedLandmarkId)?.button.focus();
+  }
+
   const leftLabel = sideLabel(activeLayer, activeFrame);
   const rightLabel = sideLabel(compareLayer, compareFrame);
 
@@ -151,6 +190,7 @@ export default function MapView() {
           visibility: comparing ? 'visible' : 'hidden',
         }}
       />
+      <LandmarkCard onClose={closeLandmark} />
       {comparing && (
         <>
           <SwipeHandle
