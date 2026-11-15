@@ -1,10 +1,12 @@
-# Status: Eduardo        Updated: Sat 11:50 PM CT        Branches: eduardo/t09-map-screen (PR #25), eduardo/sinking-poc (PR #26), eduardo/memo-sources (PR #27)
-Plan version read: Sat 11:30 PM, plan v0.5 (Mexico City sinking story, flood-priority map in Tier 1, G2 redefined)
+# Status: Eduardo        Updated: Sun 1:45 AM CT        Branch: main (status only); no feature PRs of mine open
+Plan version read: Sun 12:59 AM, plan v0.5 plus D-19 (T-35 sign convention)
 
 ## Now / Next / Done
-- Now:  Merging my three PRs for the 1:00 AM gate, in this order: #25 T-09 map screen (lint, 11 tests and build pass), #26 sinking proof of concept (numbers reproduced on the 27 crops), #27 memo sources and T-35 sign check.
-- Next: Send Elias the run instructions in PR #26 (unblocks his #24 sinking layer and #20 flood map). Add the sign decision to DECISIONS.md (see RB-F03). Repo public by Sun 9:00 AM (T-54). Follow-up for the PR #2 should-fix items only if time allows.
-- Done: plan v0.5 pushed (D-16 to D-18); T-31 and T-32 via `poc/mexico_city_sinking/` (27 pairs, Nezahualcoyotl 21.9 cm line of sight over 336 days, about 3.2 million people on ground moving >10 cm/yr); rate GeoTIFF and provenance for Elias (PR #26); T-35 sign check (PR #27: positive phase = away from the satellite, high confidence, not from the spec itself; incidence 36.7 to 40.7 degrees); Venezuela work dropped and moved out of the repo; T-09 PR open; T-02 merged; Azure deploy secret set; plan v0.2 to v0.4.
+- G2 (Sun 1:00 AM): not met yet on the live URL. Present: map with radar layers and swipe (#25 merged). Missing: ground-motion layer (#24, draft, waits on my raster, RB-F04), flood-priority map (#20, draft), landmark cards on the map (T-14, T-19), and the layer controls on the page (#30, after #24). Go/no-go call pending, my decision.
+- Now:  RB-F04, a valid line-of-sight rate GeoTIFF for Elias (float32, EPSG:32614, zipped), so #24 can run.
+- Next: place Diego's `LayerSwitcher` and `Legend` in `app/src/App.tsx` once #30 lands (Diego is sending the placement lines). Answer open questions: Diego (are the two 2026-03-23 pairs masked in T-31; drop 2025-10-30 by date in T-31; "sign INFERRED" text in the PoC is stale after D-19; New Lake Chalco missing from the landmark CSV; `matplotlib` missing from `pipeline/requirements.txt`) and Zainab (is T-16 still hers). Repo public by Sun 9:00 AM (T-54). PR #2 should-fix items only if time allows.
+- Reviews: PR #30 (Diego, T-12) reviewed Sun about 1:20 AM, 10 inline comments; Diego fixed items 1 to 4 and nits 8 to 10 at c843581. Items 5 and 6 go in a follow-up. Not re-reviewed yet.
+- Done: #25 T-09 map screen merged 12:27 AM; #26 sinking proof of concept merged 12:44 AM; #27 memo sources and T-35 sign check merged 12:58 AM; D-19 recorded 12:55 AM (sign convention, line-of-sight to vertical about 1.27x). Plan v0.5 pushed (D-16 to D-18); T-31 and T-32 via `poc/mexico_city_sinking/` (27 pairs, Nezahualcoyotl 21.9 cm line of sight over 336 days, about 3.2 million people on ground moving >10 cm/yr); rate GeoTIFF and provenance for Elias (PR #26); T-35 sign check (PR #27: positive phase = away from the satellite, high confidence, not from the spec itself; incidence 36.7 to 40.7 degrees); Venezuela work dropped and moved out of the repo; T-02 merged; Azure deploy secret set; plan v0.2 to v0.4.
 
 ## Roadblocks (append-only; mark resolved, never delete)
 ### RB-F01 (was RB-E01)  [FYI]  RESOLVED Sat 6:25 PM   Needed by: Sat 4:30 PM
@@ -34,6 +36,15 @@ What I already tried: documented the sign in `provenance.json` (PR #26) and in t
 Impact on the plan (task IDs, timeline, tiers): T-19 cards, T-15 chart, T-33 layer, T-34 flood map. A wrong sign shows sinking as uplift.
 Options (2 or 3, with cost in hours): (a) change the contract to positive = away, one line by Elias plus a DECISIONS.md entry (0.1 h); (b) keep the contract and multiply by -1 when writing landmarks.json and the layer (0.1 h, easy to forget in one place).
 My recommendation: (a). Elias, please confirm; I add the decision line.
+Update Sun 1:45 AM: Elias signed off (a) at 12:57 AM and changed `docs/DATA_CONTRACT.md` to positive = away on the PR #24 branch (f1b668d). D-19 records the sign itself. Closes when #24 merges.
+
+### RB-F04  [BLOCKER]  OPEN   Needed by: now (G2 was Sun 1:00 AM)
+What I was trying to do: hand Elias the citywide line-of-sight rate raster for the T-33 ground-motion layer.
+What happened (exact error or evidence): Elias reports (status, 12:57 AM) that the first `los_rate_cm_per_year.tif` I sent was invalid: uint32 and no CRS. His ingest in #24 is ready and waits on a float32 EPSG:32614 file, zipped. Not re-checked on my side yet.
+What I already tried: nothing yet since his report.
+Impact on the plan (task IDs, timeline, tiers): T-33 ground-motion layer (Tier 1, G2), T-34 flood map (uses the same rates), Diego's #30 (based on #24).
+Options (2 or 3, with cost in hours): (a) re-export the GeoTIFF from `displacement_cumulative.npz` as float32 with the EPSG:32614 grid of the crops, check it with `gdalinfo`, zip and send over LocalSend (0.25 h, needs a Python env with numpy and rasterio); (b) send Elias the npz plus the grid transform and he writes the GeoTIFF (0.25 h of his time).
+My recommendation: (a).
 
 ## Reviews of other people's roadblocks
 - RB-D01: AGREE with (a). Eduardo decided at 6:20 PM to drop Oct 30, 2025 from every layer and frame (D-13, plan v0.4). The memo and plan lines are corrected. Option (c), real dB values for Oct 30 against Nov 11, is still welcome if Elias has 15 minutes, but nothing waits on it.

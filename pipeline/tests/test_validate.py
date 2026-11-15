@@ -173,7 +173,6 @@ def landmark0(lm):
     return lm["landmarks"][0]
 
 LANDMARK_CASES = [
-    ("missing series",          lambda lm: landmark0(lm).pop("series"),                "missing field 'series'"),
     ("unknown source id",       lambda lm: landmark0(lm).update(sourceIds=["nope"]),   "landmarks[0].sourceIds"),
     # These used to crash the validator (review on PR #6):
     ("lon is null",             lambda lm: landmark0(lm).update(lon=None),             "lon and lat must be numbers"),
@@ -202,3 +201,7 @@ def test_duplicate_key_reports_it(broken_copy):
     )
     problems = vm.validate_folder(broken_copy)
     assert any("duplicate key" in p for p in problems), problems
+
+def test_landmark_series_may_be_omitted(broken_copy):
+    edit_json(broken_copy, "landmarks.json", lambda doc: doc["landmarks"][0].pop("series"))
+    assert vm.validate_folder(broken_copy) == []

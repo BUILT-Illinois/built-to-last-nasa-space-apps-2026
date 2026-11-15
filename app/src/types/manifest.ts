@@ -97,6 +97,7 @@ export interface SeriesPoint {
 export interface LandmarkSeries {
   hh_db?: SeriesPoint[];
   hv_db?: SeriesPoint[];
+  water_months?: { count: number; valid_months: number; provisional: true };
   /** Cumulative line-of-sight movement since the first date; negative = away from the satellite. */
   los_displacement_cm?: SeriesPoint[];
 }
@@ -111,7 +112,7 @@ export interface Landmark {
   weInfer: string;
   drivers: { human: string | null; natural: string | null };
   sourceIds: string[];
-  series: LandmarkSeries;
+  series?: LandmarkSeries;
 }
 
 export interface LandmarksFile {
