@@ -25,6 +25,13 @@ const RAMPS: Record<string, { gradient: string; minColor: string; maxColor: stri
 /** The sign caveat pipeline/ingest_sinking.py writes; the legend's own sign line replaces it. */
 const PIPELINE_SIGN_CAVEAT = 'Positive means away from the satellite.';
 
+/**
+ * The caveat pipeline/ingest_sinking.py writes about vertical motion. For ground motion it stays
+ * in view instead of folding under "About this data", because the layer is read as sinking while
+ * the number is line of sight (D-19; Eduardo's review of PR #41, note 2).
+ */
+const PIPELINE_VERTICAL_CAVEAT = 'No conversion to vertical motion.';
+
 /** Legend numbers: at most one decimal, so -12.965582 reads as -13. */
 function formatValue(value: number, showPlus: boolean): string {
   const rounded = Number(value.toFixed(1));
@@ -64,6 +71,10 @@ export default function Legend() {
   // The pipeline also writes the sign as a caveat; do not show it twice. Only that exact
   // sentence is dropped, so a longer caveat that mentions the satellite still shows.
   const caveats = sign ? layer.caveats.filter((c) => c.trim() !== PIPELINE_SIGN_CAVEAT) : layer.caveats;
+  // Ground motion: the vertical-motion caveat, as the manifest words it, stays in view.
+  const isPinned = (c: string) => isGroundMotion && c.trim() === PIPELINE_VERTICAL_CAVEAT;
+  const pinnedCaveats = caveats.filter(isPinned);
+  const foldedCaveats = caveats.filter((c) => !isPinned(c));
 
   // Layout: the color bar is drawn like a measuring staff with tick marks under it, and the
   // caveats and source fold away under "About this data" so the panel stays short on a phone.
@@ -107,12 +118,17 @@ export default function Legend() {
       {sign && <p className="legend__sign">{sign}</p>}
 
       <p className="legend__description">{layer.description}</p>
+      {pinnedCaveats.map((caveat, i) => (
+        <p key={`${i}-${caveat}`} className="legend__caveat">
+          {caveat}
+        </p>
+      ))}
 
       <details className="legend__about">
         <summary>About this data</summary>
-        {caveats.length > 0 && (
+        {foldedCaveats.length > 0 && (
           <ul className="legend__caveats">
-            {caveats.map((caveat, i) => (
+            {foldedCaveats.map((caveat, i) => (
               // The index keeps keys unique if the manifest repeats a caveat.
               <li key={`${i}-${caveat}`}>{caveat}</li>
             ))}

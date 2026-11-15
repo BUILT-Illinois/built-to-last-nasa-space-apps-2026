@@ -21,11 +21,23 @@ export default function LayerSwitcher() {
   const setLayer = useAppStore((s) => s.setLayer);
 
   if (!manifest) {
-    return loadStatus === 'loading' ? (
-      <p className="layer-switcher__loading" role="status">
-        Loading layers…
-      </p>
-    ) : null;
+    if (loadStatus === 'loading') {
+      return (
+        <p className="layer-switcher__loading" role="status">
+          Loading layers…
+        </p>
+      );
+    }
+    // The first load failed, so there is nothing to list. Say so in the panel instead of leaving
+    // it empty; the technical reason stays in the console (App.tsx logs it). UI audit item 5.
+    if (loadStatus === 'error') {
+      return (
+        <p className="layer-switcher__error" role="alert">
+          The map data did not load. Check your connection, then reload the page.
+        </p>
+      );
+    }
+    return null;
   }
   if (manifest.layers.length === 0) return null;
 
