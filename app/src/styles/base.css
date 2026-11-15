@@ -2,17 +2,19 @@
    Control panel look by Diego (UI proof of concept, chosen by the team Sun Nov 15, 7:45 AM).
    Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
 
-   Colors: the B[U]ILT @ UIUC palette (built-illinois.org): dark brown, terracotta and light
-   peach. The panel is the dark brown, text is the light peach, and terracotta is the one accent.
-   The radar pictures are gray and the ground-motion map runs blue to white to red, so the brown
-   panel and its small terracotta marks stay clear of the data colors. */
+   Colors: the B[U]ILT @ UIUC palette, measured from built-illinois.org: the brown of the logo
+   wordmark (#763D1C), the peach of the page background (#FFE7D7), the terracotta of the buttons
+   (#DB9066) and the dark brown of the body text (#51210D). The panel is the logo brown, its text
+   is the peach, and terracotta is the one accent. The radar pictures are gray and the
+   ground-motion map runs blue to white to red, so the brown panel and its small terracotta marks
+   stay clear of the data colors. */
 :root {
-  --panel-bg: #51210d; /* panel background: the org's dark brown */
-  --panel-raised: #683b28; /* raised or selected surface: the brown with a little of the peach mixed in */
-  --panel-text: #f3ddcd; /* text: the org's light peach */
-  --panel-muted: #d3b7a7; /* secondary text: a quieter peach */
-  --accent: #db9066; /* the one accent, the org's terracotta: selection, focus, the provisional badge */
-  --rule: rgba(243, 221, 205, 0.18);
+  --panel-bg: #763d1c; /* panel background: the brown of the logo wordmark */
+  --panel-raised: #895536; /* raised or selected surface: the brown with a little of the peach mixed in */
+  --panel-text: #ffe7d7; /* text: the peach of the site's page background */
+  --panel-muted: #e3c4b2; /* secondary text: a quieter peach */
+  --accent: #db9066; /* the one accent, the terracotta of the site's buttons: selection, focus, slider */
+  --rule: rgba(255, 231, 215, 0.2);
   --panel-width: 20rem;
   /* The device's own font: no request to an outside font service (the venue may filter them). */
   --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -35,15 +37,15 @@ body {
   height: 100%;
   /* The intro, tour card and reading guide (story.css, #35) read their colors from these
      variables. Set here, inside .app, they give those panels the same palette in light and dark
-     mode: peach surface, brown text, terracotta border. The accent is the brown, not the
-     terracotta, because it is also used for link text on the peach surface. */
-  --story-bg: #f3ddcd;
+     mode: peach surface, the site's dark brown text, terracotta border. The accent is the logo
+     brown, not the terracotta, because it is also used for link text on the peach surface. */
+  --story-bg: #ffe7d7;
   --story-text: #51210d;
   --story-muted: #7a4a35;
   --story-border: #db9066;
-  --story-accent: #62250c;
-  --story-accent-text: #f3ddcd;
-  --story-backdrop: rgba(40, 16, 6, 0.6);
+  --story-accent: #763d1c;
+  --story-accent-text: #ffe7d7;
+  --story-backdrop: rgba(45, 22, 10, 0.6);
 }
 
 .map {
@@ -103,6 +105,17 @@ body {
   max-width: calc(100% - var(--panel-width) - 32px);
 }
 
+/* On a short desktop window (a laptop with the browser zoomed in) the longest tour step did not
+   fit, so its Back and Next buttons fell below the card's visible part. Let the card be wider
+   there, which makes it shorter, and give it a little more of the height. */
+@media (min-width: 601px) and (max-height: 720px) {
+  .app .story-card {
+    bottom: 24px;
+    width: min(540px, calc(100% - var(--panel-width) - 32px));
+    max-height: calc(100% - 48px);
+  }
+}
+
 /* ---------- Map furniture, restyled to match (overrides MapLibre and map.css) ---------- */
 
 .app .swipe-label {
@@ -128,7 +141,7 @@ body {
 
 .app .maplibregl-ctrl-scale {
   border-color: var(--panel-text);
-  background: rgba(81, 33, 13, 0.8);
+  background: rgba(118, 61, 28, 0.85);
   color: var(--panel-text);
 }
 
