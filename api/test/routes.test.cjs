@@ -29,11 +29,33 @@ test('regions lists exactly the published static datasets and their summary fiel
   const result = regions();
   assert.equal(result.status, 200);
   assert.ok(published.includes('mexico_city'));
+  assert.ok(published.includes('sample'));
   assert.deepEqual(result.jsonBody.toSorted((a, b) => a.id.localeCompare(b.id)),
     published.toSorted((a, b) => a.localeCompare(b)).map((id) => {
       const { name, bbox } = readJson(join(dataRoot, id, 'manifest.json')).region;
       return { id, name, bbox };
     }));
+});
+
+test('Pages serves the bundled region list and synthetic sample routes as JSON', async () => {
+  const { onRequestGet } = await import('../../functions/api/[[route]].js');
+  const requestRoute = (route) => onRequestGet({ params: { route } });
+  const sampleManifest = readJson(join(dataRoot, 'sample', 'manifest.json'));
+  const sampleLandmarks = readJson(join(dataRoot, 'sample', 'landmarks.json'));
+  for (const [route, expected] of [
+    [['regions'], regions().jsonBody],
+    [['regions', 'sample'], sampleManifest],
+    [['regions', 'sample', 'manifest'], sampleManifest],
+    [['regions', 'sample', 'landmarks'], sampleLandmarks],
+  ]) {
+    const result = requestRoute(route);
+    assert.equal(result.status, 200);
+    assert.match(result.headers.get('content-type'), /^application\/json(?:;|$)/);
+    assert.deepEqual(await result.json(), expected);
+  }
+  const missing = requestRoute(['regions', 'missing', 'manifest']);
+  assert.equal(missing.status, 404);
+  assert.deepEqual(await missing.json(), { success: false, message: 'Region not found' });
 });
 
 test('manifest and landmarks return the same JSON as the static site', () => {

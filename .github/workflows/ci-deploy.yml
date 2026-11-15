@@ -121,7 +121,7 @@ jobs:
   fallback:
     name: Deploy to Cloudflare Pages
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: [pipeline, app]
+    needs: [pipeline, app, api]
     runs-on: ubuntu-latest
     steps:
       - name: Check Cloudflare configuration
@@ -140,17 +140,27 @@ jobs:
         if: steps.cloudflare.outputs.configured == 'true'
         with:
           persist-credentials: false
-          sparse-checkout: .github/scripts
+          sparse-checkout: |
+            .github/scripts
+            functions
       - uses: actions/download-artifact@v7
         if: steps.cloudflare.outputs.configured == 'true'
         with:
           name: app-dist
           path: app/dist
+      - uses: actions/download-artifact@v7
+        if: steps.cloudflare.outputs.configured == 'true'
+        with:
+          name: managed-api
+          path: api-package
+      - name: Extract shared API data
+        if: steps.cloudflare.outputs.configured == 'true'
+        run: mkdir -p api && tar -xzf api-package/functions.tar.gz -C api dist/bundle.json
       - uses: actions/setup-node@v6
         if: steps.cloudflare.outputs.configured == 'true'
         with:
           node-version: "24"
-      - name: Publish the same static build
+      - name: Publish the static build and Pages Functions
         if: steps.cloudflare.outputs.configured == 'true'
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
