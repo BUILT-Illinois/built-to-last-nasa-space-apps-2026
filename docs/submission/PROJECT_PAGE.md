@@ -9,19 +9,20 @@ Notes for Monica before pasting:
 - `docs/challenge/README.md` lists no character or word limits for these fields. Check the live form for limits when you paste.
 - Every number below has a row in `docs/submission/CLAIMS.md`. If you change a number, change it there too, and add nothing that is not in the memo's "Numbers we may quote" table.
 - Text marked **[IF SHIPPED]** describes work not confirmed live at the last status update (Sun 6:45 AM): the ground-motion (sinking) layer, layer switcher and legend were being merged to the live site; the 7 landmark points are in `landmarks.json`, but landmark cards on the map are not confirmed; the flood-priority map is **not shipped** (it appears only as "planned next"). Open the live site at G5 (10:30 AM). Keep an [IF SHIPPED] sentence only if the feature is live; otherwise delete it.
+- **Update Sun Nov 15, about 9 AM (Monica):** the ground-motion layer, the provisional badge, the guided tour and "How to read this map" are live (checked on the Azure site), so their markers are removed (CLAIMS D35 to D37). Landmark cards are **left out**: Zainab's panel (T-14) is not merged yet (D38). Add them back only once it is live, with the text in D38.
 - Wording rules: "recognize and measure", never the p-word or the f-word (except "not a forecast"). Every ground-motion number says "line of sight". The data is always PROVISIONAL.
 
 ---
 
 ## 1. Project Name
 
-`[PROJECT NAME — team agrees (T-17). PLAN.md T-17 notes Monica leans "Project Lago".]`
+**Project Lago**
 
-Tagline: **Mexico City is sinking, and NISAR measured a year of it.**
+Tagline: **See the ground beneath your city move.**
 
 ## 2. High-Level Project Summary
 
-Mexico City is sinking, and NISAR measured a year of it. We built an open-source, interactive web map that helps governments, international organizations and residents recognize and measure a slow hazard that is hard to see from the street. We added up 27 consecutive NISAR radar interferograms (26 spanning 12 days, one 24 days; GUNW, PROVISIONAL data, CRID P05023) from Nov 11, 2025 to Oct 13, 2026. Two sinking bowls appear: one in the north-east (the airport and Nezahualcóyotl) and one in the south-east (Tláhuac and Chalco). At Nezahualcóyotl the ground moved about 21.9 cm away from the satellite along the radar line of sight in that time, about 2 cm per month. About 3.2 million people (WorldPop 2020) live on ground that moves faster than 10 cm per year along the line of sight. The live app lets anyone swipe between NISAR HH and HV radar images from November 2025 and October 2026. [IF SHIPPED: It adds the year of ground motion as a map layer, with a legend in centimeters along the line of sight.] [IF SHIPPED: Landmark cards keep what the radar shows apart from what we infer.]
+Project Lago: see the ground beneath your city move. Mexico City is built on an ancient lakebed, and it is sinking. We added up a year of radar data from the NASA–ISRO NISAR satellite (27 consecutive interferograms, Nov 11, 2025 to Oct 13, 2026; PROVISIONAL data) and built an open-source, interactive web map. Radar shows two sinking bowls: the north-east (the airport and Nezahualcóyotl) and the south-east (Tláhuac and Chalco). At Nezahualcóyotl the ground moved about 21.9 cm away from the satellite along the radar line of sight; at Tláhuac, about 16.4 cm. About 3.2 million people (WorldPop 2020) live on ground moving faster than 10 cm per year along the line of sight. In Tláhuac, where one of us has family, the land sank so far that a new lake formed: water first pooled in 1988, and by 1991 it was a small lake. The live app offers a six-step guided tour, HH and HV radar images, and a year of ground motion, so residents, students, and decision-makers can see a hazard that's hard to spot from the street.
 
 ## 3. Link to Project Demo
 
@@ -39,6 +40,10 @@ Mexico City is sinking, and NISAR measured a year of it. We built an open-source
 
 ## 5. Detailed Project Description
 
+### What it does
+
+Project Lago is an interactive, open-source map of Mexico City built from NISAR radar data. Visitors can follow a six-step guided tour or explore freely: switch between radar layers (HH, HV, an HH/HV color composite, and a year of ground motion), swipe to compare two dates, and open "How to read this map" for short explainers on HH and HV, on what the radar shows versus what we infer, and on provisional data. A provisional-data badge is on screen whenever data is shown.
+
 ### The problem
 
 Mexico City is built on an old lakebed, and it is sinking. NASA/JPL reports that in the 1990s and 2000s parts of the metropolitan area were sinking by "around 14 inches (35 centimeters) per year", and that the Angel of Independence has had 14 steps added to its base as the land around it sank. JPL names three causes: groundwater pumping, the weight of urban development, and compaction of the ancient lakebed. Sinking like this is slow and hard to see from the street. To manage it, cities need to recognize where it happens and measure how fast.
@@ -54,9 +59,9 @@ An interactive, open-source web map of the Valley of Mexico, live on Azure:
 - **Real NISAR radar images** (GCOV, PROVISIONAL) in HH, in HV, and as an HH/HV color composite, for 11 dates from Nov 11, 2025 to Oct 13, 2026, all from track 19 / frame 11, so the viewing geometry is the same on every date.
 - **Swipe compare** between two dates, by mouse, touch or keyboard.
 - **A street basemap and a satellite basemap**, with credits on the map.
-- [IF SHIPPED: **A provisional-data label** on every radar layer. (The manifest carries "Provisional NISAR data. Interpret with caution." on each layer; check that the legend shows it.)]
-- [IF SHIPPED: **A ground-motion layer**: the year total along the radar line of sight, Nov 11, 2025 to Oct 13, 2026, with a legend in centimeters.]
-- [IF SHIPPED: **Landmark cards** for seven places (new Lake Chalco, Tláhuac, Nezahualcóyotl, the airport, Centro Histórico, the Angel of Independence and Chalco). Each card keeps "what the radar shows" apart from "what we infer".]
+- **A provisional-data badge** on every data view, and the caveat "Provisional NISAR data. Interpret with caution." in each layer's legend.
+- **A ground-motion layer**: the year total along the radar line of sight, Nov 11, 2025 to Oct 13, 2026, with a legend in centimeters.
+- **A six-step guided tour** of the story, and **"How to read this map"** explainer cards.
 - *Planned next: a flood-priority map that ranks places where line-of-sight sinking and standing water coincide, as a screening aid on PROVISIONAL data, not a forecast.* (Not shipped as of Sun 6:45 AM.)
 
 ### How it works
@@ -107,11 +112,12 @@ Two sinking bowls appear. The north-east bowl covers the airport, Nezahualcóyot
 
 Lake Chalco covered its plain "for several thousand years, until the early 20th century, when it was drained" (UNAM 2007; our translation of "por varios miles de años hasta principios del siglo XX, cuando fue drenado"). A system of 14 wells has pumped groundwater from the Chalco plain since 1984, and intensive pumping in the sub-basin started in the early 1960s. As the ground sank, water collected again in the hollow, "como consecuencia del bombeo" (as a consequence of pumping): five pools of up to about 1 ha in 1988, a small lake of about 100 ha by 1991, and a little over 1,000 ha at the time of the study. In 2006 the lake surface sat 12 m below the original ground level. Today new Lake Chalco (Lago de Tláhuac-Xico) is one of our landmarks.
 
+Our teammate Monica's family is from Santa Cecilia, in Tláhuac. Radar shows that Tláhuac moved about 16.4 cm along the line of sight over the year. We infer that the process that made the lake is still at work around it.
+
 ### Why it matters: Chalco, 2024
 
 In September 2024 AP reported from Chalco, "a low-income suburb southeast of Mexico City", where floodwaters stayed in homes "for over a month". "According to Chalco's government, more than 2,000 homes and over 7,000 residents have been affected." Residents blamed "a combination of unchecked growth and failing infrastructure". We give this as context only. We do not link this flood to the lake, to sinking, or to our data, and NISAR data starts in 2025.
 
-[Team member's family connection — only with their consent]
 
 ### Which polarizations show the change
 
@@ -126,9 +132,11 @@ In September 2024 AP reported from Chalco, "a low-income suburb southeast of Mex
 - **Excluded dates.** We dropped the Oct 30, 2025 acquisition from every layer because of measurement errors we observed ourselves (D-13; it is not on ASF's known-issues list). We also left Dec 5, 2025 and Apr 16, 2026 out of the radar-image frames and water counts (D-17).
 - **80 m pixels** are averages; single buildings are not resolved. We quote percentiles, never the maximum, because a few isolated pixels show impossible rates from unwrapping errors.
 - **We are not first.** NASA/JPL published NISAR sinking over Mexico City in April 2026. Our contribution is an open, interactive tool, a full year of data, and place-by-place numbers.
+- **The lake itself is not measured yet.** We have not sampled ground motion at the lake point, and our reading of the lake's seasonal change is not reviewed, so we quote neither.
 
 ### Future applications of NISAR
 
+- **For the people who live there.** A Spanish version and a classroom mode are next, so residents and students can use it.
 - **Keep measuring.** NISAR keeps passing every 12 days, so the record grows with each pass and the same pipeline can extend it.
 - **Any region.** A new region is one entry in `pipeline/config/regions.json` plus a content file, with no code changes.
 - **Help separate vertical from sideways motion** by combining the ascending track we use (19) with the descending track that also covers the city (113).
@@ -136,7 +144,7 @@ In September 2024 AP reported from Chalco, "a low-income suburb southeast of Mex
 
 ### Benefits and goals
 
-The goal is to help governments, international organizations and residents recognize and measure slow ground sinking with free, open data and an open tool. Anyone can open the map with no login and look at the radar images [IF SHIPPED: and see where the ground moves fastest]. Every number we quote is traced to its source in the repo.
+The goal is to help residents, students, decision-makers and international organizations recognize and measure slow ground sinking with free, open data and an open tool. Anyone can open the map with no login and look at the radar images and see where the ground moves fastest. Every number we quote is traced to its source in the repo.
 
 ### Tools and languages
 

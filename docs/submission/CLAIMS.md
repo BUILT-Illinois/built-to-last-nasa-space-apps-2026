@@ -107,6 +107,11 @@ All paths are relative to the repo root, as checked out from `origin/main` on Su
 | D32 | ISRO *NISAR Data Product Format Document* v1.2.1 read for the sign check | P field 8 | `docs/T35_SIGN_CHECK.md` L21 | TRACES |
 | D33 | NISAR Data User Guide GUNW page and earthaccess page URLs | P field 7 | `docs/T35_SIGN_CHECK.md` L28; `docs/PLAN.md` L174 | TRACES |
 | D34 | Learning resource URLs | P field 8 | `docs/SOURCES.md` L16-25; `docs/challenge/README.md` L79-88 | TRACES |
+| D35 | Six-step guided tour, live | P (summary, What it does, What we built) | `content/story/mexico_city.json` (6 steps); `app/src/story/StoryTour.tsx`; PR #35, merged Sun 8:15 AM. Live Azure bundle checked Sun about 9 AM: contains "Project Lago" and "Take the tour" | TRACES |
+| D36 | "How to read this map" explainers (HH and HV; radar shows vs. we infer; provisional data) and a provisional-data badge on every data view, live; each layer's legend shows "Provisional NISAR data. Interpret with caution." | P (What it does, What we built) | `content/explainers/cards.json`; `app/src/story/ReadingGuide.tsx`, `ProvisionalBadge.tsx` (#35); legend caveat from the manifest (D17) via `Legend.tsx` (#30, #37). Live bundle contains "How to read this map" and "Provisional data" | TRACES. Replaces the [IF SHIPPED] status of D17 for the page |
+| D37 | Ground-motion layer, live | P (summary, What it does, What we built, Benefits) | PR #24; live `/data/mexico_city/manifest.json` lists layer `sinking` (checked Sun about 9 AM) | TRACES. Replaces the D26 status for this layer |
+| D38 | Landmark cards on the map (tap a landmark; each card separates what the radar shows from what we infer, names human and natural drivers, lists sources) | **Not used.** Left out of the page | Card text is in `content/landmarks/mexico_city.json` (#35), but no component displays it: Zainab's panel (T-14) is not merged as of Sun about 9 AM | LEFT OUT until T-14 is live; then add to "What it does" and cite its PR here |
+| D39 | The lake itself is not measured yet; our seasonal reading of the lake is not reviewed | P (Honest limits) | memo L139 (lake point not in `landmark_series_los_cm.csv`); memo L140 (Diego's HV numbers not reviewed) | TRACES |
 
 ## E. AI use (field 6) and rules
 
@@ -131,6 +136,9 @@ All paths are relative to the repo root, as checked out from `origin/main` on Su
 | F2 | Members: Eduardo Aranda (team lead), Elias Ghanayem, Monica Venancio, Diego [last name], Zainab [last name] | P, D1, S1 | First names: `docs/AI_USAGE.md`, `docs/DECISIONS.md`; five names: `docs/PLAN.md` L302. Last names are not in the repo (they come from the task brief). | TRACES (team to confirm the spelling of last names) |
 | F3 | Project name placeholder; Monica leans "Project Lago" | P field 1 | `docs/PLAN.md` L259 (T-17) | TRACES |
 | F4 | "UIUC" (page line 5, pitch slide 1) | P, S1 | Not in any source file | DELETED: no source in the repo. The team can add it back if they want. |
+| F5 | "Where one of us has family" (summary); "Our teammate Monica's family is from Santa Cecilia, in Tláhuac" (lake section) | P | Monica's own statement; she consented to it on the page, Sun Nov 15. How close Santa Cecilia is to the lake is **not** claimed (memo L138: source not read) | TRACES (personal, with consent) |
+| F6 | Name and tagline: Project Lago, "See the ground beneath your city move." | P field 1, summary | Team decision (T-17), recorded in `coordination/claude_status_monica.md` (#44) | TRACES (not a factual claim) |
+| F7 | Next: a Spanish version and a classroom mode | P (Future applications) | Team plan (T-17 outline) | TRACES (a plan, not a claim about the shipped app) |
 
 ## G. Wording found during the fact-check
 
