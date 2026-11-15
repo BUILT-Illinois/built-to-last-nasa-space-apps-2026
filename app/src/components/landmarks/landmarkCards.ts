@@ -3,7 +3,9 @@
 // Owner: Zainab (app/src/components/landmarks/). Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
 import type { Landmark, LandmarksFile, Source } from '../../types/manifest';
 
-type CardFile = LandmarksFile & { sources?: Source[] };
+/** A hand-written card may leave fields out; those keep the published value. */
+type Card = Partial<Landmark> & { id: string };
+type CardFile = Omit<LandmarksFile, 'landmarks'> & { landmarks: Card[]; sources?: Source[] };
 
 const files = import.meta.glob<CardFile>('../../../../content/landmarks/*.json', { eager: true, import: 'default' });
 
@@ -21,7 +23,15 @@ export function withCardText(landmarks: Landmark[], cards: CardFile | undefined)
   return landmarks.map((l) => {
     const card = cards.landmarks.find((c) => c.id === l.id);
     if (!card) return l;
-    const { name, summary, radarShows, weInfer, drivers, sourceIds } = card;
-    return { ...l, name, summary, radarShows, weInfer, drivers, sourceIds };
+    // A field the card leaves out keeps the published value, so a partial card never blanks one.
+    return {
+      ...l,
+      name: card.name ?? l.name,
+      summary: card.summary ?? l.summary,
+      radarShows: card.radarShows ?? l.radarShows,
+      weInfer: card.weInfer ?? l.weInfer,
+      drivers: card.drivers ?? l.drivers,
+      sourceIds: card.sourceIds ?? l.sourceIds,
+    };
   });
 }

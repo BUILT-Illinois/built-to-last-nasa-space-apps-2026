@@ -89,3 +89,20 @@ it('a selection made elsewhere (the map) opens the same card', () => {
   act(() => useAppStore.getState().selectLandmark('placeholder_b'));
   expect(container.querySelector('.landmark-card h3')?.textContent).toBe('Placeholder landmark B');
 });
+
+it('before the first load starts (idle), shows loading, not the empty state', () => {
+  useAppStore.setState({ landmarks: [], loadStatus: 'idle' });
+  act(() => root.render(<LandmarkPanel />));
+  expect(container.textContent).toContain('Loading landmarks');
+  expect(container.textContent).not.toContain('No landmarks for this region yet.');
+});
+
+it('the Landmarks heading collapses and reopens the list', () => {
+  show('sample');
+  const toggle = container.querySelector<HTMLButtonElement>('.landmark-toggle')!;
+  expect(toggle.textContent).toContain('Landmarks (2)');
+  act(() => toggle.click());
+  expect(container.querySelector('.landmark-list')).toBeNull();
+  act(() => toggle.click());
+  expect(names()).toHaveLength(2);
+});

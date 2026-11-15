@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import LayerSwitcher from './components/layers/LayerSwitcher';
 import Legend from './components/layers/Legend';
+import LandmarkPanel from './components/landmarks/LandmarkPanel';
 import MapView from './map/MapView';
 import { DEFAULT_REGION_ID, useAppStore } from './state/store';
 import ReadingGuide from './story/ReadingGuide';
@@ -26,13 +27,14 @@ export default function App() {
   return (
     <div className="app">
       <MapView />
+      <LandmarkPanel />
       <aside className="layer-controls">
         <LayerSwitcher />
         <Legend />
       </aside>
       <ReadingGuide />
       <StoryTour />
-      {/* Slots for later tasks: layers and time (Diego), landmarks, chart, sources (Zainab). */}
+      {/* Slots for later tasks: layers and time (Diego), chart, sources (Zainab). */}
     </div>
   );
 }

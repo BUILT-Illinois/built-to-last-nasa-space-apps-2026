@@ -1,16 +1,19 @@
 /* T-14 landmark panel styles. Owner: Zainab. Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md. */
 .landmark-panel {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 1;
+  /* Below MapLibre's zoom and compass buttons (top right). */
+  top: 110px;
+  right: 10px;
+  z-index: 3;
   width: 320px;
-  max-width: calc(100% - 24px);
-  max-height: calc(100% - 24px);
+  max-width: calc(100% - 20px);
+  /* Leave the bottom clear for "How to read this" (bottom: 34px) and the map credits. */
+  max-height: calc(100% - 110px - 90px);
   overflow-y: auto;
   box-sizing: border-box;
   padding: 12px 16px;
   background: rgba(255, 255, 255, 0.95);
+  color: #1f2328;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
@@ -19,6 +22,17 @@
 .landmark-panel h3 { margin: 12px 0 4px; font-size: 1rem; }
 .landmark-panel h4 { margin: 10px 0 2px; font-size: 0.9rem; }
 .landmark-panel p { margin: 4px 0; font-size: 0.9rem; }
+
+.landmark-toggle {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
 
 .landmark-list { list-style: none; margin: 0; padding: 0; }
 .landmark-list button {
@@ -29,6 +43,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   background: #fff;
+  color: inherit;
   cursor: pointer;
 }
 .landmark-list button[aria-pressed='true'] { border-color: #1f6feb; background: #e8f0fe; }
@@ -39,14 +54,19 @@
 
 .landmark-empty { color: #555; }
 
-/* Phone width: panel sits at the bottom, half the screen at most. */
+/* Phones: a small bar on the left, above the credits and "How to read this". It starts collapsed;
+   the story card (z-index 5) still sits above it while the tour is open. */
 @media (max-width: 600px) {
   .landmark-panel {
     top: auto;
-    bottom: 12px;
-    left: 12px;
-    right: 12px;
+    right: auto;
+    left: 10px;
+    bottom: 90px;
     width: auto;
-    max-height: 50%;
+    max-width: calc(100% - 20px);
+    max-height: 45%;
+    padding: 8px 12px;
   }
+  .landmark-panel h2 { margin: 0; }
+  .landmark-list { margin-top: 8px; }
 }

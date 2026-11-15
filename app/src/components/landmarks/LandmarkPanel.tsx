@@ -1,7 +1,7 @@
 // T-14 landmark panel: a list of landmarks and a card for the selected one.
 // Reads and writes only the shared store, so the map can stay in sync through selectedLandmarkId.
 // Owner: Zainab (app/src/components/landmarks/). Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useAppStore } from '../../state/store';
 import type { Source } from '../../types/manifest';
 import { cardsFor, withCardText } from './landmarkCards';
@@ -9,6 +9,9 @@ import './LandmarkPanel.css';
 
 /** Zoom used when flying to a landmark. */
 const LANDMARK_ZOOM = 13;
+
+/** Phones start with the list collapsed so the panel does not cover the map, credits or story card. */
+const startsOpen = () => !window.matchMedia?.('(max-width: 600px)').matches;
 
 // One shared empty list: a new [] on every render would make the store selector loop forever.
 const NO_SOURCES: Source[] = [];
@@ -21,6 +24,7 @@ export default function LandmarkPanel() {
   const manifestSources = useAppStore((s) => s.manifest?.sources ?? NO_SOURCES);
   const selectLandmark = useAppStore((s) => s.selectLandmark);
   const flyTo = useAppStore((s) => s.flyTo);
+  const [open, setOpen] = useState(startsOpen);
 
   // Monica's card text over the published landmarks; card sources first, then the manifest's.
   const cards = cardsFor(regionId);
@@ -29,7 +33,8 @@ export default function LandmarkPanel() {
 
   const selected = landmarks.find((l) => l.id === selectedId);
 
-  if (loadStatus === 'loading' && landmarks.length === 0) {
+  // 'idle' too: App starts the first load in an effect, after the first render.
+  if ((loadStatus === 'loading' || loadStatus === 'idle') && landmarks.length === 0) {
     return <aside className="landmark-panel"><p>Loading landmarks…</p></aside>;
   }
 
@@ -44,7 +49,12 @@ export default function LandmarkPanel() {
 
   return (
     <aside className="landmark-panel">
-      <h2>Landmarks</h2>
+      <h2>
+        <button type="button" className="landmark-toggle" aria-expanded={open} onClick={() => setOpen(!open)}>
+          Landmarks ({landmarks.length}) <span aria-hidden="true">{open ? '▾' : '▸'}</span>
+        </button>
+      </h2>
+      {open && (
       <ul className="landmark-list">
         {landmarks.map((l) => (
           <li key={l.id}>
@@ -62,6 +72,7 @@ export default function LandmarkPanel() {
           </li>
         ))}
       </ul>
+      )}
 
       {selected && (
         <article className="landmark-card">
