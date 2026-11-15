@@ -9,7 +9,7 @@ Notes for Monica before pasting:
 - `docs/challenge/README.md` lists no character or word limits for these fields. Check the live form for limits when you paste.
 - Every number below has a row in `docs/submission/CLAIMS.md`. If you change a number, change it there too, and add nothing that is not in the memo's "Numbers we may quote" table.
 - Text marked **[IF SHIPPED]** describes work not confirmed live at the last status update (Sun 6:45 AM): the ground-motion (sinking) layer, layer switcher and legend were being merged to the live site; the 7 landmark points are in `landmarks.json`, but landmark cards on the map are not confirmed; the flood-priority map is **not shipped** (it appears only as "planned next"). Open the live site at G5 (10:30 AM). Keep an [IF SHIPPED] sentence only if the feature is live; otherwise delete it.
-- **Update Sun Nov 15, about 9 AM (Monica):** the ground-motion layer, the provisional badge, the guided tour and "How to read this map" are live (checked on the Azure site), so their markers are removed (CLAIMS D35 to D37). Landmark cards are **left out**: Zainab's panel (T-14) is not merged yet (D38). Add them back only once it is live, with the text in D38.
+- **Update Sun Nov 15, about 9 AM (Monica):** the ground-motion layer, the provisional badge, the guided tour and "How to read this map" are live (checked on the Azure site), so their markers are removed (CLAIMS D35 to D37). Landmark cards: **added back Sun about 11:50 AM** in "What it does". Zainab's panel (T-14, PR #49) merged at 10:58 AM and is on the live site. `CLAIMS.md` row D38 still says "left out"; Eduardo to update it to cite #49.
 - Wording rules: "recognize and measure", never the p-word or the f-word (except "not a forecast"). Every ground-motion number says "line of sight". The data is always PROVISIONAL.
 
 ---
@@ -42,7 +42,7 @@ Project Lago: see the ground beneath your city move. Mexico City is built on an 
 
 ### What it does
 
-Project Lago is an interactive, open-source map of Mexico City built from NISAR radar data. Visitors can follow a six-step guided tour or explore freely: switch between radar layers (HH, HV, an HH/HV color composite, and a year of ground motion), swipe to compare two dates, and open "How to read this map" for short explainers on HH and HV, on what the radar shows versus what we infer, and on provisional data. A provisional-data badge is on screen whenever data is shown.
+Project Lago is an interactive, open-source map of Mexico City built from NISAR radar data. Visitors can follow a six-step guided tour or explore freely: switch between radar layers (HH, HV, an HH/HV color composite, and a year of ground motion), swipe to compare two dates, and open "How to read this map" for short explainers on HH and HV, on what the radar shows versus what we infer, and on provisional data. Visitors can tap landmarks such as Nezahualcóyotl, the airport, Centro Histórico, the Ángel de la Independencia, Tláhuac, Chalco and the new Lake Chalco; each card separates what the radar shows from what we infer, names human and natural drivers, and lists its sources. A provisional-data badge is on screen whenever data is shown.
 
 ### The problem
 
