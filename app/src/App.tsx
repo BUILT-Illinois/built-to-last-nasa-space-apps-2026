@@ -5,6 +5,8 @@ import LayerSwitcher from './components/layers/LayerSwitcher';
 import Legend from './components/layers/Legend';
 import MapView from './map/MapView';
 import { DEFAULT_REGION_ID, useAppStore } from './state/store';
+import ReadingGuide from './story/ReadingGuide';
+import StoryTour from './story/StoryTour';
 
 export default function App() {
   const loadError = useAppStore((s) => s.loadError);
@@ -28,7 +30,9 @@ export default function App() {
         <LayerSwitcher />
         <Legend />
       </aside>
-      {/* Slots for later tasks: story (Monica), layers and time (Diego), landmarks, chart, sources (Zainab). */}
+      <ReadingGuide />
+      <StoryTour />
+      {/* Slots for later tasks: layers and time (Diego), landmarks, chart, sources (Zainab). */}
     </div>
   );
 }
