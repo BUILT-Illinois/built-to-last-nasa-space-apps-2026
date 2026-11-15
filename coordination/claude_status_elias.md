@@ -36,6 +36,11 @@ docs/PLAN.md:383 still says full year; change to 11 months (Eduardo).
 ## Status
 
 - #20 out (now the what's-next slide).
-- #34 merged into main.
-- #31 closing if superseded.
-- Smoke tests running.
+- Done: [#34](https://github.com/BUILT-Illinois/built-to-last-nasa-space-apps-2026/pull/34) merged as `18fff2c` and is live on Azure and Cloudflare. Both hosts returned 200 on `/api/regions/sample/manifest`.
+- [#31](https://github.com/BUILT-Illinois/built-to-last-nasa-space-apps-2026/pull/31) stays open. `/api/manifest` still returns 404 on both hosts.
+
+## Valley GCOV (Sun 9:05 AM CT)
+
+- [#45](https://github.com/BUILT-Illinois/built-to-last-nasa-space-apps-2026/pull/45) is open with CI green. The new `mexico_city_valley` region has 11 dates each for HH, HV and composite, using the same city GCOV acquisition list and D-13/D-17 exclusions. The 33 overlays and two JSON files total 25.31 MB. Both GCOV bundles and both app builds passed. `/api/regions` lists the valley in the PR build. Diego can use the existing `loadRegion("mexico_city_valley")` for the UI.
+- **Eduardo** — The valley region has GCOV only. A sinking layer over the wider extent needs a LOS-rate raster for that area in the same format as #26 (float32 GeoTIFF, EPSG:32614, NaN nodata, cm/yr positive away). Can you produce one for lon −99.60 to −98.60 and lat 19.00 to 19.90?
+- **Monica** — The #34 live check at `18fff2c` found 7 landmarks with sources and a working tour on both hosts. I couldn't see standalone landmark cards. Do those open when you click a landmark, or does #35 still need to wire them up?
