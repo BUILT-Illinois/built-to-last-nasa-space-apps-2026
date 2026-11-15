@@ -80,6 +80,32 @@ describe('LayerSwitcher', () => {
     expect(text()).toBe('Loading layers…');
   });
 
+  it('says the data did not load when the first load fails, instead of an empty panel', () => {
+    act(() => useAppStore.setState({ loadStatus: 'error', loadError: 'Region "mexico_city": HTTP 404' }));
+    render(<LayerSwitcher />);
+    const alert = container.querySelector('[role="alert"]');
+    expect(alert?.textContent).toBe('The map data did not load. Check your connection, then reload the page.');
+    // The technical reason is for the console, not for the visitor.
+    expect(text()).not.toContain('404');
+    expect(radios()).toHaveLength(0);
+  });
+
+  it('keeps listing the layers when a later load fails and the old data is still on screen', () => {
+    load(sample);
+    act(() => useAppStore.setState({ loadStatus: 'error', loadError: 'Region "other": HTTP 404' }));
+    render(<LayerSwitcher />);
+    expect(container.querySelector('[role="alert"]')).toBeNull();
+    expect(radios()).toHaveLength(sample.layers.length);
+  });
+
+  it('says a region has no radar layers, instead of an empty panel', () => {
+    load({ ...sample, layers: [] });
+    render(<LayerSwitcher />);
+    const status = container.querySelector('[role="status"]');
+    expect(status?.textContent).toBe('No radar layers available for this region.');
+    expect(radios()).toHaveLength(0);
+  });
+
   it('lists every layer in the manifest by title and marks the active one', () => {
     load(sample);
     render(<LayerSwitcher />);
@@ -190,6 +216,26 @@ describe('Legend', () => {
     expect(text()).not.toMatch(/subsid|vertical rate/i);
   });
 
+  it('keeps the vertical-motion caveat in view for ground motion and folds the other caveats', () => {
+    load({ ...withSinking, synthetic: false }, 'sinking');
+    render(<Legend />);
+    const pinned = [...container.querySelectorAll('.legend__caveat')].map((el) => el.textContent);
+    expect(pinned).toEqual(['No conversion to vertical motion.']);
+    // It is outside the fold, and it is not repeated inside it.
+    expect(container.querySelector('.legend__about .legend__caveat')).toBeNull();
+    const folded = [...container.querySelectorAll('.legend__about .legend__caveats li')].map((li) => li.textContent);
+    expect(folded).toEqual(['Synthetic test data.']);
+    expect(text().split('No conversion to vertical motion.')).toHaveLength(2);
+  });
+
+  it('pins no caveat for a layer that is not ground motion', () => {
+    const layer: Layer = { ...sample.layers[0]!, caveats: ['No conversion to vertical motion.', 'Another caveat.'] };
+    load({ ...sample, layers: [layer] });
+    render(<Legend />);
+    expect(container.querySelector('.legend__caveat')).toBeNull();
+    expect(container.querySelectorAll('.legend__about .legend__caveats li')).toHaveLength(2);
+  });
+
   it('says nothing about the sign when the manifest does not give it, and counts granules', () => {
     const frame = sinkingLayer.frames[0]!;
     const layer: Layer = {
@@ -262,11 +308,19 @@ describe('Legend', () => {
   });
 
   it('shows a repeated caveat twice without a React key warning', () => {
-    const caveats = ['No conversion to vertical motion.', 'No conversion to vertical motion.'];
+    const caveats = ['Provisional NISAR data.', 'Provisional NISAR data.'];
     load({ ...sample, layers: [{ ...sinkingLayer, caveats }] });
     render(<Legend />);
     expect(container.querySelectorAll('.legend__caveats li')).toHaveLength(2);
     // afterEach fails the test if React logged a duplicate-key error.
+  });
+
+  it('shows a repeated pinned caveat twice without a React key warning', () => {
+    const caveats = ['No conversion to vertical motion.', 'No conversion to vertical motion.'];
+    load({ ...sample, layers: [{ ...sinkingLayer, caveats }] });
+    render(<Legend />);
+    expect(container.querySelectorAll('.legend__caveat')).toHaveLength(2);
+    expect(container.querySelectorAll('.legend__caveats li')).toHaveLength(0);
   });
 
   it('labels the flood-priority layer as a screening aid, not a forecast', () => {
