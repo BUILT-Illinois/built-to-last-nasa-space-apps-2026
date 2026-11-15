@@ -102,6 +102,7 @@
       ]
     }
   ],
+  "vectors": [],
   "sources": [
     {
       "id": "nisar-gcov",

@@ -1,4 +1,4 @@
-"""Check a region data folder against docs/DATA_CONTRACT.md.
+"""Check a region data folder against docs/DATA_CONTRACT.md and app/src/types/manifest.ts.
 
 Usage (from the repo root):
     .venv/bin/python pipeline/validate_manifest.py app/public/data/sample
@@ -8,10 +8,10 @@ Owner: Zainab. Written with AI assistance (Claude Code) and reviewed by Zainab.
 See docs/AI_USAGE.md.
 
 Every check returns a list of problem strings. An empty list means "OK".
-Each problem says WHERE it is (for example "layers[0].frames[1].date") so the
-person fixing it can find it fast.
+Each problem says WHERE it is (for example "layers[0].frames[1].date").
+Broken input is reported as a problem, never as a Python crash: every check
+confirms a value is a list or an object before looking inside it.
 """
-
 
 import datetime
 import json
@@ -21,33 +21,52 @@ from pathlib import Path
 
 LAYER_KINDS = {"backscatter", "composite", "change", "displacement", "soil_moisture"}
 POLARIZATIONS = {"HH", "HV", "HH+HV", None}
+DIRECTIONS = {"ASCENDING", "DESCENDING"}
 MAX_IMAGE_BYTES = 1_000_000        # each image under 1 MB
 MAX_FOLDER_BYTES = 60_000_000      # each region folder under 60 MB
 
-MANIFEST_FIELDS = ["schemaVersion", "generatedAt", "generatedBy", "region", "dataMaturity", "layers", "sources"]
+MANIFEST_FIELDS = ["schemaVersion", "generatedAt", "generatedBy", "region", "dataMaturity",
+                   "layers", "vectors", "sources"]
 REGION_FIELDS = ["id", "name", "bbox", "center", "zoom"]
 LAYER_FIELDS = ["id", "title", "kind", "product", "polarization", "units", "bounds", "colormap",
                 "description", "caveats", "frames"]
 FRAME_FIELDS = ["date", "image", "granules", "track", "frame", "direction"]
-LANDMARK_FIELDS = ["id", "name", "lon", "lat", "summary", "radarShows", "weInfer", "drivers", "sourceIds"]
+VECTOR_FIELDS = ["id", "title", "file", "source"]
+LANDMARK_FIELDS = ["id", "name", "lon", "lat", "summary", "radarShows", "weInfer", "drivers",
+                   "sourceIds", "series"]
 
 
 # --------------------------------------------------------------------------
-# The four small checks. Each returns a list of problems ([] means OK).
-# Test with:  .venv/bin/python -m pytest pipeline/tests/test_validate.py -v
+# Small helpers
+# --------------------------------------------------------------------------
+
+def is_number(value) -> bool:
+    """True for int or float. (bool counts as int in Python, so exclude it.)"""
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def missing_fields(obj, fields: list[str], where: str) -> list[str]:
+    if not isinstance(obj, dict):
+        return [f"{where}: expected an object"]
+    return [f"{where}: missing field '{f}'" for f in fields if f not in obj]
+
+
+def each_frame(manifest: dict):
+    """Yield (where, frame) for every frame that is an object. Skips broken entries."""
+    layers = manifest.get("layers")
+    for i, layer in enumerate(layers if isinstance(layers, list) else []):
+        frames = layer.get("frames") if isinstance(layer, dict) else None
+        for j, frame in enumerate(frames if isinstance(frames, list) else []):
+            if isinstance(frame, dict):
+                yield f"layers[{i}].frames[{j}]", frame
+
+
+# --------------------------------------------------------------------------
+# Value checks
 # --------------------------------------------------------------------------
 
 def check_bbox(bbox, where: str) -> list[str]:
-    """EXERCISE 1. A bbox is [west, south, east, north] in WGS84 degrees.
-
-    Return a list with a problem string when:
-      - it is not a list of exactly 4 numbers
-      - west/east are outside -180..180, or south/north outside -90..90
-      - west >= east, or south >= north   (this catches a swapped order)
-    Return [] when it is fine.
-    Every problem string must start with `where`, e.g. f"{where}: west must be less than east"
-    """
-    is_number = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool)
+    """A bbox is [west, south, east, north] in WGS84 degrees."""
     if not (isinstance(bbox, list) and len(bbox) == 4 and all(is_number(v) for v in bbox)):
         return [f"{where}: must be a list of 4 numbers [west, south, east, north]"]
 
@@ -63,12 +82,7 @@ def check_bbox(bbox, where: str) -> list[str]:
 
 
 def check_date(value, where: str) -> list[str]:
-    """EXERCISE 2. Dates must be strings 'YYYY-MM-DD' AND a real calendar day.
-
-    '2026-04-16' is fine. '2026-4-16', '16/04/2026', '2026-02-30', 20260416, None are not.
-    Hint: re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", value) checks the shape;
-          datetime.date.fromisoformat(value) raises ValueError if the day is not real.
-    """
+    """Dates must be strings 'YYYY-MM-DD' AND a real calendar day."""
     if not (isinstance(value, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", value)):
         return [f"{where}: '{value}' is not a YYYY-MM-DD date"]
     try:
@@ -78,136 +92,219 @@ def check_date(value, where: str) -> list[str]:
     return []
 
 
-def check_files_exist(manifest: dict, folder: Path) -> list[str]:
-    """EXERCISE 3. Every layers[].frames[].image and vectors[].file must exist.
+def check_path(path, folder: Path, suffix: str, where: str) -> list[str]:
+    """A data file path must stay inside the region folder, have the right suffix, and exist."""
+    if not (isinstance(path, str) and path):
+        return [f"{where}: must be a relative file path"]
+    full = (folder / path).resolve()
+    if not full.is_relative_to(folder.resolve()):
+        return [f"{where}: '{path}' points outside the region folder"]
+    if full.suffix != suffix:
+        return [f"{where}: '{path}' must be a {suffix} file"]
+    if not full.is_file():
+        return [f"{where}: file not found: {path}"]
+    return []
 
-    Paths are relative to `folder` (the folder that holds manifest.json): folder / path.
-    Return one problem per missing file, and include the file path in the message.
-    `vectors` is optional: use manifest.get("vectors", []).
-    """
+
+def check_colormap(cmap, where: str) -> list[str]:
+    if not isinstance(cmap, dict):
+        return [f"{where}: expected an object"]
     problems = []
-    for i, layer in enumerate(manifest.get("layers", [])):
-        for j, frame in enumerate(layer.get("frames", [])):
-            if not (folder / frame["image"]).exists():
-                problems.append(f"layers[{i}].frames[{j}].image: file not found: {frame['image']}")
-    for k, vector in enumerate(manifest.get("vectors", [])):
-        if not (folder / vector["file"]).exists():
-            problems.append(f"vectors[{k}].file: file not found: {vector['file']}")
+    if not (isinstance(cmap.get("name"), str) and cmap["name"]):
+        problems.append(f"{where}.name: must be a non-empty string")
+    low, high = cmap.get("min"), cmap.get("max")
+    if not (is_number(low) and is_number(high) and low < high):
+        problems.append(f"{where}: min and max must be numbers with min < max")
+    return problems
+
+
+def check_series(series, where: str) -> list[str]:
+    """series is an object like {"hh_db": [{"date": ..., "value": number or null}, ...]}."""
+    if not isinstance(series, dict):
+        return [f"{where}: expected an object of named series"]
+    problems = []
+    for name, points in series.items():
+        if not isinstance(points, list):
+            problems.append(f"{where}.{name}: must be a list")
+            continue
+        for p, point in enumerate(points):
+            at = f"{where}.{name}[{p}]"
+            if not isinstance(point, dict):
+                problems.append(f"{at}: expected an object with date and value")
+                continue
+            problems += check_date(point.get("date"), f"{at}.date")
+            if "value" not in point:
+                problems.append(f"{at}: missing 'value' (use null for no data)")
+            elif point["value"] is not None and not is_number(point["value"]):
+                problems.append(f"{at}.value: must be a number or null")
+    return problems
+
+
+# --------------------------------------------------------------------------
+# File checks
+# --------------------------------------------------------------------------
+
+def check_files_exist(manifest: dict, folder: Path) -> list[str]:
+    """Every frame image (.webp) and vector file (.geojson) must exist inside the folder.
+    Entries with a missing key are skipped here; check_manifest reports them."""
+    problems = []
+    for where, frame in each_frame(manifest):
+        if "image" in frame:
+            problems += check_path(frame["image"], folder, ".webp", f"{where}.image")
+    vectors = manifest.get("vectors")
+    for k, vector in enumerate(vectors if isinstance(vectors, list) else []):
+        if isinstance(vector, dict) and "file" in vector:
+            problems += check_path(vector["file"], folder, ".geojson", f"vectors[{k}].file")
     return problems
 
 
 def check_size_budget(manifest: dict, folder: Path) -> list[str]:
-    """EXERCISE 4. Each frame image under MAX_IMAGE_BYTES, and the whole folder
-    (every file inside it, recursively) under MAX_FOLDER_BYTES.
-
-    Skip images that do not exist (check_files_exist already reports those).
-    Include the image path in the message for a too-big image.
-    Hint: path.stat().st_size gives bytes; folder.rglob("*") lists everything inside.
-    """
+    """Each frame image under MAX_IMAGE_BYTES; the whole folder under MAX_FOLDER_BYTES."""
     problems = []
-    for layer in manifest.get("layers", []):
-        for frame in layer.get("frames", []):
-            image = folder / frame["image"]
-            if image.exists() and image.stat().st_size > MAX_IMAGE_BYTES:
-                problems.append(f"{frame['image']}: image is over 1 MB")
+    for where, frame in each_frame(manifest):
+        image = folder / str(frame.get("image", ""))
+        if image.is_file() and image.stat().st_size > MAX_IMAGE_BYTES:
+            problems.append(f"{where}.image: {frame['image']} is over {MAX_IMAGE_BYTES / 1e6:g} MB")
 
     total = sum(f.stat().st_size for f in folder.rglob("*") if f.is_file())
     if total > MAX_FOLDER_BYTES:
-        problems.append(f"{folder}: folder is {total / 1e6:.1f} MB, over the 60 MB budget")
+        problems.append(f"{folder}: folder is {total / 1e6:g} MB, over the {MAX_FOLDER_BYTES / 1e6:g} MB budget")
     return problems
 
 
 # --------------------------------------------------------------------------
-# Plumbing (already done). Read it, and be ready to explain it back.
+# manifest.json
 # --------------------------------------------------------------------------
 
-def missing_fields(obj, fields: list[str], where: str) -> list[str]:
-    if not isinstance(obj, dict):
-        return [f"{where}: expected an object"]
-    return [f"{where}: missing field '{f}'" for f in fields if f not in obj]
+def check_region(region) -> list[str]:
+    problems = missing_fields(region, REGION_FIELDS, "region")
+    if problems:
+        return problems
+    bbox_problems = check_bbox(region["bbox"], "region.bbox")
+    problems += bbox_problems
+
+    center = region["center"]
+    if not (isinstance(center, list) and len(center) == 2 and all(is_number(v) for v in center)):
+        problems.append("region.center: must be [lon, lat]")
+    elif not bbox_problems:
+        west, south, east, north = region["bbox"]
+        lon, lat = center
+        if not (west <= lon <= east and south <= lat <= north):
+            problems.append("region.center: [lon, lat] is outside region.bbox (swapped?)")
+
+    if not is_number(region["zoom"]):
+        problems.append("region.zoom: must be a number")
+    return problems
 
 
-def check_manifest(manifest: dict, folder: Path) -> list[str]:
+def check_frame(frame, kind: str, where: str) -> list[str]:
+    problems = missing_fields(frame, FRAME_FIELDS, where)
+    if problems:
+        return problems
+    problems += check_date(frame["date"], f"{where}.date")
+    if kind == "displacement":
+        problems += check_date(frame.get("since"), f"{where}.since")
+    if not (isinstance(frame["granules"], list) and frame["granules"]):
+        problems.append(f"{where}.granules: list the source granule names")
+    if frame["direction"] not in DIRECTIONS:
+        problems.append(f"{where}.direction: '{frame['direction']}' is not one of {sorted(DIRECTIONS)}")
+    for key in ("track", "frame"):
+        if not (isinstance(frame[key], int) and not isinstance(frame[key], bool)):
+            problems.append(f"{where}.{key}: must be a whole number")
+    return problems
+
+
+def check_layer(layer, where: str) -> list[str]:
+    problems = missing_fields(layer, LAYER_FIELDS, where)
+    if problems:
+        return problems
+    if layer["kind"] not in LAYER_KINDS:
+        problems.append(f"{where}.kind: '{layer['kind']}' is not one of {sorted(LAYER_KINDS)}")
+    if layer["polarization"] not in POLARIZATIONS:
+        problems.append(f"{where}.polarization: '{layer['polarization']}' is not allowed")
+    problems += check_bbox(layer["bounds"], f"{where}.bounds")
+    problems += check_colormap(layer["colormap"], f"{where}.colormap")
+
+    frames = layer["frames"]
+    if not (isinstance(frames, list) and frames):
+        return problems + [f"{where}.frames: must be a non-empty list"]
+    for j, frame in enumerate(frames):
+        problems += check_frame(frame, layer["kind"], f"{where}.frames[{j}]")
+    return problems
+
+
+def check_manifest(manifest, folder: Path) -> list[str]:
     problems = missing_fields(manifest, MANIFEST_FIELDS, "manifest")
     if problems:
         return problems  # structure is too broken to check further
+    for key in ("layers", "vectors", "sources"):
+        if not isinstance(manifest[key], list):
+            problems.append(f"manifest.{key}: must be a list")
+    if problems:
+        return problems
 
-    region = manifest["region"]
-    problems += missing_fields(region, REGION_FIELDS, "region")
-    if isinstance(region, dict) and "bbox" in region:
-        problems += check_bbox(region["bbox"], "region.bbox")
+    problems += check_region(manifest["region"])
+    for i, layer in enumerate(manifest["layers"]):
+        problems += check_layer(layer, f"layers[{i}]")
 
     source_ids = {s.get("id") for s in manifest["sources"] if isinstance(s, dict)}
-
-    for i, layer in enumerate(manifest["layers"]):
-        at = f"layers[{i}]"
-        layer_problems = missing_fields(layer, LAYER_FIELDS, at)
-        problems += layer_problems
-        if layer_problems:
-            continue
-        if layer["kind"] not in LAYER_KINDS:
-            problems.append(f"{at}.kind: '{layer['kind']}' is not one of {sorted(LAYER_KINDS)}")
-        if layer["polarization"] not in POLARIZATIONS:
-            problems.append(f"{at}.polarization: '{layer['polarization']}' is not allowed")
-        problems += check_bbox(layer["bounds"], f"{at}.bounds")
-        cmap = layer["colormap"]
-        if not (isinstance(cmap, dict) and cmap.get("min") is not None and cmap.get("max") is not None
-                and cmap["min"] < cmap["max"]):
-            problems.append(f"{at}.colormap: needs name, and min < max")
-        if not layer["frames"]:
-            problems.append(f"{at}.frames: a layer needs at least one frame")
-        for j, frame in enumerate(layer["frames"]):
-            fat = f"{at}.frames[{j}]"
-            frame_problems = missing_fields(frame, FRAME_FIELDS, fat)
-            problems += frame_problems
-            if frame_problems:
-                continue
-            problems += check_date(frame["date"], f"{fat}.date")
-            if layer["kind"] == "displacement":
-                problems += check_date(frame.get("since"), f"{fat}.since")
-            if not frame["granules"]:
-                problems.append(f"{fat}.granules: list the source granule names")
-
-    for k, vec in enumerate(manifest.get("vectors", [])):
-        problems += missing_fields(vec, ["id", "title", "file", "source"], f"vectors[{k}]")
-        if isinstance(vec, dict) and vec.get("source") not in source_ids:
-            problems.append(f"vectors[{k}].source: '{vec.get('source')}' is not an id in sources[]")
+    for k, vector in enumerate(manifest["vectors"]):
+        vector_problems = missing_fields(vector, VECTOR_FIELDS, f"vectors[{k}]")
+        problems += vector_problems
+        if not vector_problems and vector["source"] not in source_ids:
+            problems.append(f"vectors[{k}].source: '{vector['source']}' is not an id in sources[]")
 
     problems += check_files_exist(manifest, folder)
     problems += check_size_budget(manifest, folder)
     return problems
 
 
-def check_landmarks(landmarks: dict, region_id: str, source_ids: set) -> list[str]:
+# --------------------------------------------------------------------------
+# landmarks.json
+# --------------------------------------------------------------------------
+
+def check_landmarks(landmarks, region_id, source_ids: set) -> list[str]:
     problems = missing_fields(landmarks, ["schemaVersion", "regionId", "landmarks"], "landmarks.json")
     if problems:
         return problems
+    if not isinstance(landmarks["landmarks"], list):
+        return ["landmarks.json landmarks: must be a list"]
     if landmarks["regionId"] != region_id:
         problems.append(f"landmarks.json regionId '{landmarks['regionId']}' != manifest region.id '{region_id}'")
+
     seen = set()
-    for i, lm in enumerate(landmarks["landmarks"]):
+    for i, landmark in enumerate(landmarks["landmarks"]):
         at = f"landmarks[{i}]"
-        lm_problems = missing_fields(lm, LANDMARK_FIELDS, at)
-        problems += lm_problems
-        if lm_problems:
+        landmark_problems = missing_fields(landmark, LANDMARK_FIELDS, at)
+        problems += landmark_problems
+        if landmark_problems:
             continue
-        if lm["id"] in seen:
-            problems.append(f"{at}.id: duplicate id '{lm['id']}'")
-        seen.add(lm["id"])
-        if not (-180 <= lm["lon"] <= 180 and -90 <= lm["lat"] <= 90):
+        if landmark["id"] in seen:
+            problems.append(f"{at}.id: duplicate id '{landmark['id']}'")
+        seen.add(landmark["id"])
+
+        lon, lat = landmark["lon"], landmark["lat"]
+        if not (is_number(lon) and is_number(lat)):
+            problems.append(f"{at}: lon and lat must be numbers")
+        elif not (-180 <= lon <= 180 and -90 <= lat <= 90):
             problems.append(f"{at}: lon/lat out of range (did you swap them?)")
-        for sid in lm["sourceIds"]:
-            if sid not in source_ids:
-                problems.append(f"{at}.sourceIds: '{sid}' is not an id in manifest sources[]")
-        for name, points in lm.get("series", {}).items():
-            for p, point in enumerate(points):
-                problems += check_date(point.get("date"), f"{at}.series.{name}[{p}].date")
-                if "value" not in point:
-                    problems.append(f"{at}.series.{name}[{p}]: missing 'value' (use null for no data)")
+
+        if not isinstance(landmark["sourceIds"], list):
+            problems.append(f"{at}.sourceIds: must be a list")
+        else:
+            for sid in landmark["sourceIds"]:
+                if sid not in source_ids:
+                    problems.append(f"{at}.sourceIds: '{sid}' is not an id in manifest sources[]")
+
+        problems += check_series(landmark["series"], f"{at}.series")
     return problems
 
 
-def load_json(path: Path) -> tuple[dict | None, list[str]]:
+# --------------------------------------------------------------------------
+# Whole folder and command line
+# --------------------------------------------------------------------------
+
+def load_json(path: Path):
     """Read a JSON file. Duplicate keys are an error (JSON would silently keep only the last one)."""
     if not path.exists():
         return None, [f"{path.name}: file not found"]
@@ -225,18 +322,21 @@ def load_json(path: Path) -> tuple[dict | None, list[str]]:
         return None, [f"{path.name}: not valid JSON ({e})"]
 
 
-def validate_folder(folder: Path) -> list[str]:
+def validate_folder(folder) -> list[str]:
     folder = Path(folder)
     manifest, problems = load_json(folder / "manifest.json")
     if manifest is None:
         return problems
     problems += check_manifest(manifest, folder)
 
-    landmarks, lm_load = load_json(folder / "landmarks.json")
-    problems += lm_load
-    if landmarks is not None and isinstance(manifest.get("region"), dict):
-        source_ids = {s.get("id") for s in manifest.get("sources", []) if isinstance(s, dict)}
-        problems += check_landmarks(landmarks, manifest["region"].get("id"), source_ids)
+    landmarks, load_problems = load_json(folder / "landmarks.json")
+    problems += load_problems
+    if landmarks is not None and isinstance(manifest, dict):
+        region = manifest.get("region")
+        region_id = region.get("id") if isinstance(region, dict) else None
+        sources = manifest.get("sources")
+        source_ids = {s.get("id") for s in sources if isinstance(s, dict)} if isinstance(sources, list) else set()
+        problems += check_landmarks(landmarks, region_id, source_ids)
     return problems
 
 
