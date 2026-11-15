@@ -182,7 +182,12 @@ describe('Legend', () => {
     expect(text()).toContain('Reference area: Generated test area.');
     expect(text()).toContain('Period: 2025-11-11 to 2026-10-13.');
     expect(text()).toContain('Source: NISAR GUNW (NASA/ISRO).');
-    expect(text()).not.toMatch(/sinking|subsid/i);
+    // D-19: "sinking" appears once, on the sign line, while the number stays labeled line of sight.
+    expect(container.querySelector('.legend__sign')?.textContent).toBe(
+      'Positive (red) = moving away from the satellite (sinking)',
+    );
+    expect(text().match(/sinking/gi)).toHaveLength(1);
+    expect(text()).not.toMatch(/subsid|vertical rate/i);
   });
 
   it('says nothing about the sign when the manifest does not give it, and counts granules', () => {

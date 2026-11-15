@@ -1,6 +1,7 @@
 // Legend for the active layer (T-12): color ramp with min and max, units, description, caveats,
-// a source note, and data-maturity and synthetic-data badges. All science wording comes from
-// manifest fields (docs/DATA_CONTRACT.md); this file adds only neutral labels.
+// a source note, and data-maturity and synthetic-data badges. Science wording comes from
+// manifest fields (docs/DATA_CONTRACT.md); the one exception is the word "sinking" on the sign
+// line, which D-19 (docs/DECISIONS.md) allows while the number stays labeled line of sight.
 // It only reads the shared store; it never touches the map and imports no other component.
 // Owner: Diego (app/src/components/layers/). Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
 import { selectActiveFrame, selectActiveLayer, useAppStore } from '../../state/store';
@@ -45,17 +46,18 @@ export default function Legend() {
   const isGroundMotion = kind === 'displacement';
   const isPriority = kind === 'priority';
 
-  // Ground motion is named by its line-of-sight label from the manifest; this file adds no
-  // "sinking" wording of its own.
+  // Ground motion is named by its line-of-sight label from the manifest, so the number on the
+  // legend always reads as line of sight (D-19). No vertical figure is shown, so no conversion.
   const name = isGroundMotion ? (layer.losLabel ?? 'Line-of-sight movement') : layer.title;
   const ramp = RAMPS[layer.colormap.name];
   const granuleCount = frame?.granules.length ?? 0;
 
   // What the sign means, only when the manifest says so. "positive" is the only value the type,
-  // the data contract and pipeline/validate_manifest.py allow (PR #24, T-35).
+  // the data contract and pipeline/validate_manifest.py allow (PR #24, T-35). D-19: moving away
+  // from the satellite is sinking, and the app may say so in words.
   const sign =
     layer.awaySign === 'positive'
-      ? `Positive${ramp ? ` (${ramp.maxColor})` : ''} = moving away from the satellite`
+      ? `Positive${ramp ? ` (${ramp.maxColor})` : ''} = moving away from the satellite (sinking)`
       : null;
   // The manifest's reference area may already end in a full stop; the legend adds its own.
   const referenceArea = layer.referenceArea?.trim().replace(/\.$/, '');
