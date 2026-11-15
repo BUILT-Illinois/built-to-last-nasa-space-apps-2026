@@ -14,7 +14,7 @@ from PIL import Image
 from rasterio.transform import from_bounds
 from rasterio.warp import Resampling, reproject, transform_bounds
 
-from fetch_crops import OUTPUT_DIR, fetch_crop, find_granule
+from fetch_crops import OUTPUT_DIR, fetch_crop, find_granule, monthly_dates, output_path
 from quicklook import CONFIG_PATH, stretch, to_db
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -117,7 +117,7 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
     catalog = {day: find_granule(region_id, "GCOV", day) for day in dates}
     scenes = {}
     for day, row in catalog.items():
-        path = crop_dir / f"{region_id}_gcov_{day}.npz"
+        path = crop_dir / output_path(region_id, "GCOV", day).name
         if not path.is_file():
             path = OUTPUT_DIR / path.name
         if not path.is_file():
@@ -208,8 +208,10 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dates", nargs="+", type=date.fromisoformat, required=True,
-                        metavar="DATE", help="Two or more distinct scene dates in YYYY-MM-DD")
+    dates_group = parser.add_mutually_exclusive_group(required=True)
+    dates_group.add_argument("--dates", nargs="+", type=date.fromisoformat,
+                             metavar="DATE", help="Two or more distinct scene dates in YYYY-MM-DD")
+    dates_group.add_argument("--monthly", action="store_true", help="Use configured GCOV dates")
     parser.add_argument("--region", default="mexico_city")
     parser.add_argument("--crop-dir", type=Path, default=OUTPUT_DIR,
                         help="Also look for cached T-03 crops in this folder")
@@ -218,8 +220,8 @@ def main():
     args = parser.parse_args()
     output = args.output or ROOT / "app" / "public" / "data" / args.region
     try:
-        build(args.region, [day.isoformat() for day in args.dates], args.crop_dir, output,
-              offline=args.offline)
+        dates = monthly_dates(args.region) if args.monthly else [day.isoformat() for day in args.dates]
+        build(args.region, dates, args.crop_dir, output, offline=args.offline)
     except (ValueError, OSError, KeyError) as error:
         parser.exit(1, f"GCOV build failed: {error}\n")
     print(f"Wrote {output / 'manifest.json'}")

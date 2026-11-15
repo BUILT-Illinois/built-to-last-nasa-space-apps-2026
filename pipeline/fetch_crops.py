@@ -2,9 +2,11 @@
 
 import argparse
 import csv
+import json
 import subprocess
 import sys
 from datetime import date
+from hashlib import sha256
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 from time import monotonic, sleep, time
@@ -14,13 +16,22 @@ import h5py
 import numpy as np
 from aiohttp import ClientConnectionError, ClientPayloadError, ClientResponseError
 
-from quicklook import GCOV_GRIDS, GUNW_UNW, region_bbox, window_for_bbox
+from quicklook import CONFIG_PATH, GCOV_GRIDS, GUNW_UNW, region_bbox, window_for_bbox
 
 HERE = Path(__file__).resolve().parent
 OUTPUT_DIR = HERE.parent / "data" / "interim"
 HTTP_TIMEOUT_SECONDS = 30
 RETRY_DELAYS = (2, 4, 8)
 FETCH_DEADLINES = {"GCOV": 180, "GUNW": 300}
+MEXICO_CITY_BBOX = [-99.40, 19.10, -98.85, 19.65]
+MEXICO_CITY_GCOV = {
+    "track": 19, "frame": 11, "direction": "ASCENDING", "release": "P05023",
+    "dates": (
+        "2025-11-11", "2025-12-17", "2026-01-10", "2026-02-15",
+        "2026-03-11", "2026-04-16", "2026-05-10", "2026-06-15",
+        "2026-07-09", "2026-08-14", "2026-09-19", "2026-10-13",
+    ),
+}
 DATASETS = {
     "GCOV": (GCOV_GRIDS.format(freq="B"), ("HHHH", "HVHV")),
     "GUNW": (GUNW_UNW, (
@@ -29,7 +40,37 @@ DATASETS = {
 }
 
 
+def gcov_config(region):
+    config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    try:
+        entry = config["regions"][region]
+        if region == "mexico_city":
+            return entry.get("gcov", MEXICO_CITY_GCOV)
+        return entry["gcov"]
+    except KeyError:
+        raise ValueError(f"Add a gcov configuration for region {region}") from None
+
+
+def monthly_dates(region):
+    try:
+        dates = [date.fromisoformat(day).isoformat() for day in gcov_config(region)["dates"]]
+    except (KeyError, TypeError, ValueError):
+        raise ValueError(f"Configure monthly GCOV dates in YYYY-MM-DD for {region}") from None
+    if len(dates) < 2 or len(set(dates)) != len(dates):
+        raise ValueError(f"Configure at least two distinct GCOV dates for {region}")
+    return sorted(dates)
+
+
+def selection(region, product):
+    settings = gcov_config(region) if product == "GCOV" else MEXICO_CITY_GCOV
+    try:
+        return tuple(str(settings[key]) for key in ("track", "frame", "direction", "release"))
+    except KeyError as error:
+        raise ValueError(f"Missing GCOV selection field {error.args[0]} for {region}") from None
+
+
 def find_granule(region, product, day):
+    track, frame, direction, release = selection(region, product)
     report = HERE / "reports" / f"granules_{region}.csv"
     if not report.is_file():
         raise ValueError(f"No catalog report for {region}: {report.name}")
@@ -37,8 +78,8 @@ def find_granule(region, product, day):
         for row in csv.DictReader(catalog):
             geometry = (row["track"], row["frame"], row["direction"])
             if (row["product_type"] == product and row["start_time"][:10] == day
-                    and row["maturity"] == "PROVISIONAL" and row["crid"] == "P05023"
-                    and geometry == ("19", "11", "ASCENDING")):
+                    and row["maturity"] == "PROVISIONAL" and row["crid"] == release
+                    and geometry == (track, frame, direction)):
                 return row
     raise ValueError(f"No approved {product} granule for {region} on {day}")
 
@@ -120,7 +161,14 @@ def run_fetch(command, timeout, label):
 
 
 def output_path(region, product, day):
-    return OUTPUT_DIR / f"{region}_{product.lower()}_{day}.npz"
+    tag = ""
+    if product == "GCOV":
+        bbox = region_bbox(region)
+        scene = selection(region, product)
+        if (region, bbox, scene) != ("mexico_city", MEXICO_CITY_BBOX, ("19", "11", "ASCENDING", "P05023")):
+            # A changed window or selection must not reuse an old crop.
+            tag = "_" + sha256(json.dumps([bbox, scene]).encode()).hexdigest()[:16]
+    return OUTPUT_DIR / f"{region}_{product.lower()}_{day}{tag}.npz"
 
 
 def fetch_bounded(region, product, day):

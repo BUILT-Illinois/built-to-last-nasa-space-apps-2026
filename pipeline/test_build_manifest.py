@@ -1,6 +1,7 @@
 """Test the GCOV app bundle. Drafted with AI assistance (Codex)."""
 
 import json
+import csv
 import subprocess
 import sys
 
@@ -9,6 +10,7 @@ import pytest
 from PIL import Image
 
 import build_manifest as builder
+import fetch_crops as fetcher
 
 REGION = "mexico_city"
 DATES = ("2025-10-30", "2025-11-11")
@@ -119,3 +121,49 @@ def test_rejects_unapproved_crop(crops, tmp_path):
     second.replace(first)
     with pytest.raises(ValueError, match="does not match approved granule"):
         builder.build(REGION, DATES, crops, tmp_path / "output", offline=True)
+
+
+def test_configured_region_and_bbox_cache(crops, tmp_path, monkeypatch):
+    config = json.loads(builder.CONFIG_PATH.read_text())
+    region = "new_region"
+    config["regions"][region] = {
+        "name": "New Region", "bbox": config["regions"][REGION]["bbox"][:],
+        "gcov": {"track": 42, "frame": 5, "direction": "DESCENDING",
+                 "release": "P05023", "dates": list(reversed(DATES))},
+    }
+    config_path = tmp_path / "regions.json"
+    config_path.write_text(json.dumps(config))
+    monkeypatch.setattr(builder, "CONFIG_PATH", config_path)
+    monkeypatch.setattr(fetcher, "CONFIG_PATH", config_path)
+    monkeypatch.setattr(fetcher, "region_bbox",
+                        lambda key: json.loads(config_path.read_text())["regions"][key]["bbox"])
+    monkeypatch.setattr(fetcher, "HERE", tmp_path)
+    reports = tmp_path / "reports"
+    reports.mkdir()
+    with (reports / f"granules_{region}.csv").open("w", newline="") as stream:
+        fields = ["product_type", "start_time", "maturity", "crid", "track", "frame",
+                  "direction", "scene_name"]
+        writer = csv.DictWriter(stream, fieldnames=fields)
+        writer.writeheader()
+        for day in DATES:
+            scene_name = f"fixture_{day}"
+            writer.writerow(dict(zip(fields, ["GCOV", day, "PROVISIONAL", "P05023",
+                                               42, 5, "DESCENDING", scene_name])))
+            path = crops / fetcher.output_path(region, "GCOV", day).name
+            with np.load(crops / f"{REGION}_gcov_{day}.npz") as source:
+                np.savez(path, **{**dict(source), "granule": scene_name})
+
+    output = tmp_path / "output"
+    builder.build(region, fetcher.monthly_dates(region), crops, output, offline=True)
+    manifest = json.loads((output / "manifest.json").read_text())
+    assert manifest["schemaVersion"] == "0.1"
+    assert manifest["region"]["id"] == region
+    assert [f["date"] for f in manifest["layers"][0]["frames"]] == list(DATES)
+    assert all((f["track"], f["frame"], f["direction"]) == (42, 5, "DESCENDING")
+               for f in manifest["layers"][0]["frames"])
+
+    before = fetcher.output_path(REGION, "GCOV", DATES[0])
+    assert before.name == f"{REGION}_gcov_{DATES[0]}.npz"
+    config["regions"][REGION]["bbox"][0] -= 0.1
+    config_path.write_text(json.dumps(config))
+    assert fetcher.output_path(REGION, "GCOV", DATES[0]) != before
