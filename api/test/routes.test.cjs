@@ -73,9 +73,20 @@ test('the wider valley serves the same GCOV acquisitions as the city', () => {
   const city = manifest(request('mexico_city', 'manifest')).jsonBody;
   const valley = manifest(request('mexico_city_valley', 'manifest')).jsonBody;
   assert.deepEqual(valley.region.bbox, [-99.60, 19.00, -98.60, 19.90]);
-  assert.deepEqual(valley.layers.map(({ id, frames }) => ({ id, frames })),
-    city.layers.filter(({ product }) => product === 'GCOV').map(({ id, frames }) => ({ id, frames })));
-  assert.ok(valley.layers.every(({ frames }) => frames.length === 11));
+  const gcov = ({ layers }) => layers.filter(({ product }) => product === 'GCOV')
+    .map(({ id, frames }) => ({ id, frames }));
+  assert.deepEqual(gcov(valley), gcov(city));
+  assert.ok(gcov(valley).every(({ frames }) => frames.length === 11));
+  assert.equal(valley.dataMaturity, 'PROVISIONAL');
+  const sinking = valley.layers.find(({ id }) => id === 'sinking');
+  assert.equal(sinking.awaySign, 'positive');
+  assert.equal(sinking.units, 'cm/yr');
+  assert.deepEqual(sinking.bounds, valley.region.bbox);
+  assert.equal(sinking.frames[0].granules.length, 27);
+  assert.match(sinking.caveats.join(' '), /likely noise, pending review/);
+  const valleyLandmarks = landmarks(request('mexico_city_valley', 'landmarks')).jsonBody.landmarks;
+  const cityLandmarks = landmarks(request('mexico_city', 'landmarks')).jsonBody.landmarks;
+  assert.deepEqual(valleyLandmarks.map(({ id }) => id), cityLandmarks.map(({ id }) => id));
 });
 
 test('/api/landmarks serves the Mexico City monthly landmark series', () => {

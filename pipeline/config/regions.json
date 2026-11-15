@@ -11,7 +11,9 @@
       "name": "Valley of Mexico (wider coverage)",
       "bbox": [-99.60, 19.00, -98.60, 19.90],
       "tier": 1,
-      "gcov_reference_region": "mexico_city"
+      "gcov_reference_region": "mexico_city",
+      "landmark_content_region": "mexico_city",
+      "sinking_pixel_meters": 100
     },
     "popocatepetl": {
       "name": "Popocatepetl volcano",

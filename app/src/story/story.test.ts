@@ -1,6 +1,6 @@
 // Checks every tour in content/story/ against its region's real data, and the step resolver.
 // Drafted with AI assistance (Claude Code), see docs/AI_USAGE.md.
-import { existsSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import type { LandmarksFile, Manifest } from '../types/manifest';
 import { getStory, resolveStep, storyRegionIds, type StoryStep } from './story';
@@ -9,8 +9,8 @@ const repoFile = (rel: string) => new URL(`../../../${rel}`, import.meta.url);
 const readJson = <T>(rel: string): T => JSON.parse(readFileSync(repoFile(rel), 'utf8')) as T;
 
 describe('tours in content/story/', () => {
-  it('include Mexico City', () => {
-    expect(storyRegionIds()).toContain('mexico_city');
+  it('include Mexico City and the wider valley', () => {
+    expect(storyRegionIds()).toEqual(expect.arrayContaining(['mexico_city', 'mexico_city_valley']));
   });
 
   for (const regionId of storyRegionIds()) {
@@ -28,11 +28,9 @@ describe('tours in content/story/', () => {
         expect(problems).toEqual([]);
       });
 
-      it('names only landmarks that exist in content/landmarks/', () => {
-        const file = `content/landmarks/${regionId}.json`;
-        const known = existsSync(repoFile(file))
-          ? new Set(readJson<LandmarksFile>(file).landmarks.map((l) => l.id))
-          : new Set<string>();
+      it('names only published landmarks for the active region', () => {
+        const file = `app/public/data/${regionId}/landmarks.json`;
+        const known = new Set(readJson<LandmarksFile>(file).landmarks.map((l) => l.id));
         const missing = story.steps.map((s) => s.set.landmark).filter((id) => id !== undefined && !known.has(id));
         expect(missing).toEqual([]);
       });

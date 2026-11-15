@@ -16,6 +16,7 @@ import {
 import { regionBaseUrl } from '../lib/data';
 import type { Frame, Layer, LngLat } from '../types/manifest';
 import { BASEMAP_STYLE, NISAR_ATTRIBUTION, addOpticalLayer, setBasemap, setNisarImage } from './layers';
+import { addLandmarkLayer, setLandmarks, setSelectedLandmark } from './landmarkMarkers';
 import { syncMaps } from './syncMaps';
 import SwipeHandle from './SwipeHandle';
 import './map.css';
@@ -60,6 +61,8 @@ export default function MapView() {
   const basemap = useAppStore((s) => s.basemap);
   const opacity = useAppStore((s) => s.layerOpacity);
   const cameraRequest = useAppStore((s) => s.cameraRequest);
+  const landmarks = useAppStore((s) => s.landmarks);
+  const selectedLandmarkId = useAppStore((s) => s.selectedLandmarkId);
   const activeLayer = useAppStore(selectActiveLayer);
   const activeFrame = useAppStore(selectActiveFrame);
   const compareLayer = useAppStore(selectCompareLayer);
@@ -83,12 +86,17 @@ export default function MapView() {
     });
     base.addControl(new maplibregl.NavigationControl({ visualizePitch: false }), 'top-right');
     base.addControl(new maplibregl.ScaleControl({ unit: 'metric' }), 'bottom-left');
+    // T-14: marker clicks select a landmark (no flyTo: the user is already looking at it).
+    const selectLandmark = (id: string) => useAppStore.getState().selectLandmark(id);
     base.on('load', () => {
       addOpticalLayer(base);
+      addLandmarkLayer(base, selectLandmark);
       setReady((r) => ({ ...r, base: true }));
     });
     compare.on('load', () => {
       addOpticalLayer(compare);
+      // Also on the top map: during a swipe it covers the right side and gets those clicks.
+      addLandmarkLayer(compare, selectLandmark);
       setReady((r) => ({ ...r, compare: true }));
     });
     const unsync = syncMaps(base, compare);
@@ -112,6 +120,17 @@ export default function MapView() {
       mapsRef.current?.base.flyTo({ center: cameraRequest.center, zoom: cameraRequest.zoom });
     }
   }, [cameraRequest]);
+
+  // T-14: landmark markers on both maps, redrawn when the region's landmarks or the selection change.
+  useEffect(() => {
+    const maps = mapsRef.current;
+    if (!maps) return;
+    for (const [map, isReady] of [[maps.base, ready.base], [maps.compare, ready.compare]] as const) {
+      if (!isReady) continue;
+      setLandmarks(map, landmarks);
+      setSelectedLandmark(map, selectedLandmarkId);
+    }
+  }, [landmarks, selectedLandmarkId, ready]);
 
   // Street map or optical imagery under the radar.
   useEffect(() => {

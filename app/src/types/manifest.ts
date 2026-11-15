@@ -104,7 +104,7 @@ export interface LandmarkSeries {
   hh_db?: SeriesPoint[];
   hv_db?: SeriesPoint[];
   water_months?: { count: number; valid_months: number; provisional: true };
-  /** Cumulative line-of-sight movement since the first date; negative = away from the satellite. */
+  /** Cumulative line-of-sight movement since the first date. Positive LOS means movement away from the satellite. */
   los_displacement_cm?: SeriesPoint[];
 }
 

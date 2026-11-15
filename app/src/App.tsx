@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import LayerSwitcher from './components/layers/LayerSwitcher';
 import Legend from './components/layers/Legend';
 import ViewOptions from './components/layers/ViewOptions';
+import LandmarkPanel from './components/landmarks/LandmarkPanel';
 import MapView from './map/MapView';
 import { DEFAULT_REGION_ID, useAppStore } from './state/store';
 import ReadingGuide from './story/ReadingGuide';
@@ -27,6 +28,7 @@ export default function App() {
   return (
     <div className="app">
       <MapView />
+      <LandmarkPanel />
       <aside className="layer-controls">
         <header className="panel__header">
           <h1 className="panel__title">Project Lago</h1>
@@ -38,7 +40,7 @@ export default function App() {
       </aside>
       <ReadingGuide />
       <StoryTour />
-      {/* Slots for later tasks: layers and time (Diego), landmarks, chart, sources (Zainab). */}
+      {/* Slots for later tasks: layers and time (Diego), chart, sources (Zainab). */}
     </div>
   );
 }
