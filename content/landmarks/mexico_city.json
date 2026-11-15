@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "0.1",
+  "regionId": "mexico_city",
+  "landmarks": [
+    {
+      "id": "new_lake_chalco",
+      "name": "New Lake Chalco (Lago de Tláhuac-Xico)",
+      "lon": -98.97,
+      "lat": 19.27,
+      "summary": "TODO(Monica): paste card text.",
+      "radarShows": "TODO(Monica): paste card text.",
+      "weInfer": "TODO(Monica): paste card text.",
+      "drivers": { "human": null, "natural": null },
+      "sourceIds": ["nisar-gcov"],
+      "series": {}
+    },
+    {
+      "id": "bosque_tlahuac_lake",
+      "name": "Bosque de Tláhuac lake",
+      "lon": null,
+      "lat": null,
+      "summary": "TODO(Monica): card text pending.",
+      "radarShows": "TODO(Monica): card text pending.",
+      "weInfer": "TODO(Monica): card text pending.",
+      "drivers": { "human": null, "natural": null },
+      "sourceIds": ["nisar-gcov"],
+      "series": {}
+    },
+    {
+      "id": "santa_cecilia_tlahuac",
+      "name": "Santa Cecilia, Tláhuac",
+      "lon": -99.00,
+      "lat": 19.28,
+      "summary": "TODO(Monica): card text pending.",
+      "radarShows": "TODO(Monica): card text pending.",
+      "weInfer": "TODO(Monica): card text pending.",
+      "drivers": { "human": null, "natural": null },
+      "sourceIds": ["nisar-gcov"],
+      "series": {}
+    },
+    {
+      "id": "tlahuac_ground_motion",
+      "name": "Tláhuac",
+      "lon": -99.00,
+      "lat": 19.28,
+      "summary": "TODO(Monica): card text pending.",
+      "radarShows": "TODO(Monica): card text pending.",
+      "weInfer": "TODO(Monica): card text pending.",
+      "drivers": { "human": null, "natural": null },
+      "sourceIds": ["nisar-gcov"],
+      "series": {}
+    },
+    {
+      "id": "nezahualcoyotl",
+      "name": "Nezahualcóyotl",
+      "lon": -99.02,
+      "lat": 19.40,
+      "summary": "TODO(Monica): card text pending.",
+      "radarShows": "TODO(Monica): card text pending.",
+      "weInfer": "TODO(Monica): card text pending.",
+      "drivers": { "human": null, "natural": null },
+      "sourceIds": ["nisar-gcov"],
+      "series": {}
+    },
+    {
+      "id": "aicm",
+      "name": "Benito Juárez International Airport (old Lake Texcoco bed)",
+      "lon": -99.07,
+      "lat": 19.44,
+      "summary": "TODO(Monica): card text pending.",
+      "radarShows": "TODO(Monica): card text pending.",
+      "weInfer": "TODO(Monica): card text pending.",
+      "drivers": { "human": null, "natural": null },
+      "sourceIds": ["nisar-gcov"],
+      "series": {}
+    },
+    {
+      "id": "angel_independencia",
+      "name": "Ángel de la Independencia",
+      "lon": -99.17,
+      "lat": 19.43,
+      "summary": "TODO(Monica): card text pending.",
+      "radarShows": "TODO(Monica): card text pending.",
+      "weInfer": "TODO(Monica): card text pending.",
+      "drivers": { "human": null, "natural": null },
+      "sourceIds": ["nisar-gcov"],
+      "series": {}
+    },
+    {
+      "id": "chalco_2024_flood",
+      "name": "Chalco (2024 flood area)",
+      "lon": -98.90,
+      "lat": 19.26,
+      "summary": "TODO(Monica): card text pending.",
+      "radarShows": "TODO(Monica): card text pending.",
+      "weInfer": "TODO(Monica): card text pending.",
+      "drivers": { "human": null, "natural": null },
+      "sourceIds": ["nisar-gcov"],
+      "series": {}
+    }
+  ]
+}
