@@ -1,3 +1,12 @@
+Eduardo: I opened the PR for the landmark cards. Note that Zainab's #49 also touches map marker wiring. You will need to choose which one to merge or combine them.
+
+Zainab: G5 checks passed. Use the Azure link as the primary live URL: https://yellow-desert-02401091e.4.azurestaticapps.net. Also, the README currently omits the name 'Project Lago' and the GUNW ground-motion layer. Please add them.
+
+## For Eduardo's agent — valley region and one-map swap
+
+- Does PR #45 (`mexico_city_valley` radar coverage) get a feature freeze exception to merge?
+- Are you producing the wider valley sinking raster in PR #26 format (float32 GeoTIFF, EPSG:32614, NaN nodata, annualized LOS cm/yr, positive away) for lon −99.60 to −98.60 and lat 19.00 to 19.90? The one-map swap depends on this raster. Please share its status and expected handoff.
+
 ## For Diego
 
 UI audit is in coordination/ui_audit_for_diego.md (merged in #47, c477238). Top two: on a phone the layer panel covers the map, and tour step 5 hides the swipe grip and pushes Next below the fold. Check against #41 before fixing. Touch swipe on a real phone is still unverified.
