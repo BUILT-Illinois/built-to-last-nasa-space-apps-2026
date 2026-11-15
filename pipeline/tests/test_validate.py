@@ -173,6 +173,17 @@ def landmark0(lm):
     return lm["landmarks"][0]
 
 LANDMARK_CASES = [
+    ("schema version", lambda lm: lm.update(schemaVersion="99"), "schemaVersion"),
+    ("id is a list", lambda lm: landmark0(lm).update(id=[]), "landmarks[0].id"),
+    ("duplicate id", lambda lm: lm["landmarks"].append(landmark0(lm)), "duplicate id"),
+    ("name is empty", lambda lm: landmark0(lm).update(name=" "), "landmarks[0].name"),
+    ("summary is null", lambda lm: landmark0(lm).update(summary=None), "landmarks[0].summary"),
+    ("radarShows is a number", lambda lm: landmark0(lm).update(radarShows=7), "landmarks[0].radarShows"),
+    ("weInfer is a list", lambda lm: landmark0(lm).update(weInfer=[]), "landmarks[0].weInfer"),
+    ("drivers is null", lambda lm: landmark0(lm).update(drivers=None), "landmarks[0].drivers"),
+    ("bad natural driver", lambda lm: landmark0(lm)["drivers"].update(natural=5), "drivers.natural"),
+    ("source id is a list", lambda lm: landmark0(lm).update(sourceIds=[[]]), "landmarks[0].sourceIds[0]"),
+    ("unknown series", lambda lm: landmark0(lm)["series"].update(hh_dB=[]), "series.hh_dB"),
     ("missing series",          lambda lm: landmark0(lm).pop("series"),                "missing field 'series'"),
     ("unknown source id",       lambda lm: landmark0(lm).update(sourceIds=["nope"]),   "landmarks[0].sourceIds"),
     # These used to crash the validator (review on PR #6):
