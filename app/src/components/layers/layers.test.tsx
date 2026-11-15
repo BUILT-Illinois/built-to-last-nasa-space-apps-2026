@@ -147,6 +147,18 @@ describe('Legend', () => {
     expect(text()).toContain('Synthetic test data');
   });
 
+  it('does not credit NISAR as the source when the manifest is synthetic', () => {
+    // The sample manifest lists a NISAR GCOV source even though its images are generated.
+    expect(sample.synthetic).toBe(true);
+    expect(sample.sources.some((s) => s.title.includes('NISAR'))).toBe(true);
+    load(sample);
+    render(<Legend />);
+    expect(text()).toContain('Generated test pattern, not NISAR data.');
+    expect(text()).toContain('Source: generated test data, not NISAR.');
+    expect(text()).not.toContain('Source: NISAR');
+    expect(text()).not.toContain('NASA/ISRO');
+  });
+
   it('rounds long real-data limits and shows no ramp for a colormap without one', () => {
     const first = sample.layers[0] as Layer;
     load({ ...sample, layers: [{ ...first, colormap: { name: 'rgb', min: -12.965582618713379, max: 4.076268119812003 } }] });
@@ -156,7 +168,7 @@ describe('Legend', () => {
   });
 
   it('labels ground motion as line of sight, with sign, reference area and source', () => {
-    load(withSinking, 'sinking');
+    load({ ...withSinking, synthetic: false }, 'sinking');
     render(<Legend />);
     expect(container.querySelector('h2')?.textContent).toBe('Radar line-of-sight rate, cm/yr');
     expect(container.querySelector('.legend__range')?.textContent).toBe('-30+30');
@@ -178,7 +190,7 @@ describe('Legend', () => {
       awaySign: undefined,
       frames: [{ ...frame, granules: ['G1', 'G2', 'G3'] }],
     };
-    load({ ...sample, layers: [layer] });
+    load({ ...sample, synthetic: false, layers: [layer] });
     render(<Legend />);
     expect(container.querySelector('h2')?.textContent).toBe('Line-of-sight movement, cm/yr');
     expect(text()).not.toContain('= moving away');

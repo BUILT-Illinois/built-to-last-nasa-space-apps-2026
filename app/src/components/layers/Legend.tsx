@@ -104,8 +104,15 @@ export default function Legend() {
             Period: {frame.since} to {frame.date}.{' '}
           </>
         )}
-        Source: NISAR {layer.product} (NASA/ISRO)
-        {granuleCount > 0 && <>, {granuleCount === 1 ? '1 granule' : `${granuleCount} granules`}</>}.
+        {synthetic ? (
+          // Generated sample data must not be credited to NISAR, whatever manifest.sources lists.
+          <>Source: generated test data, not NISAR.</>
+        ) : (
+          <>
+            Source: NISAR {layer.product} (NASA/ISRO)
+            {granuleCount > 0 && <>, {granuleCount === 1 ? '1 granule' : `${granuleCount} granules`}</>}.
+          </>
+        )}
       </p>
     </section>
   );
