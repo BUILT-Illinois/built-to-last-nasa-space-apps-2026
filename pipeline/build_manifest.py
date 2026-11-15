@@ -42,6 +42,20 @@ GCOV_SOURCE = {
 }
 
 
+def merge_sources(sources, extra):
+    """Add the card file's sources to the manifest, keeping the first entry for each id.
+
+    The landmark cards cite sources by id, and the validator checks every id against the
+    manifest's sources[]. Added Sun Nov 15 so the cards' citations validate (PR #35)."""
+    seen = {source.get("id") for source in sources}
+    merged = list(sources)
+    for source in extra:
+        if isinstance(source, dict) and source.get("id") not in seen:
+            merged.append(source)
+            seen.add(source.get("id"))
+    return merged
+
+
 def map_grid(bbox):
     west, south, east, north = transform_bounds(GEOGRAPHIC_CRS, WEB_CRS, *bbox)
     width = ceil((east - west) / PIXEL_METERS)
@@ -185,6 +199,8 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
             content = json.loads(content_path.read_text(encoding="utf-8"))
             entries = content if isinstance(content, list) else content["landmarks"]
             landmarks["landmarks"] = [{"series": {}, **entry} for entry in entries]
+            if isinstance(content, dict):
+                manifest["sources"] = merge_sources(manifest["sources"], content.get("sources", []))
         elif (output / "landmarks.json").is_file():
             landmarks = json.loads((output / "landmarks.json").read_text(encoding="utf-8"))
         if region_id == "mexico_city":

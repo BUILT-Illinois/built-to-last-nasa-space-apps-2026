@@ -167,3 +167,16 @@ def test_configured_region_and_bbox_cache(crops, tmp_path, monkeypatch):
     config["regions"][REGION]["bbox"][0] -= 0.1
     config_path.write_text(json.dumps(config))
     assert fetcher.output_path(REGION, "GCOV", DATES[0]) != before
+
+
+def test_merge_sources_adds_card_sources_once():
+    from build_manifest import GCOV_SOURCE, merge_sources
+    cards = [
+        {"id": "nisar-gcov", "title": "duplicate", "url": "x", "license": "y"},
+        {"id": "jpl-2026-mexico-city", "title": "JPL", "url": "https://example.org", "license": "ref"},
+        {"id": "jpl-2026-mexico-city", "title": "again", "url": "x", "license": "y"},
+        "not a source",
+    ]
+    merged = merge_sources([GCOV_SOURCE], cards)
+    assert [s["id"] for s in merged] == ["nisar-gcov", "jpl-2026-mexico-city"]
+    assert merged[0] is GCOV_SOURCE
