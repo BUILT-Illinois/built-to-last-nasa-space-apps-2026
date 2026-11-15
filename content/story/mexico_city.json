@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "0.1",
+  "regionId": "mexico_city",
+  "intro": {
+    "title": "The lake that came back",
+    "tagline": "NISAR radar images of a sinking Mexico City, November 2025 to October 2026.",
+    "body": [
+      "A six-step tour of one neighborhood, one new lake, and the ground under them. About a minute.",
+      "The images are NISAR PROVISIONAL data, calibrated and validated at only a limited set of sites so far."
+    ],
+    "startLabel": "Start the tour",
+    "exploreLabel": "Explore freely",
+    "sourceIds": ["asf-provisional"]
+  },
+  "steps": [
+    {
+      "id": "hook",
+      "title": "A lake that shouldn't exist",
+      "body": [
+        "My grandpa's neighborhood in Tláhuac sits next to a lake that shouldn't exist.",
+        "This tour looks at that lake, and the sinking city around it, through NISAR radar images."
+      ],
+      "set": { "layer": "gcov_composite", "date": "2026-10-13", "landmark": "santa_cecilia_tlahuac" },
+      "camera": { "center": [-99.0, 19.28], "zoom": 13 },
+      "sourceIds": ["nisar-gcov"]
+    },
+    {
+      "id": "history",
+      "title": "A city on an old lakebed",
+      "body": [
+        "Mexico City is sinking. NASA's Jet Propulsion Laboratory (JPL) names three causes: groundwater pumping, the weight of urban development, and the ancient lakebed compacting under the city.",
+        "In the 1990s and 2000s, parts of the metropolitan area sank by \"around 14 inches (35 centimeters) per year\"."
+      ],
+      "set": { "layer": "gcov_composite", "date": "2025-11-11" },
+      "camera": { "center": [-99.125, 19.375], "zoom": 10 },
+      "sourceIds": ["jpl-2026-mexico-city"],
+      "pendingClaims": [
+        "NEEDS SOURCE ROW (UNAM 2007): Lake Chalco was drained about a century ago.",
+        "NEEDS SOURCE ROW (UNAM 2007): groundwater pumping near Chalco began in 1984.",
+        "NEEDS SOURCE ROW (UNAM 2007): the ground sank and a new lake had formed by 1991."
+      ]
+    },
+    {
+      "id": "radar",
+      "title": "How radar sees through clouds",
+      "body": [
+        "NISAR is \"a joint mission developed by NASA and the Indian Space Research Organisation (ISRO)\". Its radar \"sends out a pulse of energy\" and \"records the amount of that energy reflected back\", so it works \"night or day, regardless of weather conditions\".",
+        "H means horizontal and V means vertical. HH (sent and received horizontally) is most sensitive to double bounce, like a signal bouncing off the ground and then a building. HV, a cross-polarized channel, is most sensitive to volume scattering, like inside a tree canopy.",
+        "Drag the slider to compare HH (left) with HV (right) on the same day."
+      ],
+      "set": {
+        "layer": "gcov_hh",
+        "date": "2026-10-13",
+        "compareLayer": "gcov_hv",
+        "compareDate": "2026-10-13"
+      },
+      "camera": { "center": [-98.97, 19.27], "zoom": 12 },
+      "sourceIds": ["earthdata-sar", "jpl-2026-mexico-city"],
+      "pendingClaims": [
+        "NEEDS SOURCE ROW (RB-M01 option b, NISAR Data User Guide): calm water looks dark and buildings look bright."
+      ]
+    },
+    {
+      "id": "app",
+      "title": "Swipe, tap, read",
+      "body": [
+        "Drag the slider to compare November 11, 2025 (left) with October 13, 2026 (right).",
+        "Tap a marked place, like the lake or Santa Cecilia, to read what the radar shows there and what we think it means."
+      ],
+      "set": {
+        "layer": "gcov_composite",
+        "date": "2025-11-11",
+        "compareLayer": "gcov_composite",
+        "compareDate": "2026-10-13"
+      },
+      "camera": { "center": [-98.985, 19.275], "zoom": 12.5 },
+      "sourceIds": ["nisar-gcov"]
+    },
+    {
+      "id": "data",
+      "title": "What changed at the lake",
+      "body": [
+        "Radar shows: the lake in HV on November 11, 2025 (left) and October 13, 2026 (right). A brighter pixel means more of the radar signal came back.",
+        "We infer: where the lake got brighter in HV, a likely reason is plants spreading across the water, because HV is most sensitive to volume scattering."
+      ],
+      "set": {
+        "layer": "gcov_hv",
+        "date": "2025-11-11",
+        "compareLayer": "gcov_hv",
+        "compareDate": "2026-10-13",
+        "landmark": "new_lake_chalco"
+      },
+      "camera": { "center": [-98.97, 19.27], "zoom": 13 },
+      "sourceIds": ["nisar-gcov", "earthdata-sar"],
+      "pendingClaims": [
+        "CHECK (D-13, Diego): 'the lake got much brighter in HH and HV in one year' came from the T-25 change images. Confirm it on the Nov 11, 2025 frames before stating it.",
+        "NEEDS SOURCE ROW: Google Earth historical imagery agrees (imagery dates and attribution)."
+      ]
+    },
+    {
+      "id": "why",
+      "title": "Why it matters",
+      "body": [
+        "Families live at the edge of this lake, on ground that keeps sinking. NISAR's first data, from October 25, 2025 to January 17, 2026, showed parts of the region \"subsiding by more than half an inch (more than 2 centimeters) per month\".",
+        "Because radar works through clouds, day and night, it could help cities spot sinking and flood risk early and decide where to spend on prevention.",
+        "Next: a Spanish version, a classroom mode, and more cities."
+      ],
+      "set": { "layer": "gcov_composite", "date": "2026-10-13", "landmark": "chalco_2024_flood" },
+      "camera": { "center": [-98.94, 19.27], "zoom": 11.5 },
+      "sourceIds": ["jpl-2026-mexico-city"],
+      "pendingClaims": [
+        "NEEDS SOURCE ROW (AP 2024): the 2024 Chalco flood. Confirm the numbers on the AP page first.",
+        "NEEDS SOURCE (Eduardo's framing): flooding will get worse as the ground sinks.",
+        "NEEDS SOURCE ROW: anyone can watch every 12 days (NISAR repeat cycle)."
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "jpl-2026-mexico-city",
+      "title": "NASA/JPL, \"US-Indian Space Mission Maps Extreme Subsidence in Mexico City\", Apr 29, 2026",
+      "url": "https://www.jpl.nasa.gov/news/us-indian-space-mission-maps-extreme-subsidence-in-mexico-city/"
+    },
+    {
+      "id": "earthdata-sar",
+      "title": "NASA Earthdata, \"What is SAR\"",
+      "url": "https://www.earthdata.nasa.gov/learn/earth-observation-data-basics/sar"
+    },
+    {
+      "id": "asf-provisional",
+      "title": "ASF, NISAR PROVISIONAL known issues",
+      "url": "https://nisar-docs.asf.alaska.edu/provisional-known-issues/"
+    }
+  ]
+}
