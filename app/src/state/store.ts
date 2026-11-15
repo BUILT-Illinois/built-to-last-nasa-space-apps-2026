@@ -77,8 +77,8 @@ export type AppActions = {
   applyPartial: (partial: Partial<ViewState>) => void;
 };
 
-/** Folder under public/data/ to load. "sample" until the pipeline writes a real region. */
-export const DEFAULT_REGION_ID: string = import.meta.env.VITE_REGION_ID ?? 'sample';
+/** Published region to load, with an environment override for local builds. */
+export const DEFAULT_REGION_ID: string = import.meta.env.VITE_REGION_ID ?? 'mexico_city_valley';
 
 /** Number of the newest loadRegion call. Responses from older calls are dropped. */
 let latestRequest = 0;

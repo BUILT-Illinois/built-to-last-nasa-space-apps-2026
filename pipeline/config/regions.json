@@ -1,11 +1,19 @@
 {
-  "_comment": "One entry per study region. bbox is [west, south, east, north] in WGS84 degrees. For monthly GCOV in a new region, add a gcov object containing track (integer), frame (integer), direction (ASCENDING or DESCENDING), release (one provisional CRID), and dates (YYYY-MM-DD strings). Mexico City retains its built-in selection. File drafted with AI assistance (Claude Code and Codex).",
+  "_comment": "One entry per study region. bbox is [west, south, east, north] in WGS84 degrees. For monthly GCOV in a new region, add a gcov object containing track (integer), frame (integer), direction (ASCENDING or DESCENDING), release (one provisional CRID), and dates (YYYY-MM-DD strings). Set gcov_reference_region to reuse another region's monthly GCOV selection and catalog with separate crop bounds. Mexico City retains its built-in selection. File drafted with AI assistance (Claude Code and Codex).",
   "default_region": "mexico_city",
   "regions": {
     "mexico_city": {
       "name": "Mexico City (Valley of Mexico)",
       "bbox": [-99.40, 19.10, -98.85, 19.65],
       "tier": 1
+    },
+    "mexico_city_valley": {
+      "name": "Valley of Mexico (wider coverage)",
+      "bbox": [-99.60, 19.00, -98.60, 19.90],
+      "tier": 1,
+      "gcov_reference_region": "mexico_city",
+      "landmark_content_region": "mexico_city",
+      "sinking_pixel_meters": 100
     },
     "popocatepetl": {
       "name": "Popocatepetl volcano",

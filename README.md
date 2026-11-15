@@ -17,7 +17,7 @@ Main repo for B[U]ILT Team 2 @ NASA Space Apps 2026's Chicago local event.
 
 **Web app** (Node 24, same as CI):
 
-The local sample in `app/public/data/sample/` is generated test data, separate from the live Mexico City dataset in `app/public/data/mexico_city/`.
+The app opens the Valley of Mexico dataset in `app/public/data/mexico_city_valley/`. Set `VITE_REGION_ID=sample` before starting Vite to use the generated test data in `app/public/data/sample/`.
 
 ```bash
 cd app
