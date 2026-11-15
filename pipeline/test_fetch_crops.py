@@ -1,6 +1,7 @@
 """Offline crop smoke test. Drafted with AI assistance."""
 
 from types import SimpleNamespace
+import sys
 
 import h5py
 import numpy as np
@@ -35,6 +36,7 @@ def test_fetch_writes_mexico_city_window(tmp_path, monkeypatch, product, group_p
 
     def open_granule(url, mode, **kwargs):
         assert url.startswith("https://nisar.")
+        assert kwargs["timeout"] == 30
         return fixture.open(mode)
 
     monkeypatch.setattr(fetch_crops.earthaccess, "login", login)
@@ -65,3 +67,38 @@ def test_existing_gunw_crop_skips_without_login(tmp_path, monkeypatch, capsys):
     assert fetch_crops.fetch_crop("mexico_city", "GUNW", "2025-10-30") == output
     assert capsys.readouterr().out == f"skip {output}\n"
     assert output.read_bytes() == original
+
+
+@pytest.mark.parametrize("recovers", [True, False])
+def test_remote_timeouts_retry_with_backoff(monkeypatch, recovers):
+    attempts = []
+    delays = []
+    crop = {"HVHV": np.ones((1, 1))}
+
+    def read(*args):
+        attempts.append(args)
+        if recovers and len(attempts) == 4:
+            return crop
+        raise TimeoutError("simulated dropped connection")
+
+    monkeypatch.setattr(fetch_crops, "read_crop", read)
+    monkeypatch.setattr(fetch_crops, "sleep", delays.append)
+    args = (object(), "https://example.test/granule", "frequencyB", ("HVHV",), [-1, -1, 1, 1])
+    if recovers:
+        assert fetch_crops.read_with_retries(*args) is crop
+    else:
+        with pytest.raises(ValueError, match="after 4 attempts"):
+            fetch_crops.read_with_retries(*args)
+    assert attempts == [args] * 4
+    assert delays == [2, 4, 8]
+
+
+def test_worker_that_never_returns_is_killed_and_retried(monkeypatch, capsys):
+    delays = []
+    monkeypatch.setattr(fetch_crops, "sleep", delays.append)
+    command = [sys.executable, "-c", "import time; time.sleep(60)"]
+    assert not fetch_crops.run_fetch(command, 0.2, "fake crop")
+    assert delays == [20, 40]
+    lines = capsys.readouterr().out.splitlines()
+    assert len(lines) == 3
+    assert all(line.startswith("fake crop HANG ") for line in lines)

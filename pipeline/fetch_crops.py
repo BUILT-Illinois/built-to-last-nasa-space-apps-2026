@@ -2,18 +2,25 @@
 
 import argparse
 import csv
+import subprocess
+import sys
 from datetime import date
 from pathlib import Path
 from tempfile import NamedTemporaryFile
+from time import monotonic, sleep, time
 
 import earthaccess
 import h5py
 import numpy as np
+from aiohttp import ClientConnectionError, ClientPayloadError, ClientResponseError
 
 from quicklook import GCOV_GRIDS, GUNW_UNW, region_bbox, window_for_bbox
 
 HERE = Path(__file__).resolve().parent
 OUTPUT_DIR = HERE.parent / "data" / "interim"
+HTTP_TIMEOUT_SECONDS = 30
+RETRY_DELAYS = (2, 4, 8)
+FETCH_DEADLINES = {"GCOV": 180, "GUNW": 300}
 DATASETS = {
     "GCOV": (GCOV_GRIDS.format(freq="B"), ("HHHH", "HVHV")),
     "GUNW": (GUNW_UNW, (
@@ -36,13 +43,104 @@ def find_granule(region, product, day):
     raise ValueError(f"No approved {product} granule for {region} on {day}")
 
 
+def read_crop(session, url, group_path, names, bbox):
+    # fsspec uses seconds for the metadata deadline and forwards the same
+    # numeric timeout to aiohttp for each HTTP range request.
+    with session.open(url, "rb", block_size=256 * 1024, cache_type="readahead",
+                      timeout=HTTP_TIMEOUT_SECONDS) as remote:
+        with h5py.File(remote, "r") as source:
+            group = source[group_path]
+            rows, cols = window_for_bbox(group, bbox)
+            crop = {name: group[name][rows, cols] for name in names}
+            crop["xCoordinates"] = group["xCoordinates"][cols]
+            crop["yCoordinates"] = group["yCoordinates"][rows]
+            crop["projection"] = group["projection"][()]
+    return crop
+
+
+def read_with_retries(session, url, group_path, names, bbox):
+    for attempt in range(len(RETRY_DELAYS) + 1):
+        try:
+            return read_crop(session, url, group_path, names, bbox)
+        except (OSError, ClientConnectionError, ClientPayloadError, ClientResponseError) as error:
+            if isinstance(error, ClientResponseError) and not (
+                error.status in (408, 429) or 500 <= error.status < 600
+            ):
+                raise ValueError(f"Remote crop read failed (HTTP {error.status})") from None
+            if attempt == len(RETRY_DELAYS):
+                raise ValueError("Remote crop read failed after 4 attempts") from None
+            delay = RETRY_DELAYS[attempt]
+            print(f"Remote crop read failed ({type(error).__name__}); retrying in {delay}s",
+                  flush=True)
+            sleep(delay)
+
+
+def publish_crop(path, crop, granule):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    # Publish only complete archives so a failed write can be retried.
+    with NamedTemporaryFile(dir=path.parent, suffix=".npz", delete=False) as temporary:
+        temporary_path = Path(temporary.name)
+    try:
+        np.savez_compressed(temporary_path, **crop, granule=granule)
+        temporary_path.replace(path)
+    finally:
+        temporary_path.unlink(missing_ok=True)
+
+
+def clean_stale_temps(directory):
+    # A worker is bounded to five minutes. Leave recent saves alone in case
+    # another batch is still publishing a crop.
+    cutoff = time() - 2 * max(FETCH_DEADLINES.values())
+    for path in directory.glob("tmp*.npz"):
+        try:
+            if path.is_file() and path.stat().st_mtime < cutoff:
+                path.unlink(missing_ok=True)
+        except FileNotFoundError:
+            continue
+
+
+def run_fetch(command, timeout, label):
+    """Supervise a worker, including reads that never return an HTTP error."""
+    for attempt in range(1, 4):
+        started = monotonic()
+        try:
+            subprocess.run(command, check=True, timeout=timeout)
+        except subprocess.TimeoutExpired:
+            result = "HANG"
+        except subprocess.CalledProcessError:
+            result = "FAIL"
+        else:
+            result = "OK"
+        print(f"{label} {result} {monotonic() - started:.1f}s (attempt {attempt}/3)", flush=True)
+        if result == "OK":
+            return True
+        if attempt < 3:
+            sleep(20 * attempt)
+    return False
+
+
+def output_path(region, product, day):
+    return OUTPUT_DIR / f"{region}_{product.lower()}_{day}.npz"
+
+
+def fetch_bounded(region, product, day):
+    path = output_path(region, product, day)
+    if path.is_file():
+        print(f"skip {path}", flush=True)
+        return True
+    find_granule(region, product, day)
+    command = [sys.executable, str(Path(__file__).resolve()), "--worker",
+               "--region", region, "--product", product, "--date", day]
+    return run_fetch(command, FETCH_DEADLINES[product], f"{product} {day}")
+
+
 def fetch_crop(region, product, day):
     try:
         bbox = region_bbox(region)
     except KeyError:
         raise ValueError(f"Unknown region: {region}") from None
-    path = OUTPUT_DIR / f"{region}_{product.lower()}_{day}.npz"
-    if product == "GUNW" and path.is_file():
+    path = output_path(region, product, day)
+    if path.is_file():
         print(f"skip {path}")
         return path
 
@@ -51,25 +149,8 @@ def fetch_crop(region, product, day):
         raise ValueError("Earthdata login failed. Check your user netrc file.")
     session = earthaccess.get_fsspec_https_session()
     group_path, names = DATASETS[product]
-    with session.open(granule["url"], "rb", block_size=256 * 1024,
-                      cache_type="readahead") as remote:
-        with h5py.File(remote, "r") as source:
-            group = source[group_path]
-            rows, cols = window_for_bbox(group, bbox)
-            crop = {name: group[name][rows, cols] for name in names}
-            crop["xCoordinates"] = group["xCoordinates"][cols]
-            crop["yCoordinates"] = group["yCoordinates"][rows]
-            crop["projection"] = group["projection"][()]
-
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    # Publish only complete archives so a failed write can be retried.
-    with NamedTemporaryFile(dir=OUTPUT_DIR, suffix=".npz", delete=False) as temporary:
-        temporary_path = Path(temporary.name)
-    try:
-        np.savez_compressed(temporary_path, **crop, granule=granule["scene_name"])
-        temporary_path.replace(path)
-    finally:
-        temporary_path.unlink(missing_ok=True)
+    crop = read_with_retries(session, granule["url"], group_path, names, bbox)
+    publish_crop(path, crop, granule["scene_name"])
     print(f"Wrote {path}")
     return path
 
@@ -80,12 +161,18 @@ def main():
     parser.add_argument("--product", required=True, choices=DATASETS)
     parser.add_argument("--date", required=True, type=date.fromisoformat,
                         help="Granule start date (YYYY-MM-DD)")
+    parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args()
     try:
-        fetch_crop(args.region, args.product, args.date.isoformat())
+        day = args.date.isoformat()
+        if args.worker:
+            fetch_crop(args.region, args.product, day)
+            return 0
+        clean_stale_temps(OUTPUT_DIR)
+        return int(not fetch_bounded(args.region, args.product, day))
     except ValueError as error:
         parser.error(str(error))
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

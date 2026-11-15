@@ -1,4 +1,4 @@
-"""Build the Tier 1 GCOV map bundle. Drafted with AI assistance (Codex)."""
+"""Build the GCOV map bundle. Drafted with AI assistance (Codex)."""
 
 import argparse
 import json
@@ -22,7 +22,8 @@ WEB_CRS = "EPSG:3857"
 GEOGRAPHIC_CRS = "EPSG:4326"
 PIXEL_METERS = 80
 IMAGE_LIMIT = 1_000_000
-REGION_LIMIT = 30_000_000
+TIER_1_REGION_LIMIT = 30_000_000
+TIER_2_REGION_LIMIT = 60_000_000
 LAYERS = (
     ("gcov_hh", "Radar brightness, HH", "backscatter", "HH", "dB",
      "Radar brightness when the signal is transmitted and received horizontally."),
@@ -30,7 +31,7 @@ LAYERS = (
      "Radar brightness when the signal is transmitted horizontally and received vertically."),
     ("gcov_composite", "HH/HV color composite", "composite", "HH+HV", "normalized",
      "Red shows HH, green shows HV, and blue shows HH minus HV in dB. "
-     "Each channel is scaled independently using the same limits for both dates."),
+     "Each channel is scaled independently using the same limits across dates."),
 )
 GCOV_SOURCE = {
     "id": "nisar-gcov",
@@ -102,8 +103,9 @@ def write_json(path, payload):
 
 def build(region_id, dates, crop_dir, output, *, offline=False):
     dates = sorted(dates)
-    if len(dates) != 2 or dates[0] == dates[1]:
-        raise ValueError("Provide two different scene dates")
+    if len(dates) < 2 or len(set(dates)) != len(dates):
+        raise ValueError("Provide at least two distinct scene dates")
+    region_limit = TIER_1_REGION_LIMIT if len(dates) == 2 else TIER_2_REGION_LIMIT
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     if region_id not in config["regions"]:
         raise ValueError(f"Unknown region: {region_id}")
@@ -111,7 +113,7 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
     bbox = region["bbox"]
     shape, target = map_grid(bbox)
 
-    # Resolve both dates before fetching anything.
+    # Resolve every date before fetching anything.
     catalog = {day: find_granule(region_id, "GCOV", day) for day in dates}
     scenes = {}
     for day, row in catalog.items():
@@ -130,7 +132,7 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
                 ) from None
         scenes[day] = read_scene(path, row["scene_name"], shape, target)
 
-    # Pool each channel across both dates so the swipe uses a consistent scale.
+    # Pool each channel across all dates so the swipe and time slider use a consistent scale.
     limits = [percentile_limits(bands) for bands in zip(*scenes.values())]
     manifest = {
         "schemaVersion": "0.1",
@@ -189,8 +191,8 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
         paths = {path.relative_to(stage) for path in files}
         existing_size = sum(path.stat().st_size for path in output.rglob("*")
                             if path.is_file() and path.relative_to(output) not in paths)
-        if existing_size + sum(path.stat().st_size for path in files) >= REGION_LIMIT:
-            raise ValueError("Region folder would exceed the 30 MB Tier 1 budget")
+        if existing_size + sum(path.stat().st_size for path in files) >= region_limit:
+            raise ValueError(f"Region folder must stay under {region_limit // 1_000_000} MB")
         validator = Path(__file__).with_name("validate_manifest.py")
         if validator.is_file():
             result = subprocess.run([sys.executable, str(validator), str(stage)], check=False)
@@ -206,13 +208,13 @@ def build(region_id, dates, crop_dir, output, *, offline=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--dates", nargs=2, type=date.fromisoformat, required=True,
-                        metavar=("DATE_1", "DATE_2"), help="The two GS scene dates in YYYY-MM-DD")
+    parser.add_argument("--dates", nargs="+", type=date.fromisoformat, required=True,
+                        metavar="DATE", help="Two or more distinct scene dates in YYYY-MM-DD")
     parser.add_argument("--region", default="mexico_city")
     parser.add_argument("--crop-dir", type=Path, default=OUTPUT_DIR,
                         help="Also look for cached T-03 crops in this folder")
     parser.add_argument("--output", type=Path, help="Defaults to app/public/data/<region>/")
-    parser.add_argument("--offline", action="store_true", help="Require both crops to be cached")
+    parser.add_argument("--offline", action="store_true", help="Require all crops to be cached")
     args = parser.parse_args()
     output = args.output or ROOT / "app" / "public" / "data" / args.region
     try:
