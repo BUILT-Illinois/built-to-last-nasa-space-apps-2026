@@ -12,6 +12,7 @@ import build_manifest as builder
 
 REGION = "mexico_city"
 DATES = ("2025-10-30", "2025-11-11")
+MONTHLY_DATES = (*DATES, "2025-12-17")
 
 
 @pytest.fixture
@@ -21,10 +22,10 @@ def crops(tmp_path):
     rows, cols = np.indices(shape)
     x = transform.c + transform.a * (np.arange(shape[1]) + 0.5)
     y = transform.f + transform.e * (np.arange(shape[0]) + 0.5)
-    for index, day in enumerate(DATES):
+    for index, day in enumerate(MONTHLY_DATES):
         # The north half is brighter. Values common to both dates must render
         # the same, even though the second date has a wider HH distribution.
-        hh = np.where(rows < shape[0] // 2, 0.1, 0.01 * (1 - index * 0.9))
+        hh = np.where(rows < shape[0] // 2, 0.1, 0.01 if index == 0 else 0.001)
         hh[165:225, :] = 0.025
         hv = np.where(cols < shape[1] // 2, 0.01, 0.001)
         hh[:20, :20] = 0
@@ -35,10 +36,11 @@ def crops(tmp_path):
     return tmp_path
 
 
-def test_cli_writes_app_bundle(crops, tmp_path):
+@pytest.mark.parametrize("dates", [DATES, MONTHLY_DATES])
+def test_cli_writes_app_bundle(crops, tmp_path, dates):
     output = tmp_path / "bundle"
     subprocess.run(
-        [sys.executable, builder.__file__, "--dates", *reversed(DATES), "--offline",
+        [sys.executable, builder.__file__, "--dates", *reversed(dates), "--offline",
          "--crop-dir", str(crops), "--output", str(output)],
         check=True,
     )
@@ -53,7 +55,7 @@ def test_cli_writes_app_bundle(crops, tmp_path):
     images = {}
     for layer in manifest["layers"]:
         assert layer["bounds"] == bbox
-        assert [frame["date"] for frame in layer["frames"]] == list(DATES)
+        assert [frame["date"] for frame in layer["frames"]] == list(dates)
         for frame in layer["frames"]:
             day = frame["date"]
             assert frame["granules"] == [builder.find_granule(REGION, "GCOV", day)["scene_name"]]
@@ -80,7 +82,7 @@ def test_cli_writes_app_bundle(crops, tmp_path):
     assert landmarks["schemaVersion"] == "0.1"
     assert landmarks["regionId"] == REGION
     assert "landmarks" in landmarks
-    assert sum(path.stat().st_size for path in output.rglob("*") if path.is_file()) < builder.REGION_LIMIT
+    assert sum(path.stat().st_size for path in output.rglob("*") if path.is_file()) < builder.TIER_1_REGION_LIMIT
 
 
 def test_fetches_only_the_missing_crop(crops, tmp_path, monkeypatch):
