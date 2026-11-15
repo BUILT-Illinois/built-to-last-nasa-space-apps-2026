@@ -4,6 +4,7 @@ import argparse
 import csv
 from datetime import date
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 
 import earthaccess
 import h5py
@@ -15,7 +16,9 @@ HERE = Path(__file__).resolve().parent
 OUTPUT_DIR = HERE.parent / "data" / "interim"
 DATASETS = {
     "GCOV": (GCOV_GRIDS.format(freq="B"), ("HHHH", "HVHV")),
-    "GUNW": (GUNW_UNW, ("unwrappedPhase",)),
+    "GUNW": (GUNW_UNW, (
+        "unwrappedPhase", "coherenceMagnitude", "connectedComponents", "ionospherePhaseScreen",
+    )),
 }
 
 
@@ -38,6 +41,11 @@ def fetch_crop(region, product, day):
         bbox = region_bbox(region)
     except KeyError:
         raise ValueError(f"Unknown region: {region}") from None
+    path = OUTPUT_DIR / f"{region}_{product.lower()}_{day}.npz"
+    if product == "GUNW" and path.is_file():
+        print(f"skip {path}")
+        return path
+
     granule = find_granule(region, product, day)
     if not earthaccess.login(strategy="netrc").authenticated:
         raise ValueError("Earthdata login failed. Check your user netrc file.")
@@ -54,8 +62,15 @@ def fetch_crop(region, product, day):
             crop["projection"] = group["projection"][()]
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    path = OUTPUT_DIR / f"{region}_{product.lower()}_{day}.npz"
-    np.savez_compressed(path, **crop, granule=granule["scene_name"])
+    # Publish only complete archives so a failed write can be retried.
+    with NamedTemporaryFile(dir=OUTPUT_DIR, suffix=".npz", delete=False) as temporary:
+        temporary_path = Path(temporary.name)
+    try:
+        np.savez_compressed(temporary_path, **crop, granule=granule["scene_name"])
+        temporary_path.replace(path)
+    finally:
+        temporary_path.unlink(missing_ok=True)
+    print(f"Wrote {path}")
     return path
 
 
@@ -67,7 +82,7 @@ def main():
                         help="Granule start date (YYYY-MM-DD)")
     args = parser.parse_args()
     try:
-        print(f"Wrote {fetch_crop(args.region, args.product, args.date.isoformat())}")
+        fetch_crop(args.region, args.product, args.date.isoformat())
     except ValueError as error:
         parser.error(str(error))
 
