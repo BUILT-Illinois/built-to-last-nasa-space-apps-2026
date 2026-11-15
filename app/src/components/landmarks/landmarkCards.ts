@@ -9,9 +9,16 @@ type CardFile = Omit<LandmarksFile, 'landmarks'> & { landmarks: Card[]; sources?
 
 const files = import.meta.glob<CardFile>('../../../../content/landmarks/*.json', { eager: true, import: 'default' });
 
+// The wider valley map shows the same 7 landmarks as Mexico City, so it uses the same card text
+// (the tour does the same in story.ts). Without this, the valley showed the older copied text.
+const CARD_ALIASES: Record<string, string> = { mexico_city_valley: 'mexico_city' };
+
 /** The card file for a region, or undefined if Monica has not written one. */
 export function cardsFor(regionId: string): CardFile | undefined {
-  return Object.values(files).find((f) => f.regionId === regionId);
+  const own = Object.values(files).find((f) => f.regionId === regionId);
+  if (own) return own;
+  const alias = CARD_ALIASES[regionId];
+  return alias ? Object.values(files).find((f) => f.regionId === alias) : undefined;
 }
 
 /**
