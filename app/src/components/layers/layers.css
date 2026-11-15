@@ -15,7 +15,7 @@
 .layer-switcher__heading,
 .view-options__label {
   padding: 0;
-  color: var(--panel-muted, #e3c4b2);
+  color: var(--panel-muted, #5a3e2b);
   font-size: 0.8125rem;
   font-weight: 500;
 }
@@ -37,12 +37,12 @@
 }
 
 .layer-switcher__option:hover {
-  background: var(--panel-raised, #895536);
+  background: var(--panel-raised, #e8bda3);
 }
 
 .layer-switcher__option.is-active {
-  border-left-color: var(--accent, #db9066);
-  background: var(--panel-raised, #895536);
+  border-left-color: var(--accent-strong, #a0522d);
+  background: var(--accent, #d09052);
   font-weight: 650;
 }
 
@@ -56,13 +56,13 @@
 
 .layer-switcher__option:focus-within,
 .segmented__item:focus-within {
-  outline: 2px solid var(--accent, #db9066);
+  outline: 2px solid var(--accent-strong, #a0522d);
   outline-offset: 1px;
 }
 
 .layer-switcher__loading {
   margin: 0;
-  color: var(--panel-muted, #e3c4b2);
+  color: var(--panel-muted, #5a3e2b);
 }
 
 /* A small sample of the layer's own colors. */
@@ -71,8 +71,8 @@
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
-  background: var(--panel-muted, #e3c4b2);
-  box-shadow: 0 0 0 1px rgba(255, 231, 215, 0.45);
+  background: var(--panel-muted, #5a3e2b);
+  box-shadow: 0 0 0 1px rgba(81, 33, 13, 0.35);
 }
 
 .swatch--gray {
@@ -95,7 +95,7 @@
   gap: 0.8rem;
   margin-top: 0.9rem;
   padding-top: 0.9rem;
-  border-top: 1px solid var(--rule, rgba(255, 231, 215, 0.2));
+  border-top: 1px solid var(--rule, rgba(81, 33, 13, 0.2));
 }
 
 .view-options__row {
@@ -113,7 +113,7 @@
 }
 
 .view-options__value {
-  color: var(--panel-text, #ffe7d7);
+  color: var(--panel-text, #51210d);
   font-variant-numeric: tabular-nums;
 }
 
@@ -121,9 +121,9 @@
   width: 100%;
   min-height: 2.5rem;
   padding: 0 0.6rem;
-  border: 1px solid var(--rule, rgba(255, 231, 215, 0.2));
+  border: 1px solid var(--rule, rgba(81, 33, 13, 0.2));
   border-radius: 2px;
-  background: var(--panel-raised, #895536);
+  background: var(--panel-raised, #e8bda3);
   color: inherit;
   font: inherit;
 }
@@ -131,14 +131,14 @@
 .view-options__select:focus-visible,
 .view-options__range:focus-visible,
 .legend__about summary:focus-visible {
-  outline: 2px solid var(--accent, #db9066);
+  outline: 2px solid var(--accent-strong, #a0522d);
   outline-offset: 1px;
 }
 
 .segmented {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border: 1px solid var(--rule, rgba(255, 231, 215, 0.2));
+  border: 1px solid var(--rule, rgba(81, 33, 13, 0.2));
   border-radius: 2px;
 }
 
@@ -151,8 +151,8 @@
 }
 
 .segmented__item.is-active {
-  background: var(--panel-text, #ffe7d7);
-  color: var(--panel-bg, #763d1c);
+  background: var(--panel-text, #51210d);
+  color: var(--panel-bg, #fde6d4);
   font-weight: 650;
 }
 
@@ -160,7 +160,7 @@
   width: 100%;
   height: 1.5rem;
   margin: 0;
-  accent-color: var(--accent, #db9066);
+  accent-color: var(--accent-strong, #a0522d);
 }
 
 /* ---------- Legend ---------- */
@@ -168,7 +168,7 @@
 .legend {
   margin-top: 0.9rem;
   padding-top: 0.9rem;
-  border-top: 1px solid var(--rule, rgba(255, 231, 215, 0.2));
+  border-top: 1px solid var(--rule, rgba(81, 33, 13, 0.2));
 }
 
 .legend__title {
@@ -187,10 +187,10 @@
 
 .legend__badge {
   padding: 0.1rem 0.5rem;
-  border: 1px solid var(--accent, #db9066);
+  border: 1px solid var(--accent-strong, #a0522d);
   border-radius: 999px;
-  /* Text in the panel's text color: terracotta letters on the brown are too faint to read. */
-  color: var(--panel-text, #ffe7d7);
+  /* Text in the panel's text color: copper letters on the peach are too faint to read. */
+  color: var(--panel-text, #51210d);
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -204,7 +204,7 @@
 .legend__ramp {
   height: 1.1rem;
   border-radius: 2px 2px 0 0;
-  box-shadow: 0 0 0 1px rgba(255, 231, 215, 0.45);
+  box-shadow: 0 0 0 1px rgba(81, 33, 13, 0.35);
 }
 
 .legend__ticks {
@@ -212,8 +212,8 @@
   margin: 1px 0 0;
   /* a tick every 5% of the width, a taller one at each end and in the middle */
   background:
-    linear-gradient(to right, var(--panel-text, #ffe7d7) 1px, transparent 1px) 0 0 / calc(50% - 0.5px) 100%,
-    linear-gradient(to right, var(--panel-muted, #e3c4b2) 1px, transparent 1px) 0 0 / calc(5% - 0.05px) 55%;
+    linear-gradient(to right, var(--panel-text, #51210d) 1px, transparent 1px) 0 0 / calc(50% - 0.5px) 100%,
+    linear-gradient(to right, var(--panel-muted, #5a3e2b) 1px, transparent 1px) 0 0 / calc(5% - 0.05px) 55%;
   background-repeat: repeat-x;
 }
 
@@ -244,7 +244,7 @@
 
 .legend__about {
   margin-top: 0.7rem;
-  color: var(--panel-muted, #e3c4b2);
+  color: var(--panel-muted, #5a3e2b);
   font-size: 0.8125rem;
 }
 
