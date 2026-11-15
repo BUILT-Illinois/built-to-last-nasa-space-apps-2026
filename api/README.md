@@ -18,13 +18,15 @@ npm test
 To exercise the HTTP routes locally, install Azure Functions Core Tools v4 and
 run `func start` from `api/` with `FUNCTIONS_WORKER_RUNTIME=node`. The default
 local URL is `http://localhost:7071`. On Azure the same routes are on the app's
-origin:
+origin. Cloudflare Pages serves the same routes from the shared data bundle:
 
 - `GET /api/health` returns the Git SHA included at build time.
 - `GET /api/regions` lists published region IDs, names, and bounding boxes.
+- `GET /api/regions/sample` and `GET /api/regions/sample/manifest` return the synthetic sample manifest.
+- `GET /api/regions/sample/landmarks` returns the sample landmarks.
 - `GET /api/regions/mexico_city/manifest` returns the published manifest.
 - `GET /api/regions/mexico_city/landmarks` returns the published landmarks file.
-- An unknown region ID on either region file route returns a JSON 404.
+- An unknown region ID on any region file route returns a JSON 404.
 
 For the static-only build, set `VITE_REGION_ID=mexico_city`, run
 `npm run build` from `app/`, and serve `app/dist` with any static server.
