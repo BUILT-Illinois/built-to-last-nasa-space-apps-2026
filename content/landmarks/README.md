@@ -12,19 +12,19 @@ Rules for the text:
 
 Cards (Sun Nov 15): New Lake Chalco, Tláhuac, Nezahualcóyotl, the airport, Centro Histórico, Ángel de la Independencia, Chalco.
 
-## Numbers (memo row `nisar-gunw`)
+## Valley ground-motion rates
 
-Line of sight, Nov 11, 2025 to Oct 13, 2026, relative to a reference box in the western hills (-99.27 to -99.22 E, 19.33 to 19.38 N). About 2 cm is the uncertainty of any single number, so quote "about".
+Annualized line-of-sight rates from 336 days of provisional GUNW observations (Nov 11, 2025 to Oct 13, 2026), relative to the western hills. Positive means away from the satellite.
 
-| Card | Memo value | Card text |
-|---|---|---|
-| nezahualcoyotl | 21.9 cm | about 22 cm, "the most of any place we measured" |
-| tlahuac_ground_motion | 16.4 cm | about 16 cm, "among the fastest". Not "second-fastest": the airport (15.3) is within the 2 cm uncertainty |
-| aicm | 15.3 cm | about 15 cm |
-| centro_historico | 9.2 cm | about 9 cm |
-| chalco_2024_flood | 7.6 cm | about 8 cm |
-| angel_independencia | 4.3 cm | about 4 cm |
-| new_lake_chalco | **not sampled** | No number. The lake point is not in `landmark_series_los_cm.csv` yet (memo, "keep out of visible text") |
+| Card | Rate (cm/yr) |
+|---|---:|
+| Nezahualcóyotl | +24.2 |
+| Tláhuac | +17.9 |
+| Benito Juárez International Airport | +16.5 |
+| Centro Histórico | +9.0 |
+| Chalco | +8.4 |
+| Ángel de la Independencia | +5.1 |
+| New Lake Chalco | No reported rate |
 
 ## Still open
 

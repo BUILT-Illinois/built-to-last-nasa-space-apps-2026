@@ -1,4 +1,4 @@
-"""Proof of concept: one year of Mexico City ground motion from NISAR.
+"""Proof of concept: 336 days of Mexico City ground motion from NISAR.
 
 AI-generation notice: this file was generated with AI assistance (Claude Code)
 for Eduardo's T-31 (pipeline/science/displacement.py will be the cleaned-up
@@ -21,7 +21,7 @@ Method (each step fixes a known way the simple sum goes wrong):
   4. Fill a pixel's missing pairs (at most MAX_FILLED) from its own average
      rate, drop pixels missing more, then add the pairs in order.
      Atmospheric noise of each date enters once with + and once with -, so it
-     mostly cancels; the sum behaves like one year-long measurement.
+     mostly cancels; the sum behaves like one 336-day measurement.
   5. Convert phase to centimeters along the radar line of sight.
 No tilt is removed from single pairs: the sinking bowls cover much of the box,
 and a fitted tilt would absorb part of the signal.

@@ -1,14 +1,14 @@
-# Proof of concept: a year of Mexico City sinking, measured with NISAR
+# Proof of concept: 336 days of Mexico City sinking, measured with NISAR
 
 Status: Sat Nov 14, 11:35 PM CT. Runs on the 27 GUNW crops in `data/Mexico_City/` (or any folder given with `--data`). Takes under 10 seconds. Any pair touching Oct 30, 2025 is skipped (D-13).
 
 Drafted with AI assistance (Claude Code). See `docs/AI_USAGE.md`.
 
-![A year of ground motion](fig_mexico_city_year_of_sinking.png)
+![336 days of ground motion](fig_mexico_city_year_of_sinking.png)
 
 ## What it shows
 
-Adding up 27 consecutive 12-day NISAR interferograms (track 19, Nov 11, 2025 to Oct 13, 2026, all PROVISIONAL) gives one year of ground motion. Two sinking bowls appear:
+Adding up 27 consecutive NISAR interferograms (26 of 12 days and one of 24 days) (track 19, Nov 11, 2025 to Oct 13, 2026, all PROVISIONAL) gives 336 days of ground motion. Two sinking bowls appear:
 
 - **North-east**: the airport, Nezahualcoyotl and the old Texcoco lakebed.
 - **South-east**: Tlahuac, Chalco and the Xochimilco lakebed.
@@ -36,7 +36,7 @@ Whole map:
 
 | Source | Says | Our number |
 |---|---|---|
-| NASA JPL, Apr 29, 2026 (NISAR, Oct 25, 2025 to Jan 17, 2026) | parts of the region subsiding "by more than half an inch (more than 2 centimeters) per month" | 2.0 cm per month at Nezahualcoyotl over the full year, about 4 cm per month at the fastest pixels in the first 72 days |
+| NASA JPL, Apr 29, 2026 (NISAR, Oct 25, 2025 to Jan 17, 2026) | parts of the region subsiding "by more than half an inch (more than 2 centimeters) per month" | 2.0 cm per month at Nezahualcoyotl over 336 days, about 4 cm per month at the fastest pixels in the first 72 days |
 | AP coverage of the JPL release | "nearly 10 inches (about 25 centimeters) a year" | 24 cm per year at the 99th percentile |
 | Chaussard et al. 2021, JGR Solid Earth | rates "reach 50 cm/year" (read the abstract before quoting) | below that, but ours is line of sight, not vertical |
 
@@ -58,7 +58,7 @@ Our numbers are **along the radar line of sight**. The radar looks at the ground
 - PROVISIONAL data, CRID P05023.
 - **The sign is inferred, not read from the specification.** The known sinking zones come out positive, so we call positive "away from the satellite". Confirm in the GUNW specification (JPL D-102272) before the app says "sinking" in words.
 - The wavelength (24.2 cm) is taken from a GUNW of the same mode on another track, because the crops do not store it. The effect on the numbers is about 1 to 2%.
-- The control point in the hills drifts by about -2 cm over the year. Treat about 2 cm as the uncertainty of any single number.
+- The control point in the hills drifts by about -2 cm over 336 days. Treat about 2 cm as the uncertainty of any single number.
 - The 80 m pixels are averages; individual buildings are not resolved. Place locations are approximate and must be checked on a map before any name goes into the app.
 - A few isolated pixels show impossible rates (over 100 cm per year): unwrapping errors. Quote percentiles, never the maximum.
 

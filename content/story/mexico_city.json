@@ -19,7 +19,7 @@
       "id": "valley",
       "title": "Mexico City is sinking",
       "body": [
-        "Mexico City is built on an ancient lakebed, and the ground beneath it is slowly moving. Using a year of radar data from NASA and ISRO's NISAR satellite, we mapped where."
+        "Mexico City is built on an ancient lakebed, and the ground beneath it is slowly moving. We used 336 days of GUNW measurements from NASA and ISRO's NISAR satellite to map motion and 11 months of GCOV images to compare surface change."
       ],
       "set": {
         "layer": "gcov_composite",
@@ -34,6 +34,7 @@
       },
       "sourceIds": [
         "jpl-2026-mexico-city",
+        "nisar-gunw",
         "nisar-gcov"
       ]
     },
@@ -110,7 +111,7 @@
       "id": "lake",
       "title": "The lake that came back",
       "body": [
-        "In Tláhuac, groundwater pumping made the land sink, and a new lake formed in the hollow as a consequence. Water first pooled in 1988, and by 1991 the pools had joined into a small lake. Nearby Tláhuac moved about 16.4 cm along the radar's line of sight in under a year. My family is from Santa Cecilia, in Tláhuac.",
+        "In Tláhuac, groundwater pumping made the land sink, and a new lake formed in the hollow as a consequence. Water first pooled in 1988, and by 1991 the pools had joined into a small lake. Nearby Tláhuac had a provisional annualized line-of-sight rate of +17.9 cm/yr, away from the satellite, measured over 336 days. My family is from Santa Cecilia, in Tláhuac.",
         "Drag the slider to compare the dry season (February 15, 2026, left) with the rainy season (September 19, 2026, right)."
       ],
       "set": {
