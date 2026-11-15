@@ -7,11 +7,9 @@ import ProvisionalBadge from './ProvisionalBadge';
 import { findSources, getStory, resolveStep, type StorySource } from './story';
 import '../styles/story.css';
 
-function Sources({ sources }: { sources: StorySource[] }) {
-  if (sources.length === 0) return null;
+function SourceLinks({ sources }: { sources: StorySource[] }) {
   return (
-    <p className="story-sources">
-      Sources:{' '}
+    <>
       {sources.map((s, i) => (
         <span key={s.id}>
           {i > 0 && '; '}
@@ -24,6 +22,27 @@ function Sources({ sources }: { sources: StorySource[] }) {
           )}
         </span>
       ))}
+    </>
+  );
+}
+
+/**
+ * The sources line. On a tour step it starts folded ("Sources (3)"), so the card stays short
+ * enough not to hide the swipe it asks people to compare; one tap opens it.
+ */
+function Sources({ sources, folded = false }: { sources: StorySource[]; folded?: boolean }) {
+  if (sources.length === 0) return null;
+  if (folded) {
+    return (
+      <details className="story-sources">
+        <summary>Sources ({sources.length})</summary>
+        <SourceLinks sources={sources} />
+      </details>
+    );
+  }
+  return (
+    <p className="story-sources">
+      Sources: <SourceLinks sources={sources} />
     </p>
   );
 }
@@ -126,7 +145,7 @@ export default function StoryTour() {
       {step.body.map((p) => (
         <p key={p}>{p}</p>
       ))}
-      <Sources sources={findSources(story, manifest, step.sourceIds)} />
+      <Sources sources={findSources(story, manifest, step.sourceIds)} folded />
       <div className="story-actions">
         <button type="button" className="story-btn" onClick={() => goTo(storyStep - 1)} disabled={storyStep === 0}>
           Back
