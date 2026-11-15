@@ -1,8 +1,10 @@
-# Status: Diego        Updated: Sat 8:10 PM CT        Branch: main (status only)
+# Status: Diego        Updated: Sat 10:45 PM CT        Branch: main (status only)
 Plan version read: Sat 6:25 PM | Plan v0.4: G1 passed, GS default (surface change), Oct 30, 2025 dropped (D-13), T-11 cancelled (D-15).
 
 ## Now / Next / Done
-- Now:  Lake check for the story (Tlahuac lakes, real dB, one release): results in, writing them up with Monica.
+- Now:  T-12 layer switcher and legend, against the real `app/public/data/mexico_city/manifest.json` (sample data PR #6 still not merged). Late: it was due at the 9:30 PM checkpoint.
+- Done: Lake check for the story, sent to Monica (she dropped the 2025-to-2026 brightening claim). Real dB, one release (P05023), 28 GCOV dates from 2025-11-11 to 2026-10-13, 27 GUNW pairs, OpenStreetMap outlines. Tlahuac-Xico water: Nov 2025 to Sep/Oct 2026 HV +1.1 dB (city control -0.1); dry (Jan-Apr) to rainy (Jul-Oct) 2026 HV +1.2 dB (city +0.4); rise starts late June 2026; GUNW coherence lowest (0.24 to 0.27) for pairs starting late June to July and late September (city 0.60 to 0.78). Bosque de Tlahuac: same pattern, smaller. The earlier "lakes much brighter, HV +5 dB" picture mixed releases and used 2025-10-30, so it is not supported. Also: on 2025-12-05 and 2026-04-16 HH drops 2 to 3 dB over the lakes and the NE flat zone but not the city (cause unknown; avoid those dates in a swipe). PROVISIONAL; for Eduardo's review before any of it goes in the app.
+- In progress: open-water area by date around the Tlahuac lakes (fixed HH cut-offs, on my second laptop). Overlaps with Elias's water-persistence count in draft PR #20; will compare.
 - Done: T-30. 28 of 28 GUNW pairs fetched on my second laptop, no failures (one timeout on 2026-04-28, retry succeeded); 7:03 to 7:30 PM, median 47 s per pair. The T-31 set is the 27 pairs from 2025-11-11 to 2026-10-01 in `data/interim/` (142 MB, all 761 x 723, phase 100% finite, median coherence 0.56 to 0.75); the 2025-10-30 pair is in `data/interim/excluded_D13/` (D-13). FYI Eduardo (T-31): there is no 2026-08-02 acquisition, so the pair starting 2026-07-21 spans 24 days, not 12. Files reach Eduardo by USB or local share; tell me which.
 - Next: T-12 layer switcher and legend once Zainab's sample data (PR #6) is on main; then T-13 time slider (no Oct 30, 2025 frame).
 - Done: T-25 findings (section at the bottom); RB-D01 accepted as D-13. T-11 cancelled (D-15).
