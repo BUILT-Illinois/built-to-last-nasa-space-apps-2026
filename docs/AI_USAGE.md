@@ -22,3 +22,4 @@ Rules we follow (from the 2026 Project Submission Guide, summarized in `docs/cha
 | Nov 14 | Elias | Codex | Drafted the monthly GCOV frequency-B batch runner and added restart handling. The script caches NASA/ISRO data locally for T-33. | `data/fetch_monthly_gcov.py` |
 | Nov 14 | Elias | Codex | Added the primary Azure and fallback Cloudflare links and checked both endpoints. | `README.md` (Live URLs section) |
 | Nov 14 | Elias | Codex | Drafting and testing the GCOV data build and reprojection | `pipeline/build_manifest.py`, `pipeline/test_build_manifest.py`, `pipeline/requirements.txt` |
+| Nov 14 | Elias | Codex | T-33: extended the GCOV build and tests to accept monthly dates, then rendered and validated the 12 cached NISAR scenes. | `pipeline/build_manifest.py`, `pipeline/test_build_manifest.py`, `app/public/data/mexico_city/` (derived from NISAR data) |
