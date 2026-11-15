@@ -450,7 +450,8 @@
         "Positive means away from the satellite.",
         "No conversion to vertical motion.",
         "Provisional NISAR data.",
-        "Pixels with absolute rates above 50 cm/yr are masked as phase-unwrapping artifacts (likely noise, pending review)."
+        "Pixels with absolute rates above 50 cm/yr are masked as phase-unwrapping artifacts (likely noise, pending review).",
+        "Pixels within 6 km of the radar swath edge (north-west corner of the map) are masked as an edge artifact."
       ],
       "frames": [
         {
