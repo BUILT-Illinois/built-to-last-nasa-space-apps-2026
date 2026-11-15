@@ -139,7 +139,7 @@ Rules:
 
 - `series` is optional. A point without data can have an empty object. A named series a landmark does not have is left out. The app hides the matching chart.
 - `value` may be `null` for a date with no valid data. The chart shows a gap, not a zero.
-- `los_displacement_cm` is cumulative movement along the radar's line of sight since the first date, relative to our reference area. Negative means away from the satellite. It is not vertical sinking unless we say how we converted it.
+- `los_displacement_cm` is cumulative movement along the radar's line of sight since the first date, relative to our reference area. Positive means away from the satellite. It is not vertical sinking unless we say how we converted it.
 - Mexico City `hh_db` and `hv_db` use the median of finite dB pixels in a centered 5×5 window on the native 80 m frequency-B grid of the monthly GCOV frames. Windows that do not fit in the crop are missing. The published GCOV layers (HH, HV, and composite) each have 11 frames on the same 11 acquisition dates, one per observed month from November 2025 to October 2026. D-17 excludes December 5, 2025 and April 16, 2026. The December 17 frame remains, and April has no frame.
 - `series.water_months` is optional and has the shape `{ "count": 0, "valid_months": 11, "provisional": true }`. A month counts when its HH median is ≤ −12 dB and its HV median is ≤ −20 dB. Only months with both medians contribute to `valid_months`. This is a provisional radar proxy, not confirmed water or a flood history.
 - To refresh the checked-in Mexico City series without rendering map images, run `python pipeline/landmark_series.py --crop-dir <monthly-NPZ-directory>`. The script validates the source granule IDs against the existing manifest.
