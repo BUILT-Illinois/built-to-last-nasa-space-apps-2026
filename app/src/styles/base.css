@@ -84,6 +84,13 @@ body {
   left: var(--panel-width);
 }
 
+/* The tour card (story.css, #35) is pinned bottom left of the page, which is where the panel is.
+   Start it to the right of the panel so the legend stays readable during the tour. */
+.app .story-card {
+  left: calc(var(--panel-width) + 16px);
+  max-width: calc(100% - var(--panel-width) - 32px);
+}
+
 /* ---------- Map furniture, restyled to match (overrides MapLibre and map.css) ---------- */
 
 .app .swipe-label {
@@ -113,9 +120,10 @@ body {
   color: var(--bone);
 }
 
-/* ---------- Phones: the panel becomes a sheet along the bottom ---------- */
+/* ---------- Phones: the panel becomes a sheet along the bottom ----------
+   Same 600 px breakpoint as story.css, so the sheet and the tour card switch together. */
 
-@media (max-width: 640px) {
+@media (max-width: 600px) {
   .layer-controls {
     top: auto;
     width: 100%;
@@ -139,5 +147,22 @@ body {
   .app .map-screen {
     left: 0;
     bottom: 46%;
+  }
+
+  /* On phones story.css hides the panel while the tour card is open and shows the card as its
+     own bottom sheet, so the card and the map go back to the full width and height. */
+  .app .story-card {
+    left: 0;
+    max-width: none;
+  }
+
+  .app:has(.story-card) .map-screen {
+    bottom: 0;
+  }
+
+  /* Outside the tour, lift the "How to read this map" bar above the sheet (story.css keeps it
+     92 px above the bottom of the map to clear the credits). */
+  .app:not(:has(.story-card)) .reading-guide {
+    bottom: calc(46% + 92px);
   }
 }
