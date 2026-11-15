@@ -93,6 +93,10 @@ jobs:
     needs: [pipeline, app, api]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/scripts
       - uses: actions/download-artifact@v7
         with:
           name: app-dist
@@ -111,6 +115,8 @@ jobs:
           skip_app_build: true
           api_location: api-package
           skip_api_build: true
+      - name: Smoke test Azure
+        run: node .github/scripts/deploy-smoke.mjs Azure https://yellow-desert-02401091e.4.azurestaticapps.net
 
   fallback:
     name: Deploy to Cloudflare Pages
@@ -130,6 +136,11 @@ jobs:
           else
             echo "::notice::Cloudflare Pages is not configured. Skipping fallback deployment."
           fi
+      - uses: actions/checkout@v6
+        if: steps.cloudflare.outputs.configured == 'true'
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/scripts
       - uses: actions/download-artifact@v7
         if: steps.cloudflare.outputs.configured == 'true'
         with:
@@ -146,3 +157,6 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
         run: npx --yes wrangler@4 pages deploy app/dist --project-name="$PAGES_PROJECT" --branch=main
+      - name: Smoke test Cloudflare
+        if: steps.cloudflare.outputs.configured == 'true'
+        run: node .github/scripts/deploy-smoke.mjs Cloudflare https://built-to-last-6or.pages.dev
