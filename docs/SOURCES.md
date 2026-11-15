@@ -1,11 +1,10 @@
 # Sources
 
-Every dataset, text, library and tool the project uses. This list feeds the "Space Agency Partner Data and Other References" field on the project page (T-52). Owner: Zainab. Add a line whenever you use something new.
+Every dataset, text, library and tool the project uses. This list feeds the "Space Agency Partner Data and Other References" field on the project page (T-52). Owner: Zainab. [Adding a line whenever I use something new]
 
 **Datasets**
 - NISAR L2 GCOV (radar backscatter, HH and HV), collection `NISAR_L2_GCOV_PROVISIONAL_V1`, track 19 / frame 11, NASA and ISRO | <https://nisar-docs.asf.alaska.edu/>
   - Exact granule names for every image are listed in each region's `manifest.json`.
-- NISAR L2 GUNW (ground motion), only if Tier 2 ships | <https://nisar-docs.asf.alaska.edu/>
 
 **Text sources** (claims we may quote are in the "Numbers we may quote" table of [DECISION_MEMO.md](DECISION_MEMO.md))
 - NASA/JPL, "US-Indian Space Mission Maps Extreme Subsidence in Mexico City", Apr 29, 2026 | <https://www.jpl.nasa.gov/news/us-indian-space-mission-maps-extreme-subsidence-in-mexico-city/>
