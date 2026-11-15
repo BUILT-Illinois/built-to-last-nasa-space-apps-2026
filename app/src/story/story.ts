@@ -56,6 +56,11 @@ export type StoryFile = {
 // to give that region a tour.
 const files = import.meta.glob<StoryFile>('../../../content/story/*.json', { eager: true, import: 'default' });
 const stories = new Map<string, StoryFile>(Object.values(files).map((s) => [s.regionId, s]));
+// The wider map covers the same places and acquisitions as the Mexico City tour.
+const cityStory = stories.get('mexico_city');
+if (cityStory && !stories.has('mexico_city_valley')) {
+  stories.set('mexico_city_valley', { ...cityStory, regionId: 'mexico_city_valley' });
+}
 
 /** The tour for a region, or undefined if it has none. */
 export function getStory(regionId: string): StoryFile | undefined {

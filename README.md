@@ -38,14 +38,15 @@ All NISAR data shown is **PROVISIONAL** (NASA and ISRO, CRID P05023).
 
 **Web app** (Node 24, same as CI):
 
+The app opens the Valley of Mexico dataset in `app/public/data/mexico_city_valley/`. Set `VITE_REGION_ID=sample` before starting Vite to use the generated test data in `app/public/data/sample/`.
+
 ```bash
 cd app
 npm install
-VITE_REGION_ID=mexico_city npm run dev   # the real NISAR data, as on the live site; opens at http://localhost:5173
+npm run dev                              # the real NISAR data (Valley of Mexico), as on the live site; opens at http://localhost:5173
 npm test                                 # app tests
 ```
 
-Plain `npm run dev` loads `app/public/data/sample/`, a small generated test dataset (not NISAR data) used for development.
 
 **Pipeline** (Python 3.12):
 
